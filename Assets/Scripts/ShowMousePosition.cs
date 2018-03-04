@@ -70,22 +70,24 @@ public class ShowMousePosition : MonoBehaviour {
 
 	/*
 	 * Snap the position at the edge of the grid
+	 * The y axis will be always of 0
 	*/
 	public Vector3 snapPosition(Vector3 original){
 		Vector3 snapped;
 		snapped.x = Mathf.Floor (original.x + 0.5f);
-		snapped.y = Mathf.Floor (original.y + 0.5f);
+		snapped.y = Mathf.Floor (0f);
 		snapped.z = Mathf.Floor (original.z + 0.5f);
 		return snapped;
 	}
 
 	/*
 	 * Snap the position at the center of the grid
+	 * The y axis will be always of 0
 	*/
 	public Vector3 snapCenterPosition(Vector3 original){
 		Vector3 snapped;
 		snapped.x = Mathf.Floor (original.x) + 0.5f;
-		snapped.y = Mathf.Floor (original.y + 0.5f);
+		snapped.y = Mathf.Floor (0f);
 		snapped.z = Mathf.Floor (original.z) + 0.5f;
 		return snapped;
 	}
