@@ -79,6 +79,10 @@ public class CreateWall : MonoBehaviour {
 	//Effectively create the wall
 	void setWall(){
 
+		// Show the finishing position with a gameObject
+		endPole = Instantiate (polePrefab, lastIteration, Quaternion.identity);
+		endPole.transform.position = new Vector3 (lastIteration.x, lastIteration.y, lastIteration.z);
+
 		if (lastIteration.Equals (startPosition)) {
 			Destroy (Instance.startPole);
 			Destroy (Instance.endPole);
@@ -102,11 +106,10 @@ public class CreateWall : MonoBehaviour {
 
 		if (!currentPosition.Equals(lastIteration)) {
 			recursiveWallBuilder(startPosition, currentPosition);
-			Debug.Log ("current = " + currentPosition.x);
-			Debug.Log ("last = " + lastIteration.x);
 		}
-
 	}
+
+
 
 
 	/**
@@ -149,34 +152,18 @@ public class CreateWall : MonoBehaviour {
 		}
 	}
 
+	//==========================================
 	//Create effectively a Segment of the Wall
 	void createWallSegment(int iteration, bool isPositive){
 
 		if (!isPositive)
 			iteration = -iteration;
 
-		if (buildingAxis == 1) {
-			it = new Vector3 (startPosition.x + iteration, startPosition.y, startPosition.z);
-			onAxisChangeDestroy (1);
-		} else {
-			it = new Vector3 (startPosition.x, startPosition.y, startPosition.z + iteration);
-			onAxisChangeDestroy (2);
-		}
+		//Check that all the object are build on the same axis (x or z one)
+		checkAllObjectOnXorZAxis (iteration);
 
 		//Check that all the object are build on the same side (negative or positive one)
-		if (standbyGO.Count > 0) {
-			if (buildingAxis == 1) {
-				if (it.x > startPosition.x && standbyGO [0].transform.position.x < startPosition.x)
-					clearAndDestroyAllGO ();
-				else if (it.x < startPosition.x && standbyGO [0].transform.position.x > startPosition.x)
-					clearAndDestroyAllGO ();
-			} else {
-				if (it.z > startPosition.z && standbyGO [0].transform.position.z < startPosition.z)
-					clearAndDestroyAllGO ();
-				else if (it.z < startPosition.z && standbyGO [0].transform.position.z > startPosition.z)
-					clearAndDestroyAllGO ();
-			}
-		}
+		checkAllObjectPositiveOrNegativeAxis ();
 
 		// checks if it is a new item
 		if (Mathf.Abs(iteration) > standbyGO.Count) {
@@ -196,27 +183,66 @@ public class CreateWall : MonoBehaviour {
 			newWall.transform.Rotate (YRotation);
 
 			//Destroy previous endPole
+			/*
 			if (endPole == null) {
 				endPole = Instantiate (polePrefab, it, Quaternion.identity);
 			} else if (!endPole.transform.position.Equals (it)){
 				endPole.transform.position = new Vector3 (it.x, it.y, it.z);
-			}
+			}*/
 
 		}
-
 		//Update the last iteration
 		lastIteration = it;
 	}
-
-	//Destroy every gameobject stored on change of axis
-	void onAxisChangeDestroy(int axis_int)
-	{
-		if (buildingAxis != axis_int) {
-			buildingAxis = axis_int;
-
-			clearAndDestroyAllGO();
+		
+	//Check that all the object are build on the same axis (x or z one)
+	void checkAllObjectOnXorZAxis(int iteration){
+		
+		//Create the it vector indicating the new point of the wall
+		if (buildingAxis == 1) {
+			it = new Vector3 (startPosition.x + iteration, startPosition.y, startPosition.z);
+		} else {
+			it = new Vector3 (startPosition.x, startPosition.y, startPosition.z + iteration);
+		}
+			
+		// Check if we are still building on the right axis
+		if (standbyGO.Count > 0) {
+			if (buildingAxis == 1 && standbyGO [0].transform.position.z != startPosition.z) {
+				buildingAxis = 2;
+				clearAndDestroyAllGO ();
+			} else if (buildingAxis == 2 && standbyGO [0].transform.position.x != startPosition.x) {
+				buildingAxis = 1;
+				clearAndDestroyAllGO ();
+			}
 		}
 	}
+
+	//Check that all the object are build on the same side (negative or positive one)
+	void checkAllObjectPositiveOrNegativeAxis(){
+		if (standbyGO.Count > 0) {
+			if (buildingAxis == 1) {
+				if (it.x > startPosition.x && standbyGO [0].transform.position.x < startPosition.x)
+					clearAndDestroyAllGO ();
+				else if (it.x < startPosition.x && standbyGO [0].transform.position.x > startPosition.x)
+					clearAndDestroyAllGO ();
+			} else {
+				if (it.z > startPosition.z && standbyGO [0].transform.position.z < startPosition.z)
+					clearAndDestroyAllGO ();
+				else if (it.z < startPosition.z && standbyGO [0].transform.position.z > startPosition.z)
+					clearAndDestroyAllGO ();
+			}
+		}
+	}
+		
+	//Utility Method to empty the gameObject Array
+	void clearAndDestroyAllGO()
+	{
+		standbyGO.ForEach(delegate(GameObject obj) {
+			Destroy(obj);
+		});
+		standbyGO.Clear ();
+	}
+
 
 	//destroy
 	void destroyObsoleteGO(int pseudoMax){
@@ -243,22 +269,13 @@ public class CreateWall : MonoBehaviour {
 				}
 			}
 
-			if (endPole != null) 
+			/*if (endPole != null) 
 				endPole.transform.position = lastIteration;
-
+			*/
 
 			Destroy (standbyGO [i]);
 			standbyGO.RemoveAt (i);
 		}
 	}
 
-
-	//Utility Method
-	void clearAndDestroyAllGO()
-	{
-		standbyGO.ForEach(delegate(GameObject obj) {
-			Destroy(obj);
-		});
-		standbyGO.Clear ();
-	}
 }
