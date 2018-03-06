@@ -41,6 +41,7 @@ public class CreateWall : MonoBehaviour {
 	//Awake
 	void Awake(){
 		Instance = this;
+		//Create a temp WallGameObject list
 		standbyGO = new List<GameObject> ();
 	}
 
@@ -50,13 +51,25 @@ public class CreateWall : MonoBehaviour {
 
 		if (Input.GetMouseButtonDown (0)) {
 			Instance.startWall(pointer);
-		}else if(Input.GetMouseButtonUp(0)){
+		}else if(Input.GetMouseButtonUp(0) && Instance.dragAndDropping){
 			Instance.setWall();
 		}
 
 		if(Instance.dragAndDropping){
-			Instance.updateWall(pointer);
+			//If right click is pressed to cancel
+			if (Input.GetMouseButtonDown (1)) {
+				// Remove the starting Pole
+				Destroy (Instance.startPole);
 
+				// Remove all walls
+				clearAndDestroyAllGO ();
+
+				// undrag
+				Instance.dragAndDropping = false;
+
+			} else {
+				Instance.updateWall (pointer);
+			}
 		}
 	}
 
