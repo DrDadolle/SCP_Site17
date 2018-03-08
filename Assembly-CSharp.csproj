@@ -51,11 +51,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\ConstructionManager.cs" />
-     <Compile Include="Assets\Scripts\CreateWall.cs" />
-     <Compile Include="Assets\Scripts\GridMesh.cs" />
-     <Compile Include="Assets\Scripts\PlaceObject.cs" />
-     <Compile Include="Assets\Scripts\ShowMousePosition.cs" />
+     <Compile Include="Assets\_Scripts\ConstructionManager.cs" />
+     <Compile Include="Assets\_Scripts\CreateWall.cs" />
+     <Compile Include="Assets\_Scripts\GridMesh.cs" />
+     <Compile Include="Assets\_Scripts\PlaceObject.cs" />
+     <Compile Include="Assets\_Scripts\ShowMousePosition.cs" />
+     <Compile Include="Assets\_Scripts\Wall_Behaviour.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
