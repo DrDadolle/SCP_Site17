@@ -1,9 +1,10 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CreateWall.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Scripts\CreateWall.cs">
     <Files>
-      <File FileName="Assets\Scripts\CreateWall.cs" Line="25" Column="2" />
-      <File FileName="Assets\Scripts\ShowMousePosition.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Scripts\CreateWall.cs" Line="35" Column="30" />
+      <File FileName="Assets\_Scripts\Wall_Behaviour.cs" Line="22" Column="23" />
+      <File FileName="Assets\_Scripts\PlaceObject.cs" Line="13" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
