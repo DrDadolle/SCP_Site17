@@ -1,3 +1,8 @@
 /Assets/Downloaded_Resources
-/Library
+/Library/metadata
+/Library/ScriptAssemblies
+/Library/ShaderCache
+/Library/assetDatabase3
 /Temp
+/.vs
+SCP_Site19.csproj
