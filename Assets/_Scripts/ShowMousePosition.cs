@@ -34,7 +34,7 @@ public class ShowMousePosition : MonoBehaviour {
 			mousePointer.transform.position = snapPosition (getWorldPoint ());
 
 			//Setting the WallBuilder Method
-			buildingMethod = CreateWall.Instance.creationOfWalls;
+			buildingMethod = CreateWall.Instance.CreationOfWalls;
 
 		} else if (ConstructionManager.getCurrentMouseMode () == ConstructionManager.MouseMode.BuildingObjects) {
 			//Activating the mousePointer
