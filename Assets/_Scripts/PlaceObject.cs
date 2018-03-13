@@ -29,7 +29,7 @@ public class PlaceObject : MonoBehaviour {
 		pos = pointer.snapCenterPosition (pos);
 
 		GameObject objectToPlace = Instantiate(objectPrefab, pos, Quaternion.identity);
-		objectToPlace.transform.position = new Vector3 (pos.x, pos.y + 0.3f, pos.z);
+		objectToPlace.transform.position = new Vector3 (pos.x, pos.y, pos.z);
 	}
 }
 
