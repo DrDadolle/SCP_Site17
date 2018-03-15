@@ -36,4 +36,16 @@ public class ConstructionManager : MonoBehaviour {
 		return currentMouseMode;
 	}
 
+    //Sets the building mode to BuildingWall;
+    public void Set_Mode_Build_Wall()
+    {
+        currentMouseMode = MouseMode.BuildingWall;
+    }
+
+    //Sets the building mode to BuildingObjects
+    public void Set_Mode_Place_Office()
+    {
+        currentMouseMode = MouseMode.BuildingObjects;
+    }
+
 }

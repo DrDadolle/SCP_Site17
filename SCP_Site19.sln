@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCP_Site19", "SCP_Site19.csproj", "{AE3E52DA-B2FD-F338-FA9F-2EDE94AB6315}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCP_Site19.Editor", "SCP_Site19.Editor.csproj", "{1F051FB1-BE80-B0C0-4F86-A0632E1B5918}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{AE3E52DA-B2FD-F338-FA9F-2EDE94AB6315}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE3E52DA-B2FD-F338-FA9F-2EDE94AB6315}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE3E52DA-B2FD-F338-FA9F-2EDE94AB6315}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F051FB1-BE80-B0C0-4F86-A0632E1B5918}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F051FB1-BE80-B0C0-4F86-A0632E1B5918}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F051FB1-BE80-B0C0-4F86-A0632E1B5918}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F051FB1-BE80-B0C0-4F86-A0632E1B5918}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

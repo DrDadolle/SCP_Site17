@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /**
  * Method creating basic Wall
@@ -47,6 +48,16 @@ public class ShowMousePosition : MonoBehaviour {
 		} else {
 			mousePointer.SetActive(false);
 		}
+
+
+        //If we are over a UI element, then don't call a building method
+        //FIXME issue dragging or when releasing
+        //We just want to prevent startDrag
+        //Requires changing buildings methods
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
 
 		//Calling the Building Methods
 		if (mousePointer.activeSelf) {
