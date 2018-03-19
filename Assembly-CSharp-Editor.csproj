@@ -9,10 +9,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{3FE5C476-A1B2-A80B-86BF-A3CA21FD96EA}</ProjectGuid>
+    <ProjectGuid>{F4D23AEC-9929-0B4A-6A20-3468C1F718AE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>Assets</BaseDirectory>
@@ -51,15 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\_Scripts\ConstructionManager.cs" />
-     <Compile Include="Assets\_Scripts\CreateDoubleWalls.cs" />
-     <Compile Include="Assets\_Scripts\CreateWall.cs" />
-     <Compile Include="Assets\_Scripts\GridMesh.cs" />
-     <Compile Include="Assets\_Scripts\IBuildingMethod.cs" />
-     <Compile Include="Assets\_Scripts\MouseController.cs" />
-     <Compile Include="Assets\_Scripts\PlaceObject.cs" />
-     <Compile Include="Assets\_Scripts\Wall_Behaviour.cs" />
-     <Compile Include="Assets\UI\AutomaticSetVerticalSize.cs" />
+     <Compile Include="Assets\UI\Editor\AutomaticSetVerticalSizeEditor.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -144,6 +136,10 @@
  <Reference Include="UnityEngine.StandardEvents">
  <HintPath>C:/Users/Alexandre/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.10/UnityEngine.StandardEvents.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp.csproj">
+      <Project>{3FE5C476-A1B2-A80B-86BF-A3CA21FD96EA}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,6 +9,7 @@ public class ConstructionManager : MonoBehaviour {
 	public enum BuildingMode {
 		NotBuilding,
 		BuildingWall,
+		BuildingDoubleWalls,
 		BuildingObjects
 	};
 
@@ -43,9 +44,15 @@ public class ConstructionManager : MonoBehaviour {
     }
 
     //Sets the building mode to BuildingObjects
-    public void Set_Mode_Place_Office()
+    public void Set_Mode_Place_Furnitures()
     {
         currentBuildingMode = BuildingMode.BuildingObjects;
     }
+
+	//Sets the building mode to BuildingDoubleWalls
+	public void Set_Mode_Build_Double_Walls()
+	{
+		currentBuildingMode = BuildingMode.BuildingDoubleWalls;
+	}
 
 }

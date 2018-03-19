@@ -18,7 +18,7 @@ public class MouseController : MonoBehaviour
     BuildingGameObjects onLeftButtonPressMethod;
     BuildingGameObjects onLeftButtonReleaseDuringDragAndDropMethod;
     BuildingGameObjects duringDragAndDropMethod;
-    BuildingGameObjects OnRightButtonPressDuringDragAndDropMethod;
+	BuildingGameObjects onRightButtonPressDuringDragAndDropMethod;
 
     //Reference to the GameObject MousePointer
     public GameObject mousePointer;
@@ -39,26 +39,30 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ConstructionManager.getCurrentBuildingMode() == ConstructionManager.BuildingMode.BuildingWall)
-        {
-            //Activating the mousePointer
-            mousePointer.SetActive(true);
-            mousePointer.transform.position = snapPosition(getWorldPoint());
+		if (ConstructionManager.getCurrentBuildingMode () == ConstructionManager.BuildingMode.BuildingWall) {
+			//Activating the mousePointer
+			mousePointer.SetActive (true);
+			mousePointer.transform.position = snapPosition (getWorldPoint ());
 
-            //Setting the CreateWall Methods
-            SetBuildingMethods(CreateWall.Instance);
+			//Setting the CreateWall Methods
+			SetBuildingMethods (CreateWall.Instance);
 
-        }
-        else if (ConstructionManager.getCurrentBuildingMode() == ConstructionManager.BuildingMode.BuildingObjects)
-        {
-            //Activating the mousePointer
-            mousePointer.SetActive(true);
-            mousePointer.transform.position = snapCenterPosition(getWorldPoint());
+		} else if (ConstructionManager.getCurrentBuildingMode () == ConstructionManager.BuildingMode.BuildingObjects) {
+			//Activating the mousePointer
+			mousePointer.SetActive (true);
+			mousePointer.transform.position = snapCenterPosition (getWorldPoint ());
 
-            //Setting the ObjectPlacer Method
-            SetBuildingMethods(PlaceObject.Instance);
+			//Setting the ObjectPlacer Method
+			SetBuildingMethods (PlaceObject.Instance);
 
-        }
+		} else if (ConstructionManager.getCurrentBuildingMode () == ConstructionManager.BuildingMode.BuildingDoubleWalls) {
+			//Activating the mousePointer
+			mousePointer.SetActive (true);
+			mousePointer.transform.position = snapPosition (getWorldPoint ());
+			Debug.Log("aaaaaaaaaaaaaaaaa");
+			//Setting the CreateDoubleWalls Methods
+			SetBuildingMethods (CreateDoubleWalls.Instance);
+		}
         else
         {
             mousePointer.SetActive(false);
@@ -89,7 +93,7 @@ public class MouseController : MonoBehaviour
         onLeftButtonPressMethod = buildingMethod.OnLeftButtonPress;
         onLeftButtonReleaseDuringDragAndDropMethod = buildingMethod.OnLeftButtonReleaseDuringDragAndDrop;
         duringDragAndDropMethod = buildingMethod.DuringDragAndDrop;
-        OnRightButtonPressDuringDragAndDropMethod = buildingMethod.OnRightButtonPressDuringDragAndDrop;
+        onRightButtonPressDuringDragAndDropMethod = buildingMethod.OnRightButtonPressDuringDragAndDrop;
     }
 
     //Method calling the different case of building method
@@ -108,7 +112,7 @@ public class MouseController : MonoBehaviour
             //If right click is pressed to cancel
             if (Input.GetMouseButtonDown(1))
             {
-                OnRightButtonPressDuringDragAndDropMethod(pointer);
+                onRightButtonPressDuringDragAndDropMethod(pointer);
                 //Drag&Drop Cancel
                 dragAndDropping = false;
 
