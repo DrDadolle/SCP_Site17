@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class ConstructionManager : MonoBehaviour {
 
-	private static MouseMode currentMouseMode;
+	private static BuildingMode currentBuildingMode;
 
-	public enum MouseMode {
+	public enum BuildingMode {
 		NotBuilding,
 		BuildingWall,
+		BuildingDoubleWalls,
 		BuildingObjects
 	};
 
 
 	// Use this for initialization
 	void Start () {
-		currentMouseMode = MouseMode.NotBuilding;	
+		currentBuildingMode = BuildingMode.NotBuilding;	
 	}
 	
 	// Update is called once per frame
@@ -23,17 +24,35 @@ public class ConstructionManager : MonoBehaviour {
 
 		//Change the mode of construction
 		if (Input.GetKeyUp (KeyCode.Alpha1)) {
-			currentMouseMode = MouseMode.NotBuilding;
+			currentBuildingMode = BuildingMode.NotBuilding;
 		} else if (Input.GetKeyUp (KeyCode.Alpha2)) {
-			currentMouseMode = MouseMode.BuildingWall;
+			currentBuildingMode = BuildingMode.BuildingWall;
 		} else if (Input.GetKeyUp (KeyCode.Alpha3)) {
-			currentMouseMode = MouseMode.BuildingObjects;
+			currentBuildingMode = BuildingMode.BuildingObjects;
 		}
 	}
 
-	public static MouseMode getCurrentMouseMode()
+	public static BuildingMode getCurrentBuildingMode()
 	{
-		return currentMouseMode;
+		return currentBuildingMode;
+	}
+
+    //Sets the building mode to BuildingWall;
+    public void Set_Mode_Build_Wall()
+    {
+        currentBuildingMode = BuildingMode.BuildingWall;
+    }
+
+    //Sets the building mode to BuildingObjects
+    public void Set_Mode_Place_Furnitures()
+    {
+        currentBuildingMode = BuildingMode.BuildingObjects;
+    }
+
+	//Sets the building mode to BuildingDoubleWalls
+	public void Set_Mode_Build_Double_Walls()
+	{
+		currentBuildingMode = BuildingMode.BuildingDoubleWalls;
 	}
 
 }
