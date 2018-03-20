@@ -59,9 +59,9 @@ public class MouseController : MonoBehaviour
 			//Activating the mousePointer
 			mousePointer.SetActive (true);
 			mousePointer.transform.position = snapPosition (getWorldPoint ());
-			Debug.Log("aaaaaaaaaaaaaaaaa");
+
 			//Setting the CreateDoubleWalls Methods
-			SetBuildingMethods (CreateDoubleWalls.Instance);
+			SetBuildingMethods (CreateDoubleWalls.InstanceDoubleWall);
 		}
         else
         {

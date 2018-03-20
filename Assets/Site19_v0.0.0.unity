@@ -454,6 +454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 507498829}
   - component: {fileID: 507498828}
+  - component: {fileID: 507498830}
   m_Layer: 0
   m_Name: Walls
   m_TagString: Untagged
@@ -472,9 +473,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6bf9ca7a0c60e842a2470c0fe2ef221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPole: {fileID: 0}
+  buildingAxis: 0
   startPosition: {x: 0, y: 0, z: 0}
-  polePrefab: {fileID: 1298058629980102, guid: 41cf34e17d38324449e04da659295216, type: 2}
+  polePrefab: {fileID: 1155302369082580, guid: 3fe8f75b5a1d79b4ea44e7418d1ec5d1, type: 2}
   wallPrefab: {fileID: 1512010601336732, guid: 5e7d15fc8fc841b4288c332463a9c8c0, type: 2}
 --- !u!4 &507498829
 Transform:
@@ -489,6 +490,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &507498830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 507498827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4afabf55f632c74380ff7acf5575f9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingAxis: 0
+  startPosition: {x: 0, y: 0, z: 0}
+  polePrefab: {fileID: 1155302369082580, guid: 3fe8f75b5a1d79b4ea44e7418d1ec5d1, type: 2}
+  wallPrefab: {fileID: 1512010601336732, guid: 8b15307aec9faf040ab0d0d6169bc6b1, type: 2}
 --- !u!1 &548609391
 GameObject:
   m_ObjectHideFlags: 0
@@ -873,7 +889,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 50c1fc4af9437034ca09b6ded289bca2, type: 2}
+  - {fileID: 2100000, guid: 8822cb6d6344ba645bc4db1372391fb2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1127,7 +1143,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1548294423}
   m_OnClick:
     m_PersistentCalls:
@@ -1344,7 +1360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7420b4d34d4def44a49f4d200ade00c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectPrefab: {fileID: 1573373090619802, guid: aee98827a19958d4f817901d84b735f6,
+  objectPrefab: {fileID: 1242995545496130, guid: b869b8b9784413440a90fd41c7941344,
     type: 2}
 --- !u!4 &2126843154
 Transform:
