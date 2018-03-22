@@ -12,127 +12,78 @@ public class MouseController : MonoBehaviour
     // Last Position of the Mouse
     private Vector3 lastMousePosition;
 
-    //Storing the building function called
-    // Need to update this based on the IBuildingMethod Interface methods
-    private delegate void BuildingGameObjects(MouseController pointer);
-    BuildingGameObjects onLeftButtonPressMethod;
-    BuildingGameObjects onLeftButtonReleaseDuringDragAndDropMethod;
-    BuildingGameObjects duringDragAndDropMethod;
-	BuildingGameObjects onRightButtonPressDuringDragAndDropMethod;
-
     //Reference to the GameObject MousePointer
     public GameObject mousePointer;
 
     //Last Mouse Position
-    MouseController pointer;
+    public MouseController Pointer {
+        get; private set;
+    }
 
-    //Indicate if currently drag&dropping
-    private bool dragAndDropping;
+    // Used for access purpose
+    public static MouseController Instance;
 
     // Use this for initialization
     void Start()
     {
-        pointer = GetComponent<MouseController>();
+        Pointer = GetComponent<MouseController>();
 
     }
 
-    // Update is called once per frame
-    void Update()
+    // On Awake
+    private void Awake()
     {
-		if (ConstructionManager.getCurrentBuildingMode () == ConstructionManager.BuildingMode.BuildingWall) {
-			//Activating the mousePointer
-			mousePointer.SetActive (true);
-			mousePointer.transform.position = snapPosition (getWorldPoint ());
-
-			//Setting the CreateWall Methods
-			SetBuildingMethods (CreateWall.Instance);
-
-		} else if (ConstructionManager.getCurrentBuildingMode () == ConstructionManager.BuildingMode.BuildingObjects) {
-			//Activating the mousePointer
-			mousePointer.SetActive (true);
-			mousePointer.transform.position = snapCenterPosition (getWorldPoint ());
-
-			//Setting the ObjectPlacer Method
-			SetBuildingMethods (PlaceObject.Instance);
-
-		} else if (ConstructionManager.getCurrentBuildingMode () == ConstructionManager.BuildingMode.BuildingDoubleWalls) {
-			//Activating the mousePointer
-			mousePointer.SetActive (true);
-			mousePointer.transform.position = snapPosition (getWorldPoint ());
-
-			//Setting the CreateDoubleWalls Methods
-			SetBuildingMethods (CreateDoubleWalls.InstanceDoubleWall);
-		}
-        else
-        {
-            mousePointer.SetActive(false);
-        }
-
-
-        //If we are over a UI element, then don't call a building method
-        //FIXME issue dragging or when releasing
-        //We just want to prevent startDrag
-        //Requires changing buildings methods
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-
-        //Calling the Building Methods
-        if (mousePointer.activeSelf)
-        {
-            CallingBuildingAction(pointer);
-        }
-
+        Instance = this;
     }
 
-
-    // Utility Method Setting all the IBuildingMethods to the BuildingGameObjects var
-    private void SetBuildingMethods(IBuildingMethod buildingMethod)
+    // It is called on every frame
+    private void Update()
     {
-        onLeftButtonPressMethod = buildingMethod.OnLeftButtonPress;
-        onLeftButtonReleaseDuringDragAndDropMethod = buildingMethod.OnLeftButtonReleaseDuringDragAndDrop;
-        duringDragAndDropMethod = buildingMethod.DuringDragAndDrop;
-        onRightButtonPressDuringDragAndDropMethod = buildingMethod.OnRightButtonPressDuringDragAndDrop;
+        //Refresh the pointer Position
+        if (ConstructionManager.IsBuildingWall())
+        {
+            //Activating the mousePointer
+            SetMouseToWallGrid();
+        }
+        else if(ConstructionManager.IsPlacingFurnitures())
+        {
+            //Activating the mousePointer
+            SetMouseToFurnitureGrid();
+        }
+        else if(ConstructionManager.IsNotBuilding())
+        {
+            DiseableMousePointer();
+        }
+
+
     }
 
-    //Method calling the different case of building method
-    private void CallingBuildingAction(MouseController pointer)
+
+    //Activating the mousePointer for Walls
+    public void SetMouseToWallGrid()
     {
-        //When clicking for the first time,
-        if (Input.GetMouseButtonDown(0))
-        {
-            onLeftButtonPressMethod(pointer);
-            dragAndDropping = true;
-        }
-
-        //During a drap and drop
-        if (dragAndDropping)
-        {
-            //If right click is pressed to cancel
-            if (Input.GetMouseButtonDown(1))
-            {
-                onRightButtonPressDuringDragAndDropMethod(pointer);
-                //Drag&Drop Cancel
-                dragAndDropping = false;
-
-            }
-            else if(Input.GetMouseButtonUp(0))
-            {
-                onLeftButtonReleaseDuringDragAndDropMethod(pointer);
-                //Finishing the drag and drop
-                dragAndDropping = false;
-            }
-            else
-            {
-                //Continue Drag&Dropping
-                duringDragAndDropMethod(pointer);
-            }
-        }
+        mousePointer.SetActive(true);
+        mousePointer.transform.position = snapPosition(getWorldPoint());
     }
 
+    //Activating the mousePointer for Furnitures
+    public void SetMouseToFurnitureGrid()
+    {
+        mousePointer.SetActive(true);
+        mousePointer.transform.position = snapCenterPosition(getWorldPoint());
+    }
 
+    //Desactivate the mouse Pointer
+    public void DiseableMousePointer()
+    {
+        mousePointer.SetActive(false);
+    }
 
+    //Return the state of the mouse Pointer
+    public static bool IsMousePointerActive()
+    {
+        return Instance.mousePointer.activeSelf;
+    }
 
     public Vector3 getWorldPoint()
     {

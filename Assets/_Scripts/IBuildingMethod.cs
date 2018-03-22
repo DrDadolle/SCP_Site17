@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Interface of ALL the buildings functions
+//Interface of ALL the buildings Walls functions
 public interface IBuildingMethod
 {
     // OnLeftButtonPress
