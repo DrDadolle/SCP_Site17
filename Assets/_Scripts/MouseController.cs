@@ -40,17 +40,17 @@ public class MouseController : MonoBehaviour
     private void Update()
     {
         //Refresh the pointer Position
-        if (ConstructionManager.IsBuildingWall())
+        if (ConstructionController.IsBuildingWall())
         {
             //Activating the mousePointer
             SetMouseToWallGrid();
         }
-        else if(ConstructionManager.IsPlacingFurnitures())
+        else if(ConstructionController.IsPlacingFurnitures())
         {
             //Activating the mousePointer
             SetMouseToFurnitureGrid();
         }
-        else if(ConstructionManager.IsNotBuilding())
+        else if(ConstructionController.IsNotBuilding())
         {
             DiseableMousePointer();
         }

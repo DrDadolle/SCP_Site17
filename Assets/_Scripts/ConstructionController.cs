@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ConstructionManager : MonoBehaviour {
+public class ConstructionController : MonoBehaviour {
 
 	public static BuildingMode currentBuildingMode {
         get; private set;
@@ -48,7 +48,7 @@ public class ConstructionManager : MonoBehaviour {
     private bool dragAndDropping;
 
     // used for access purposes
-    public static ConstructionManager Instance;
+    public static ConstructionController Instance;
 
 
     //On Awake
@@ -62,10 +62,9 @@ public class ConstructionManager : MonoBehaviour {
 	void Update () {
 
         //Change the mode of construction
-        if (Input.GetKeyUp(KeyCode.Alpha1))
+        if (CurrentGlobalBuildingMode != GlobalBuildingMode.NotBuilding && Input.GetMouseButtonUp(1))
         {
-            currentBuildingMode = BuildingMode.NotBuilding;
-            CurrentGlobalBuildingMode = GlobalBuildingMode.NotBuilding;
+            Set_Mode_Build_To_Not_Building();
         }
 
         //If we are over a UI element, then don't call a building method
@@ -80,11 +79,11 @@ public class ConstructionManager : MonoBehaviour {
         //Calling the Building or Placing Methods
         if (CurrentGlobalBuildingMode == GlobalBuildingMode.BuildingWall)
         {
-            ConstructionManager.Instance.CallingBuildingAction(MouseController.Instance.Pointer);
+            ConstructionController.Instance.CallingBuildingAction(MouseController.Instance.Pointer);
         }
         else if (CurrentGlobalBuildingMode == GlobalBuildingMode.PlacingFurnitures)
         {
-            ConstructionManager.Instance.CallingPlacingObjectAction(MouseController.Instance.Pointer);
+            ConstructionController.Instance.CallingPlacingObjectAction(MouseController.Instance.Pointer);
         }
     }
 
@@ -111,6 +110,14 @@ public class ConstructionManager : MonoBehaviour {
         CurrentGlobalBuildingMode = GlobalBuildingMode.BuildingWall;
         HandleConstructionMode(currentBuildingMode);
 
+    }
+
+    //Sets the building mode to NotBuilding
+    public void Set_Mode_Build_To_Not_Building()
+    {
+        currentBuildingMode = BuildingMode.NotBuilding;
+        CurrentGlobalBuildingMode = GlobalBuildingMode.NotBuilding;
+        HandleConstructionMode(currentBuildingMode);
     }
 
 

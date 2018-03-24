@@ -14,6 +14,7 @@ public class ResourcesLoading : MonoBehaviour {
     public static Material ghostly_blue;
     public static Material ghostly_red;
 
+
     // Awake
     void Awake () {
         //Loading Materials for Ghostly effects 

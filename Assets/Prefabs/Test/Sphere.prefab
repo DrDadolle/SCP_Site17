@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33283194961505210}
   - component: {fileID: 135074920181116588}
   - component: {fileID: 23291290726134548}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1896444849550690}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0.306, z: -0.04}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 0}
@@ -56,7 +56,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 9641663126a97d54988d9ecef17c5df8, type: 2}
+  - {fileID: 2100000, guid: d9d74f4af72225a449d50ca116c6f2f3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

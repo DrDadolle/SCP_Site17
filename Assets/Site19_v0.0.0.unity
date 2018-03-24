@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 103270082}
   m_Layer: 0
-  m_Name: Managers
+  m_Name: Controllers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -222,11 +222,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 23291290726134548, guid: 8f33c04143c213945addf3fa60bc6d96,
-        type: 2}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: d9d74f4af72225a449d50ca116c6f2f3, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8f33c04143c213945addf3fa60bc6d96, type: 2}
   m_IsPrefabParent: 0
@@ -960,7 +955,7 @@ GameObject:
   - component: {fileID: 1204818130}
   - component: {fileID: 1204818129}
   - component: {fileID: 1204818128}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: World
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1046,7 +1041,7 @@ GameObject:
   - component: {fileID: 1337395074}
   - component: {fileID: 1337395073}
   - component: {fileID: 1337395076}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WorldGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1435,7 +1430,7 @@ GameObject:
   - component: {fileID: 2126843154}
   - component: {fileID: 2126843153}
   m_Layer: 0
-  m_Name: Objects
+  m_Name: Furnitures
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
