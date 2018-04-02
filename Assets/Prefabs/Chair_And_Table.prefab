@@ -71,7 +71,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4816190737079708}
   - component: {fileID: 65001253119826816}
-  - component: {fileID: 114954986702731212}
   m_Layer: 11
   m_Name: Chair_And_Table
   m_TagString: Untagged
@@ -233,7 +232,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1242995545496130}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5, y: 8.112199e-17, z: 0.5}
+  m_LocalPosition: {x: 0.28549573, y: -4.337977e-17, z: 3.9073024}
   m_LocalScale: {x: 0.65, y: 0.65, z: 0.65}
   m_Children:
   - {fileID: 4317200363154340}
@@ -471,14 +470,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5839089, y: 1.2698326, z: 1.3966936}
   m_Center: {x: 0.38096485, y: 0.16168265, z: -0.0012721007}
---- !u!114 &114954986702731212
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1242995545496130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9127e1edf96ebb24fb66ccf9f3218f12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

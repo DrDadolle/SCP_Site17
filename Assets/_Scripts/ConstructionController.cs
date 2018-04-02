@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.EventSystems;
 
 public class ConstructionController : MonoBehaviour {
 
-	public static BuildingMode currentBuildingMode {
+	public static BuildingMode CurrentBuildingMode {
         get; private set;
     }
     public static GlobalBuildingMode CurrentGlobalBuildingMode {
@@ -15,35 +16,52 @@ public class ConstructionController : MonoBehaviour {
 	public enum BuildingMode {
 		NotBuilding,
 		BuildingWall,
-		BuildingDoubleWalls,
-		BuildingObjects
+		BuildingObjects,
+        PlacingFloor,
+        Bulldoze
 	};
 
     public enum GlobalBuildingMode
     {
         NotBuilding,
         BuildingWall,
-        PlacingFurnitures
+        PlacingFurnitures,
+        PlacingFloor,
+        Bulldoze
     };
 
+    //FIXME : Move it else where
+    //Tile of the floor we want to place on the tilemap
+    private FloorTile ftile;
 
     //Storing the building function called
     // Need to update this based on the IBuildingMethod Interface methods
     private delegate void BuildingGameObjects(MouseController pointer);
     BuildingGameObjects onLeftButtonPressBMethod;
-    BuildingGameObjects onLeftButtonReleaseDuringDragAndDropBMethod;
     BuildingGameObjects duringDragAndDropBMethod;
-    BuildingGameObjects onRightButtonPressDuringDragAndDropBMethod;
 
     //Storing the place object function called
     // Need to update this based on the IPlaceObjectmethod Interface methods
     private delegate void PlacingGameObjects(MouseController pointer);
     PlacingGameObjects onLeftButtonPressPMethod;
-    PlacingGameObjects onUpdatePMethod;
 
     private delegate void PlacingGamesObjects_withoutPointer();
     PlacingGamesObjects_withoutPointer OnKeyboardPressPMethod;
-    
+
+    //Storing the placing floor function called
+    // Need to update this based on the IPlacingFloorTile Interface methods
+    private delegate void PlacingFloorTiles(MouseController pointer, FloorTile tile);
+    PlacingFloorTiles onLeftButtonPressFMethod;
+    PlacingFloorTiles duringDragAndDropFMethod;
+    PlacingFloorTiles onLeftButtonReleaseDuringDragAndDropFMethod;
+    PlacingFloorTiles onRightButtonPressDuringDragAndDropFMethod;
+
+    //Storing the Bulldoze function called
+    // Need to update this based on the IBulldozeMethod Interface methods
+    private delegate void BulldozeDel(MouseController pointer);
+    BulldozeDel onLeftButtonPressBulldozeMethod;
+
+
     //Indicate if currently drag&dropping
     private bool dragAndDropping;
 
@@ -54,7 +72,7 @@ public class ConstructionController : MonoBehaviour {
     //On Awake
     void Awake () {
         Instance = this;
-		currentBuildingMode = BuildingMode.NotBuilding;
+		CurrentBuildingMode = BuildingMode.NotBuilding;
         CurrentGlobalBuildingMode = GlobalBuildingMode.NotBuilding;
 	}
 	
@@ -67,11 +85,8 @@ public class ConstructionController : MonoBehaviour {
             Set_Mode_Build_To_Not_Building();
         }
 
-        //If we are over a UI element, then don't call a building method
-        //FIXME issue dragging or when releasing
-        //We just want to prevent startDrag
-        //Requires changing buildings methods
-        if (EventSystem.current.IsPointerOverGameObject())
+        //If we are over a UI element, then don't call a building method unless we are already dragging
+        if (EventSystem.current.IsPointerOverGameObject() && !dragAndDropping)
         {
             return;
         }
@@ -85,86 +100,23 @@ public class ConstructionController : MonoBehaviour {
         {
             ConstructionController.Instance.CallingPlacingObjectAction(MouseController.Instance.Pointer);
         }
-    }
-
-    //Sets the building mode to BuildingWall;
-    public void Set_Mode_Build_Wall()
-    {
-        currentBuildingMode = BuildingMode.BuildingWall;
-        CurrentGlobalBuildingMode = GlobalBuildingMode.BuildingWall;
-        HandleConstructionMode(currentBuildingMode);
-    }
-
-    //Sets the building mode to BuildingObjects
-    public void Set_Mode_Place_Furnitures()
-    {
-        currentBuildingMode = BuildingMode.BuildingObjects;
-        CurrentGlobalBuildingMode = GlobalBuildingMode.PlacingFurnitures;
-        HandleConstructionMode(currentBuildingMode);
-    }
-
-	//Sets the building mode to BuildingDoubleWalls
-	public void Set_Mode_Build_Double_Walls()
-	{
-		currentBuildingMode = BuildingMode.BuildingDoubleWalls;
-        CurrentGlobalBuildingMode = GlobalBuildingMode.BuildingWall;
-        HandleConstructionMode(currentBuildingMode);
-
-    }
-
-    //Sets the building mode to NotBuilding
-    public void Set_Mode_Build_To_Not_Building()
-    {
-        currentBuildingMode = BuildingMode.NotBuilding;
-        CurrentGlobalBuildingMode = GlobalBuildingMode.NotBuilding;
-        HandleConstructionMode(currentBuildingMode);
-    }
-
-
-    private void HandleConstructionMode(BuildingMode bmode)
-    {
-        if (bmode == BuildingMode.BuildingWall)
+        else if (CurrentGlobalBuildingMode == GlobalBuildingMode.PlacingFloor)
         {
-            //Setting the CreateWall Methods
-            SetBuildingMethods(CreateWall.Instance);
+            ConstructionController.Instance.CallingPlacingFloorTilesAction(MouseController.Instance.Pointer, ftile);
         }
-        else if (bmode == BuildingMode.BuildingObjects)
+        else if (CurrentGlobalBuildingMode == GlobalBuildingMode.Bulldoze)
         {
-            //Setting the ObjectPlacer Method
-            SetPlaceObjectMethods(PlaceObject.Instance);
+            ConstructionController.Instance.CallingBulldozeAction(MouseController.Instance.Pointer);
         }
-        else if (bmode == BuildingMode.BuildingDoubleWalls)
-        {
-            //Setting the CreateDoubleWalls Methods
-            SetBuildingMethods(CreateDoubleWalls.InstanceDoubleWall);
-        }
-
-        //Destroy the leftovert Ghost furniture if it exists
-        PlaceObject.DestroyLeftovertGhostlyFurniture();
-    }
-
-
-    // Utility Method Setting all the IBuildingMethods to the BuildingGameObjects var
-    private void SetBuildingMethods(IBuildingMethod buildingMethod)
-    {
-        onLeftButtonPressBMethod = buildingMethod.OnLeftButtonPress;
-        onLeftButtonReleaseDuringDragAndDropBMethod = buildingMethod.OnLeftButtonReleaseDuringDragAndDrop;
-        duringDragAndDropBMethod = buildingMethod.DuringDragAndDrop;
-        onRightButtonPressDuringDragAndDropBMethod = buildingMethod.OnRightButtonPressDuringDragAndDrop;
-    }
-
-    // Utility Method Setting all the IPlaceObjectmethod to the BuildingGameObjects var
-    private void SetPlaceObjectMethods(IPlaceObjectMethod placeObjectMethod)
-    {
-        onLeftButtonPressPMethod = placeObjectMethod.OnLeftButtonPress;
-        onUpdatePMethod = placeObjectMethod.OnUpdate;
-        OnKeyboardPressPMethod = placeObjectMethod.OnKeyboardPress;
     }
 
 
     //Method calling the different case of building method
     public void CallingBuildingAction(MouseController pointer)
     {
+        // Changing the material of the pointer
+        pointer.SetMouseMaterial(ResourcesLoading.MaterialDictionnary[ResourcesLoading.MaterialNames.MousePointerCube_Blue]);
+
         //When clicking for the first time,
         if (Input.GetMouseButtonDown(0))
         {
@@ -178,14 +130,12 @@ public class ConstructionController : MonoBehaviour {
             //If right click is pressed to cancel
             if (Input.GetMouseButtonDown(1))
             {
-                onRightButtonPressDuringDragAndDropBMethod(pointer);
                 //Drag&Drop Cancel
                 dragAndDropping = false;
 
             }
             else if (Input.GetMouseButtonUp(0))
             {
-                onLeftButtonReleaseDuringDragAndDropBMethod(pointer);
                 //Finishing the drag and drop
                 dragAndDropping = false;
             }
@@ -201,8 +151,8 @@ public class ConstructionController : MonoBehaviour {
     public void CallingPlacingObjectAction(MouseController pointer)
     {
 
-        //On Update
-        onUpdatePMethod(pointer);
+        // Changing the material of the pointer
+        pointer.SetMouseMaterial(ResourcesLoading.MaterialDictionnary[ResourcesLoading.MaterialNames.MousePointerCube_Blue]);
 
         //When clicking for the first time,
         if (Input.GetMouseButtonDown(0))
@@ -215,6 +165,155 @@ public class ConstructionController : MonoBehaviour {
         }
     }
 
+    //Method calling the different case of building method
+    public void CallingPlacingFloorTilesAction(MouseController pointer, FloorTile tile)
+    {
+        // Changing the material of the pointer
+        pointer.SetMouseMaterial(ResourcesLoading.MaterialDictionnary[ResourcesLoading.MaterialNames.MousePointerCube_Blue]);
+
+        //When clicking for the first time,
+        if (Input.GetMouseButtonDown(0))
+        {
+            onLeftButtonPressFMethod(pointer, tile);
+            dragAndDropping = true;
+        }
+
+        //During a drap and drop
+        if (dragAndDropping)
+        {
+            //If right click is pressed to cancel
+            if (Input.GetMouseButtonDown(1))
+            {
+                onRightButtonPressDuringDragAndDropFMethod(pointer, tile);
+                //Drag&Drop Cancel
+                dragAndDropping = false;
+
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                onLeftButtonReleaseDuringDragAndDropFMethod(pointer, tile);
+                //Finishing the drag and drop
+                dragAndDropping = false;
+            }
+            else
+            {
+                //Continue Drag&Dropping
+                duringDragAndDropFMethod(pointer, tile);
+            }
+        }
+    }
+
+    //Method calling the different case of Bulldoze method
+    public void CallingBulldozeAction(MouseController pointer)
+    {
+        // Changing the material of the pointer
+        pointer.SetMouseMaterial(ResourcesLoading.MaterialDictionnary[ResourcesLoading.MaterialNames.MousePointerCube_Red]);
+
+        //When clicking for the first time,
+        if (Input.GetMouseButtonDown(0))
+        {
+            onLeftButtonPressBulldozeMethod(pointer);
+        }
+    }
+
+    //Sets the building mode to BuildingWall;
+    public void Set_Mode_Build_Wall()
+    {
+        CurrentBuildingMode = BuildingMode.BuildingWall;
+        CurrentGlobalBuildingMode = GlobalBuildingMode.BuildingWall;
+        HandleConstructionMode(CurrentBuildingMode);
+    }
+
+    //Sets the building mode to BuildingObjects
+    public void Set_Mode_Place_Furnitures()
+    {
+        CurrentBuildingMode = BuildingMode.BuildingObjects;
+        CurrentGlobalBuildingMode = GlobalBuildingMode.PlacingFurnitures;
+        HandleConstructionMode(CurrentBuildingMode);
+    }
+
+    //Sets the building mode to PlacingFloorTiles
+    public void Set_Mode_Placing_Floor(FloorTile tile)
+    {
+        CurrentBuildingMode = BuildingMode.PlacingFloor;
+        CurrentGlobalBuildingMode = GlobalBuildingMode.PlacingFloor;
+        HandleConstructionMode(CurrentBuildingMode);
+        // Select the tile
+        this.ftile = tile;
+    }
+
+    //Sets the building mode to Bulldoze
+    public void Set_Mode_Build_To_Not_Building()
+    {
+        CurrentBuildingMode = BuildingMode.NotBuilding;
+        CurrentGlobalBuildingMode = GlobalBuildingMode.NotBuilding;
+        HandleConstructionMode(CurrentBuildingMode);
+    }
+
+    //Sets the building mode to NotBuilding
+    public void Set_Mode_Build_To_Bulldoze()
+    {
+        CurrentBuildingMode = BuildingMode.Bulldoze;
+        CurrentGlobalBuildingMode = GlobalBuildingMode.Bulldoze;
+        HandleConstructionMode(CurrentBuildingMode);
+    }
+
+
+    private void HandleConstructionMode(BuildingMode bmode)
+    {
+        if (bmode == BuildingMode.BuildingWall)
+        {
+            //Setting the CreateWall Methods
+            SetBuildingMethods(BuildWall.Instance);
+        }
+        else if (bmode == BuildingMode.BuildingObjects)
+        {
+            //Setting the ObjectPlacer Method
+            SetPlaceObjectMethods(PlaceFurnitures.Instance);
+        }
+        else if (bmode == BuildingMode.PlacingFloor)
+        {
+            SetPlaceFloorMethods(PlaceFloor.Instance);
+        }
+        else if (bmode == BuildingMode.Bulldoze)
+        {
+            SetBulldozeMethods(Bulldoze.Instance);
+        }
+
+        //Destroy the leftovert Ghost furniture if it exists
+        //PlaceObject.DestroyLeftovertGhostlyFurniture();
+    }
+
+
+    // Utility Method Setting all the IBuildingMethods to the BuildingGameObjects var
+    private void SetBuildingMethods(IBuildingMethod buildingMethod)
+    {
+        onLeftButtonPressBMethod = buildingMethod.OnLeftButtonPress;
+        duringDragAndDropBMethod = buildingMethod.DuringDragAndDrop;
+    }
+
+    // Utility Method Setting all the IPlaceObjectmethod to the BuildingGameObjects var
+    private void SetPlaceObjectMethods(IPlaceObjectMethod placeObjectMethod)
+    {
+        onLeftButtonPressPMethod = placeObjectMethod.OnLeftButtonPress;
+        OnKeyboardPressPMethod = placeObjectMethod.OnKeyboardPress;
+    }
+
+    // Utility Method Setting all the IplaceFloorMethod to the BuildingGameObjects var
+    private void SetPlaceFloorMethods(IPlacingFloorTile placeFloorMethod)
+    {
+        duringDragAndDropFMethod = placeFloorMethod.DuringDragAndDrop;
+        onLeftButtonPressFMethod = placeFloorMethod.OnLeftButtonPress;
+        onLeftButtonReleaseDuringDragAndDropFMethod = placeFloorMethod.OnLeftButtonReleaseDuringDragAndDrop;
+        onRightButtonPressDuringDragAndDropFMethod = placeFloorMethod.OnRightButtonPressDuringDragAndDrop;
+    }
+    // Utility Method Setting all the IplaceFloorMethod to the BuildingGameObjects var
+    private void SetBulldozeMethods(IBulldozeMethod bulldozeMethod)
+    {
+        onLeftButtonPressBulldozeMethod = bulldozeMethod.OnLeftButtonPress;
+    }
+
+
     //Utilies methods
     public static bool IsBuildingWall()
     {
@@ -224,6 +323,11 @@ public class ConstructionController : MonoBehaviour {
     public static bool IsPlacingFurnitures()
     {
         return CurrentGlobalBuildingMode.Equals(GlobalBuildingMode.PlacingFurnitures);
+    }
+
+    public static bool IsPlacingFlootTiles()
+    {
+        return CurrentGlobalBuildingMode.Equals(GlobalBuildingMode.PlacingFloor);
     }
 
     public static bool IsNotBuilding()

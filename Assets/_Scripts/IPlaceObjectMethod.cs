@@ -11,10 +11,10 @@ public interface IPlaceObjectMethod
 
     // OnUpdate
     // Used to display a position at every update
-    void OnUpdate(MouseController pointer);
+    //void OnUpdate(MouseController pointer);
 
     // OnKeyboardPress
-    //Use to handle shortcuts and other behaviours
+    //Use to handle shortcuts, rotation and other behaviours
     void OnKeyboardPress();
 
 }

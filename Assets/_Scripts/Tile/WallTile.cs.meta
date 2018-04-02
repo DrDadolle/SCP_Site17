@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e12af06af5fd3ab46852d7cd5d701c73
+timeCreated: 1522518447
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - Sprite: {instanceID: 0}
+  - WallPrefab: {fileID: 1573373090619802, guid: bf3197083f23dc04ab75da2c37a8a4d4,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

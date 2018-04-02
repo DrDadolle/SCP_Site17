@@ -15,6 +15,13 @@ public class MouseController : MonoBehaviour
     //Reference to the GameObject MousePointer
     public GameObject mousePointer;
 
+    // max distance for the raycast
+    private float maxDistance = Mathf.Infinity;
+
+    //Layer mask
+    private int layer_mask;
+
+
     //Last Mouse Position
     public MouseController Pointer {
         get; private set;
@@ -27,7 +34,7 @@ public class MouseController : MonoBehaviour
     void Start()
     {
         Pointer = GetComponent<MouseController>();
-
+        layer_mask = LayerMask.GetMask("Terrain");
     }
 
     // On Awake
@@ -40,19 +47,14 @@ public class MouseController : MonoBehaviour
     private void Update()
     {
         //Refresh the pointer Position
-        if (ConstructionController.IsBuildingWall())
-        {
-            //Activating the mousePointer
-            SetMouseToWallGrid();
-        }
-        else if(ConstructionController.IsPlacingFurnitures())
-        {
-            //Activating the mousePointer
-            SetMouseToFurnitureGrid();
-        }
-        else if(ConstructionController.IsNotBuilding())
+        if(ConstructionController.IsNotBuilding())
         {
             DiseableMousePointer();
+        }
+        else
+        {
+             //Activating the mousePointer
+            SetMouseToFurnitureGrid();
         }
 
 
@@ -71,6 +73,14 @@ public class MouseController : MonoBehaviour
     {
         mousePointer.SetActive(true);
         mousePointer.transform.position = snapCenterPosition(getWorldPoint());
+        mousePointer.transform.position += Vector3.up * 0.5f;
+    }
+
+    //Change the colour of the material of the mouse
+    public void SetMouseMaterial(Material mat)
+    {
+        // Set the materials
+        mousePointer.GetComponent<Renderer>().material = mat;
     }
 
     //Desactivate the mouse Pointer
@@ -90,7 +100,8 @@ public class MouseController : MonoBehaviour
         Camera camera = GetComponent<Camera>();
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+
+        if (Physics.Raycast(ray, out hit, maxDistance, layer_mask))
         {
             lastMousePosition = hit.point;
             return lastMousePosition;

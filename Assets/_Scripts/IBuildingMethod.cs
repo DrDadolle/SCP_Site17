@@ -11,7 +11,7 @@ public interface IBuildingMethod
 
     // OnLeftButtonReleaseDuringDragAndDrop
     // Used to finish a drag and drop of the left mouse button
-    void OnLeftButtonReleaseDuringDragAndDrop(MouseController pointer);
+    //void OnLeftButtonReleaseDuringDragAndDrop(MouseController pointer);
 
     // DuringDragAnDrop
     // Method called during each frame of a drag and drop
@@ -19,6 +19,6 @@ public interface IBuildingMethod
 
     // OnRightButtonPress
     // Used for canceling stuff
-    void OnRightButtonPressDuringDragAndDrop(MouseController pointer);
+    //void OnRightButtonPressDuringDragAndDrop(MouseController pointer);
 
 }
