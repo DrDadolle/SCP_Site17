@@ -3,31 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class PlaceFurnitures : MonoBehaviour, IPlaceObjectMethod {
+public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
+{
 
     //Reference to the tilemap
     public Tilemap map;
 
-    // Reference to the FurnitureTile
-    //It is empty
-    public FurnitureTile tile;
+    // Store the ref to the mouse pointer
+    public MousePointer pointer;
 
     // for access purpose
     public static PlaceFurnitures Instance;
 
-    // Store in memory the sprite of the previous FloorTile
-    public Sprite OldFloorSprite {
-        get; private set;
-    }
+    // Ref to the rotation float
+    public FloatVariable rotation;
 
-    // Store in memory the wanted Rotation
-    //TODO : Reset to zero when leaving construction mode
-    public float RotationFurniture
-    {
-        get; private set;
-    }
+    //The sprite
+    public StringVariable nameOfTheTileBeneath;
 
-
+    //FIXME : JobHandler maybe wrong name
+    public InitializeScene initScene;
 
     // On Awake
     void Awake()
@@ -35,36 +30,59 @@ public class PlaceFurnitures : MonoBehaviour, IPlaceObjectMethod {
         Instance = this;
     }
 
-    // ============================== Implement IPlaceObjectMethod ==============================
+    // ============================== Implement IBuildingMethod ==============================
     // These methods are called by the MouseController
 
     public void OnKeyboardPress()
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            RotationFurniture += 90;
-            RotationFurniture = RotationFurniture % 360;
+            rotation.thefloat += 90;
+            rotation.thefloat = rotation.thefloat % 360;
         }
     }
 
-    public void OnLeftButtonPress(MouseController pointer)
+    public void OnLeftButtonPress(TileBase tile)
     {
-        UpdateTile(pointer);
+        UpdateTile((FurnitureTile)tile);
     }
+
+    public void OnLeftButtonReleaseDuringDragAndDrop(TileBase tile)
+    {
+        //Do nothing
+    }
+
+    public void DuringDragAndDrop(TileBase tile)
+    {
+        //Do nothing
+    }
+
+    public void OnRightButtonPressDuringDragAndDrop(TileBase tile)
+    {
+        //Do nothing
+    }
+
     // ============================== Implement IPlaceObjectMethod ==============================
 
-    private void UpdateTile(MouseController pointer)
+    private void UpdateTile(FurnitureTile tile)
     {
-        Vector3Int tilePos = map.WorldToCell(pointer.getWorldPoint());
+        Vector3Int tilePos = map.WorldToCell(pointer.GetWorldPoint());
 
-        //If we are not over a floorTile, bail out
-        if (!(map.GetTile(tilePos) is FloorTile))
+        // Check if we can put this furniture there
+        //If we are not over a valid floorTile, bail out
+        if (!tile.furnitureData.tilesItCanBePlacedOn.Contains((FloorTile)map.GetTile(tilePos)))
+        {
+            // Bail out
+            Debug.Log("Can't place " + tile.furnitureData.furniturePrefab.name + " on " + map.GetTile(tilePos).name + " tile !");
             return;
+        }
 
         //Get Old sprite
-        OldFloorSprite = ((FloorTile)map.GetTile(tilePos)).SpriteOfFloor;
+        //OldSpriteOfFloor.sprite = ((FloorTile)map.GetTile(tilePos)).SpriteOfFloor;
+        Debug.Log(((FloorTile)map.GetTile(tilePos)).name);
+        nameOfTheTileBeneath.theString = ((FloorTile)map.GetTile(tilePos)).name;
 
-        //Place the furniture
+        //Set the furniture tile on the map
         map.SetTile(tilePos, tile);
     }
 }

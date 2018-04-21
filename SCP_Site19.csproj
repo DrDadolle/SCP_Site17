@@ -283,23 +283,47 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\_Scripts\Builders\BuildWall.cs" />
+    <Compile Include="Assets\_Scripts\Builders\BuildWallWithDoor.cs" />
     <Compile Include="Assets\_Scripts\Builders\Bulldoze.cs" />
     <Compile Include="Assets\_Scripts\Builders\PlaceFloor.cs" />
     <Compile Include="Assets\_Scripts\Builders\PlaceFurnitures.cs" />
-    <Compile Include="Assets\_Scripts\ConstructionController.cs" />
+    <Compile Include="Assets\_Scripts\Controllers\ConstructionController.cs" />
+    <Compile Include="Assets\_Scripts\Controllers\MouseController.cs" />
+    <Compile Include="Assets\_Scripts\Controllers\SaveAndLoadController.cs" />
     <Compile Include="Assets\_Scripts\GridMesh.cs" />
     <Compile Include="Assets\_Scripts\IBuildingMethod.cs" />
-    <Compile Include="Assets\_Scripts\IBulldozeMethod.cs" />
-    <Compile Include="Assets\_Scripts\IPlaceObjectMethod.cs" />
-    <Compile Include="Assets\_Scripts\IPlacingFloorTile.cs" />
-    <Compile Include="Assets\_Scripts\MouseController.cs" />
+    <Compile Include="Assets\_Scripts\Job.cs" />
+    <Compile Include="Assets\_Scripts\JobQueue.cs" />
+    <Compile Include="Assets\_Scripts\Managers\FurnitureManager.cs" />
+    <Compile Include="Assets\_Scripts\Managers\WeatherManager.cs" />
+    <Compile Include="Assets\_Scripts\Models\SCP\SCPClassification.cs" />
+    <Compile Include="Assets\_Scripts\Models\Single Object Models\ComputerModel.cs" />
+    <Compile Include="Assets\_Scripts\Models\Single Object Models\FurnitureFactory.cs" />
+    <Compile Include="Assets\_Scripts\Models\Single Object Models\FurnitureModel.cs" />
+    <Compile Include="Assets\_Scripts\Models\Single Object Models\OfficeModel.cs" />
+    <Compile Include="Assets\_Scripts\Models\Single Object Models\WallWithDoorsModel.cs" />
     <Compile Include="Assets\_Scripts\MoveCamera.cs" />
     <Compile Include="Assets\_Scripts\ResourcesLoading.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\CameraSpeedData.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\InitializeScene.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\Models\FurnitureData.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\MousePointer.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\BooleanVariables.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\FloatVariable.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\SpriteVariable.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\StringVariable.cs" />
+    <Compile Include="Assets\_Scripts\Tile\CommonMethodWall.cs" />
     <Compile Include="Assets\_Scripts\Tile\FloorTile.cs" />
     <Compile Include="Assets\_Scripts\Tile\FurnitureTile.cs" />
+    <Compile Include="Assets\_Scripts\Tile\SaveableTile.cs" />
     <Compile Include="Assets\_Scripts\Tile\WallTile.cs" />
+    <Compile Include="Assets\_Scripts\Tile\WallWithDoorTile.cs" />
     <Compile Include="Assets\_Scripts\UtilitiesMethod.cs" />
     <Compile Include="Assets\UI\AutomaticSetVerticalSize.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Downloaded_Resources\BodyGuards\ReadMe.txt.txt" />
+    <None Include="Assets\Downloaded_Resources\Equipment for industrial or sci-fi building\Equipment.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

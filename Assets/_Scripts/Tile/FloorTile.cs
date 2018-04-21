@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -8,7 +9,7 @@ using UnityEngine.Tilemaps;
  * Default Tile for the world
  * Contains floorSprite and furnitures
  */
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Tile/Floor Tile")]
 public class FloorTile : TileBase
 {
     //The sprite of tile in the palette

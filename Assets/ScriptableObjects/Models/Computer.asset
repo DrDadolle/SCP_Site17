@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f5a42e6e5dffc34ea7182c5d4ed345c, type: 3}
+  m_Name: Computer
+  m_EditorClassIdentifier: 
+  nameOfFurniture: Computer
+  costDollar: 2000
+  maxHealth: 200
+  furniturePrefab: {fileID: 1467876534227764, guid: a776e90b657e25d48a7baf65c685e7b3,
+    type: 2}
+  tilesItCanBePlacedOn:
+  - {fileID: 11400000, guid: b6876b1375b7512499c0990e622bd1a4, type: 2}

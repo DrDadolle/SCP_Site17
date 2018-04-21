@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 /**
  * Tile type handling walls
  */
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Tile/Wall Tile")]
 public class WallTile : TileBase
 {   
     
@@ -12,33 +12,11 @@ public class WallTile : TileBase
     private float rotPrefab;
 
     /**
-     * Indicates if the wall has a hole in it (to place doors)
-     */
-    public bool HasAHole
-    {
-        get; private set;
-    }
-
-    /**
      * Is called whenever a tile at "position" is placed
      */
     public override void RefreshTile(Vector3Int position, ITilemap tilemap)
-    {     
-        //Check horizontal neighbours
-        for (int x = -1; x <= 1; x++)
-        {
-            Vector3Int nPos = new Vector3Int(position.x + x, position.y, position.z);
-            RefreshNeighbourWallTiles(tilemap, nPos);
-
-        }
-
-        //Check vertical neighbours
-        //Note : it is Y because tilemap are XY based
-        for (int y = -1; y <= 1; y++)
-        {
-            Vector3Int nPos = new Vector3Int(position.x, position.y + y, position.z);
-            RefreshNeighbourWallTiles(tilemap, nPos);
-        }
+    {
+        CommonMethodWall.RefreshNeighbourWallsMethod(position, tilemap);
 
         base.RefreshTile(position, tilemap);
     }
@@ -49,54 +27,16 @@ public class WallTile : TileBase
      */
     public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)
     {
-        string composition = "";
-
-        /** Check if the neighbour has walls
-         * Check horizontal neighbours
-         */
-        for (int x = -1; x <= 1; x++)
-        {
-            if (x != 0)
-            {
-                Vector3Int nPos = new Vector3Int(position.x + x, position.y, position.z);
-                if(HasWall(tilemap, nPos))
-                {
-                    composition += "W";
-                }
-                else
-                {
-                    composition += "E";
-                }
-            }
-
-        }
-
-        /** Check if the neighbour has walls
-         * Check vertical neighbours
-         * Note : it is Y because tilemap are XY based
-         */
-        for (int y = -1; y <= 1; y++)
-        {
-            if (y != 0)
-            {
-                Vector3Int nPos = new Vector3Int(position.x, position.y + y, position.z);
-                if (HasWall(tilemap, nPos))
-                {
-                    composition += "W";
-                }
-                else
-                {
-                    composition += "E";
-                }
-            }
-        }
+        string composition = CommonMethodWall.ReturnCompositionOfNearWalls(position, tilemap);
 
         //Add the wall prefab based on the composition
-        SetWallBasedOnComposition(composition, ref tileData);
+        rotPrefab = SetWallBasedOnComposition(composition, ref tileData);
 
 
         //Delete the sprite below the wall
         tileData.sprite = null;
+
+        base.GetTileData(position, tilemap, ref tileData);
     }
 
     /**
@@ -116,68 +56,50 @@ public class WallTile : TileBase
     }
 
     /**
-     * Refresh all neighbour wall tiles
-     */
-    private void RefreshNeighbourWallTiles(ITilemap tilemap, Vector3Int pos)
+ *  handle Exhaustively the composition cases
+ *  return the rotation
+ */
+    private float SetWallBasedOnComposition(string composition, ref TileData tileData)
     {
-        if(HasWall(tilemap,pos))
-        {
-            tilemap.RefreshTile(pos);
-        }
-    }
-
-    /**
-     * Return true if the tile is a walltile
-     */
-    private bool HasWall(ITilemap tilemap, Vector3Int pos)
-    {
-        return tilemap.GetTile(pos) == this;
-    }
-
-    /**
-     *  handle Exhaustively the composition cases
-     */
-    private void SetWallBasedOnComposition(string composition, ref TileData tileData)
-    {
-        rotPrefab = 0f;
+        float rot = 0f;
         GameObject prefab;
 
         // Only one neighbour situation
-        if(composition.Equals("EEEW") || composition.Equals("EEWE") || composition.Equals("EWEE") || composition.Equals("WEEE"))
+        if (composition.Equals("EEEW") || composition.Equals("EEWE") || composition.Equals("EWEE") || composition.Equals("WEEE"))
         {
             prefab = ResourcesLoading.WallPrefabDictionnary[ResourcesLoading.WallsPrefabName.I_Wall];
             // Z axis alignement need rotation
             if (composition.Equals("EEWE") || composition.Equals("EEEW"))
             {
-                rotPrefab = 90f;
+                rot = 90f;
             }
         }
         //Corner neighbour situation
-        else if(composition.Equals("EWWE") || composition.Equals("EWEW") || composition.Equals("WEEW") || composition.Equals("WEWE"))
+        else if (composition.Equals("EWWE") || composition.Equals("EWEW") || composition.Equals("WEEW") || composition.Equals("WEWE"))
         {
             prefab = ResourcesLoading.WallPrefabDictionnary[ResourcesLoading.WallsPrefabName.Corner_Wall];
 
             if (composition.Equals("WEEW"))
             {
-                rotPrefab = 90f;
+                rot = 90f;
             }
             else if (composition.Equals("EWEW"))
             {
-                rotPrefab = 180f;
+                rot = 180f;
             }
             else if (composition.Equals("EWWE"))
             {
-                rotPrefab = 270f;
+                rot = 270f;
             }
         }
         // Opposite neighbour
-        else if(composition.Equals("WWEE") || composition.Equals("EEWW"))
+        else if (composition.Equals("WWEE") || composition.Equals("EEWW"))
         {
             prefab = ResourcesLoading.WallPrefabDictionnary[ResourcesLoading.WallsPrefabName.I_Wall];
             // Z axis alignement need rotation
             if (composition.Equals("EEWW"))
             {
-                rotPrefab = 90f;
+                rot = 90f;
             }
 
         }
@@ -188,15 +110,15 @@ public class WallTile : TileBase
 
             if (composition.Equals("WEWW"))
             {
-                rotPrefab = 90f;
+                rot = 90f;
             }
             else if (composition.Equals("WWEW"))
             {
-                rotPrefab = 180f;
+                rot = 180f;
             }
             else if (composition.Equals("EWWW"))
             {
-                rotPrefab = 270f;
+                rot = 270f;
             }
         }
         //No neighbour or 4 neighbour = default prefab
@@ -207,8 +129,8 @@ public class WallTile : TileBase
 
         //Adding the wall prefab on the tile
         tileData.gameObject = prefab;
+
+        return rot;
     }
-
-
 
 }

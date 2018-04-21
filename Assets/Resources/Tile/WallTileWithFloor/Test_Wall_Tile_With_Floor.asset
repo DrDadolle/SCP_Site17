@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7242f1b1bd32ca44be8e238f349ea33, type: 3}
+  m_Name: Test_Wall_Tile_With_Floor
+  m_EditorClassIdentifier: 
+  Wall_With_A_Hole_Prefab: {fileID: 1582415056137110, guid: d43de1630d952394aa40c00eaf758272,
+    type: 2}
+  oldSpriteOfFloor: {fileID: 11400000, guid: e1d5ea59e9ecca84da51959b447015a7, type: 2}

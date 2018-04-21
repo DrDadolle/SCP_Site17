@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 /**
  * Class containing the loaded resources (e.g. Materials)
  */
+[System.Serializable]
 public class ResourcesLoading : MonoBehaviour {
 
     // Materials
@@ -37,9 +38,30 @@ public class ResourcesLoading : MonoBehaviour {
         X_Wall,
         Corner_Wall,
         I_Wall,
-        T_Wall
+        T_Wall,
+        Door_Wall,
+        Window_Wall
     }
     public static Dictionary<WallsPrefabName, GameObject> WallPrefabDictionnary = new Dictionary<WallsPrefabName, GameObject>();
+
+    // TileBases
+    protected static string PATH_TO_TILEBASE = "Tile";
+    [System.Serializable]
+    public enum TileBasesName
+    {
+        DarkGrey_Floor_Tile,
+        Orange_Floor_Tile,
+        Computer,
+        Furniture_Tile_Test,
+        Wall_Tile,
+        Test_Wall_Tile_With_Floor
+    }
+    // One dictionnary per TileBase child class
+    public static Dictionary<TileBasesName, FurnitureTile> FurnitureTileDic      = new Dictionary<TileBasesName, FurnitureTile>();
+    public static Dictionary<TileBasesName, FloorTile> FloorTileDic          = new Dictionary<TileBasesName, FloorTile>();
+    public static Dictionary<TileBasesName, WallTile> WallTileDic                = new Dictionary<TileBasesName, WallTile>();
+    public static Dictionary<TileBasesName, WallWithDoorTile> WallDoorTileDic    = new Dictionary<TileBasesName, WallWithDoorTile>();
+
 
 
 
@@ -53,6 +75,9 @@ public class ResourcesLoading : MonoBehaviour {
 
         //Loading Walls Prefabs
         LoadingWallPrefabs();
+
+        // Loading All type of TileBase
+        LoadingTileBases();
     }
 
 
@@ -76,6 +101,37 @@ public class ResourcesLoading : MonoBehaviour {
         //Check that the loading was successful
         if (FloorTilesDictionnary.Count != tmp.Length)
             Debug.LogError("Loading of FloorTiles failed");
+
+    }
+
+
+    //Loading tiles
+    private void LoadingTileBases()
+    {
+        Object[] tmp = Resources.LoadAll(PATH_TO_TILEBASE, typeof(TileBase));
+        string[] names = System.Enum.GetNames(typeof(TileBasesName));
+        TileBasesName[] values = (TileBasesName[])System.Enum.GetValues(typeof(TileBasesName));
+
+        foreach (var t in tmp)
+        {
+            for (int i = 0; i < names.Length; i++)
+            {
+                if (t.name.Equals(names[i]))
+                    if(t is FloorTile)
+                        FloorTileDic.Add(values[i], (FloorTile)t);
+                    else if (t is FurnitureTile)
+                        FurnitureTileDic.Add(values[i], (FurnitureTile)t);
+                    else if (t is WallTile)
+                        WallTileDic.Add(values[i], (WallTile)t);
+                    else if (t is WallWithDoorTile)
+                        WallDoorTileDic.Add(values[i], (WallWithDoorTile)t);
+            }
+
+        }
+
+        //Check that the loading was successful
+        if (FloorTileDic.Count + FurnitureTileDic.Count + WallTileDic.Count + WallDoorTileDic.Count != tmp.Length)
+            Debug.LogError("Loading of TileBase failed");
 
     }
 

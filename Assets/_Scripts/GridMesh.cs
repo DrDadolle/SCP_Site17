@@ -7,7 +7,9 @@ public class GridMesh : MonoBehaviour
 {
 	public int GridSize;
 
-	void Awake()
+    public float reductionOfAlpha;
+
+    void Awake()
 	{
 		MeshFilter filter = gameObject.GetComponent<MeshFilter>();        
 		var mesh = new Mesh();
@@ -35,6 +37,8 @@ public class GridMesh : MonoBehaviour
 
 		MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
 		meshRenderer.material = new Material(Shader.Find("Sprites/Default"));
-		meshRenderer.material.color = Color.white;
+        Color Whitish = Color.white;
+        Whitish.a -= reductionOfAlpha;
+        meshRenderer.material.color = Whitish;
 	}
 }

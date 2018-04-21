@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class PlaceFloor : MonoBehaviour, IPlacingFloorTile {
+public class PlaceFloor : MonoBehaviour, IBuildingMethod
+{
 
     // Tilemap containing the world
     public Tilemap map;
 
     // Instance for access purpose
     public static PlaceFloor Instance;
+
+    // Store the ref to the mouse pointer
+    public MousePointer pointer;
 
     // Starting Cell position of the drag and drop
     private Vector3Int startpos;
@@ -40,45 +44,51 @@ public class PlaceFloor : MonoBehaviour, IPlacingFloorTile {
         Instance = this;
     }
 
-    // ============================== Implement IPlacingFloorTile ==============================
+    // ============================== Implement IBuildingMethod ==============================
     // These methods are called by the MouseController
 
     // Set the starting position of the drag & drop
-    public void OnLeftButtonPress(MouseController pointer, FloorTile tile)
+    public void OnLeftButtonPress(TileBase tile)
     {
         //Save starting position
-        startpos = map.WorldToCell(pointer.getWorldPoint());
+        startpos = map.WorldToCell(pointer.GetWorldPoint());
     }
 
-    public void DuringDragAndDrop(MouseController pointer, FloorTile tile)
+    public void DuringDragAndDrop(TileBase tile)
     {
 
-        UpdateTile(pointer, tile);
+        UpdateTile((FloorTile)tile);
     }
 
 
-    public void OnLeftButtonReleaseDuringDragAndDrop(MouseController pointer, FloorTile tile)
+    public void OnLeftButtonReleaseDuringDragAndDrop(TileBase tile)
     {
         // Clean up the memory
         listOfOldTiles.Clear();
     }
 
-    public void OnRightButtonPressDuringDragAndDrop(MouseController pointer, FloorTile tile)
+    public void OnRightButtonPressDuringDragAndDrop(TileBase tile)
     {
-        ResetOldTiles(pointer, tile);
+        CleanUpPreviewTiles();
+    }
+
+
+    public void OnKeyboardPress()
+    {
+        //DO NOTHING
     }
 
     // ========================== End Implement IPlacingFloorTile ==============================
 
 
-    private void UpdateTile(MouseController pointer, FloorTile tile)
+    private void UpdateTile(FloorTile tile)
     {
         // Avoid calling the updatetile method every frame if nothing changed
-        if (currentpos == map.WorldToCell(pointer.getWorldPoint()))
+        if (currentpos == map.WorldToCell(pointer.GetWorldPoint()))
             return;
 
         // get current position
-        currentpos = map.WorldToCell(pointer.getWorldPoint());
+        currentpos = map.WorldToCell(pointer.GetWorldPoint());
 
         // Get starting and end position
         int start_x = startpos.x;
@@ -125,12 +135,6 @@ public class PlaceFloor : MonoBehaviour, IPlacingFloorTile {
         }
     }
 
-    // Remove the preview tiles
-    private void ResetOldTiles(MouseController pointer, FloorTile tile)
-    {
-        CleanUpPreviewTiles();
-    }
-
     /** Remove the previewTiles and add back the old one
      * FIXME special case with furnitures
      */
@@ -143,6 +147,5 @@ public class PlaceFloor : MonoBehaviour, IPlacingFloorTile {
             map.SetTile(t.npos, t.tileBase);
         }
     }
-
 
 }

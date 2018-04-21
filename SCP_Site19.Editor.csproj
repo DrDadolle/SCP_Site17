@@ -290,6 +290,10 @@
   <ItemGroup>
     <Compile Include="Assets\UI\Editor\AutomaticSetVerticalSizeEditor.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Downloaded_Resources\BodyGuards\ReadMe.txt.txt" />
+    <None Include="Assets\Downloaded_Resources\Equipment for industrial or sci-fi building\Equipment.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

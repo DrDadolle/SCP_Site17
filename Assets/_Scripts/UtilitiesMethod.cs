@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UtilitiesMethod : MonoBehaviour {
+public class UtilitiesMethod {
 
     //Utilities method to change the material of all the children
     public static void ChangeMaterialOfRecChildGameObject(GameObject obj, Material material)
@@ -33,6 +33,32 @@ public class UtilitiesMethod : MonoBehaviour {
             }
         }
         return false;
+    }
+
+    /*
+	 * Snap the position at the center of the grid
+	 * The y axis will be always of 0
+	*/
+    public static Vector3 snapCenterPosition(Vector3 original)
+    {
+        Vector3 snapped;
+        snapped.x = Mathf.Floor(original.x) + 0.5f;
+        snapped.y = Mathf.Floor(0f);
+        snapped.z = Mathf.Floor(original.z) + 0.5f;
+        return snapped;
+    }
+
+    /*
+     * Snap the position at the edge of the grid
+     * The y axis will be always of 0
+    */
+    public static Vector3 snapPosition(Vector3 original)
+    {
+        Vector3 snapped;
+        snapped.x = Mathf.Floor(original.x + 0.5f);
+        snapped.y = Mathf.Floor(0f);
+        snapped.z = Mathf.Floor(original.z + 0.5f);
+        return snapped;
     }
 
 }
