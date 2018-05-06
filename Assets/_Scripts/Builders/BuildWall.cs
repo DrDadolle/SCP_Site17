@@ -185,8 +185,8 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
                 */
                 Job j_tmp = new Job(npos, (theJob) =>
                 {
-                    (map.GetTile(npos) as WallTile).isPending = false;
-                    (map.GetTile(npos) as WallTile).isPreview = false;
+                    map.GetTile<WallTile>(npos).isPending = false;
+                    map.GetTile<WallTile>(npos).isPreview = false;
                     map.RefreshTile(npos);
 
                 });

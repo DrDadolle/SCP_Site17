@@ -48,10 +48,10 @@ public class CommonMethodWall {
         {
             //TODO : add the same for WallWithDoorTile
 
-            Debug.Log("Pending : " + tilemap.GetTile<WallTile>(pos).isPending);
+            Debug.Log("Pending @ " + pos +" : " + tilemap.GetTile<WallTile>(pos).isPending);
             //The following line is buggy :
             tilemap.RefreshTile(pos);
-            Debug.Log("Pending : " + tilemap.GetTile<WallTile>(pos).isPending);
+            Debug.Log("Pending @ " + pos + " : " + tilemap.GetTile<WallTile>(pos).isPending);
         }
     }
 

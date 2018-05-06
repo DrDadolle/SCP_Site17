@@ -14,6 +14,7 @@ public class WallTile : TileBase
     public Material WallMaterial;
     public Material PendingMaterial;
 
+    //TODO Move it to model ? Copy it ?
     public bool isPending;
     public bool isPreview;
 
