@@ -23,11 +23,14 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 	int start_x;
 	int start_y;
 
-	// Current Cell position of the drag and drop
-	private Vector3Int currentpos;
+    // Current Cell position of the drag and drop
+    private Vector3Int currentpos;
 
-	// Storing old positions
-	public class OldTileData
+    // List of all pending tiles
+    private List<Vector3Int> listOfPendingTiles = new List<Vector3Int>();
+
+    // Storing old positions
+    public class OldTileData
 	{
 		public Vector3Int npos;
 		public TileBase tileBase;
@@ -38,8 +41,9 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 			this.tileBase = tileBase;
 		}
 	}
-
     private List<OldTileData> listOfOldTiles = new List<OldTileData>();
+
+    private List<Job> listOfPotentialJobs = new List<Job>();
 
     // On Awake
     void Awake()
@@ -67,11 +71,28 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
     {
         // Clean up the memory
         listOfOldTiles.Clear();
+
+        // Add all jobs
+        foreach(var j in listOfPotentialJobs)
+        {
+            JobManager.jobQueue.Enqueue(j);
+        }
+        // Change the preview tile to the pending tiles
+        foreach (var v in listOfPendingTiles)
+        {
+            map.GetTile<WallTile>(v).isPending = true;
+            map.GetTile<WallTile>(v).isPreview = false;
+            map.RefreshTile(v);  
+        }
+        listOfPendingTiles.Clear();
+        listOfPotentialJobs.Clear();
     }
 
     public void OnRightButtonPressDuringDragAndDrop(TileBase tile)
     {
         CleanUpPreviewTiles();
+        listOfPotentialJobs.Clear();
+        listOfPendingTiles.Clear();
     }
 
     public void OnKeyboardPress()
@@ -127,9 +148,11 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 
 		// Clean up old drag previews
 		CleanUpPreviewTiles();
+        listOfPotentialJobs.Clear();
+        listOfPendingTiles.Clear();
 
-		// Display a preview of the drag area
-		for (int m = start_max; m <= end_max; m++)
+        // Display a preview of the drag area
+        for (int m = start_max; m <= end_max; m++)
 		{
 			Vector3Int npos;
 			//Building on X
@@ -142,12 +165,34 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 				npos = new Vector3Int (start_x, m, 0);
 			}
 
-			//Add the old tile to the list
-			OldTileData t_tmp = new OldTileData(npos, map.GetTile(npos));
-			listOfOldTiles.Add(t_tmp);
+            // If we are not building over an existing wall
+            if (!(map.GetTile(npos) is WallTile))
+            {
+                //Add the old tile to the list
+                OldTileData t_tmp = new OldTileData(npos, map.GetTile(npos));
+                listOfOldTiles.Add(t_tmp);
 
-            // Display the building hint on top of this tile position
-            map.SetTile(npos, tile);
+                //Set the pending tile
+                tile.isPreview = true;
+                tile.isPending = false;
+                map.SetTile(npos, tile);
+                listOfPendingTiles.Add(npos);
+
+                /**
+                * JOBS !
+                 * We should create all the jobs only on mousebutton release !
+                * We should create a tmp list of jobs !
+                */
+                Job j_tmp = new Job(npos, (theJob) =>
+                {
+                    (map.GetTile(npos) as WallTile).isPending = false;
+                    (map.GetTile(npos) as WallTile).isPreview = false;
+                    map.RefreshTile(npos);
+
+                });
+
+                listOfPotentialJobs.Add(j_tmp);
+            }
 		}
     }
 

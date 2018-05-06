@@ -18,11 +18,10 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
     // Ref to the rotation float
     public FloatVariable rotation;
 
-    //The sprite
-    public StringVariable nameOfTheTileBeneath;
+    //The sprite dict
+    public DictionnaryVariable dictionnaryOfOldTiles;
 
-    //FIXME : JobHandler maybe wrong name
-    public InitializeScene initScene;
+    private List<Job> listOfPotentialJobs = new List<Job>();
 
     // On Awake
     void Awake()
@@ -77,12 +76,26 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
             return;
         }
 
-        //Get Old sprite
-        //OldSpriteOfFloor.sprite = ((FloorTile)map.GetTile(tilePos)).SpriteOfFloor;
-        Debug.Log(((FloorTile)map.GetTile(tilePos)).name);
-        nameOfTheTileBeneath.theString = ((FloorTile)map.GetTile(tilePos)).name;
+        //Save old sprite
+        Vector3 v3 = new Vector3(tilePos.x, tilePos.y, tilePos.z);
+        // If it contains already this tile
+        if (!dictionnaryOfOldTiles.AddToDict(v3, ((FloorTile)map.GetTile(tilePos)).name))
+        {
+            Debug.LogError("Trying to add twice the old tile data. Return.");
+            return;
+        }
 
-        //Set the furniture tile on the map
-        map.SetTile(tilePos, tile);
+        /**
+        * JOBS !
+        * We should create all the jobs only on mousebutton release !
+        * We should create a tmp list of jobs !
+        */
+        Job j_tmp = new Job(tilePos, (theJob) =>
+        {
+            //Set the furniture tile on the map
+            map.SetTile(tilePos, tile);
+            //FIXME : Maybe indicates that a job is going on
+        });
+        JobManager.jobQueue.Enqueue(j_tmp);
     }
 }

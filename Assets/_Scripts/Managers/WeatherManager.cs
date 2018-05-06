@@ -11,7 +11,7 @@ public class WeatherManager : MonoBehaviour {
 	void Start () {
 
         //Start a random Weather
-        weather[Random.Range(0, weather.Length - 1)].SetActive(true);
+        weather[Random.Range(0, weather.Length)].SetActive(true);
 
 	}
 }

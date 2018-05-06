@@ -11,14 +11,28 @@ public class WallTile : TileBase
     //Rotation value (in degree) of the prefab to align them correctly
     private float rotPrefab;
 
+    public Material WallMaterial;
+    public Material PendingMaterial;
+
+    public bool isPending;
+    public bool isPreview;
+
     /**
      * Is called whenever a tile at "position" is placed
      */
     public override void RefreshTile(Vector3Int position, ITilemap tilemap)
     {
-        CommonMethodWall.RefreshNeighbourWallsMethod(position, tilemap);
-
+        //For some reasons, it is needed to real time update the preview walls
+        // if (SaveAndLoadController.IsLoading)
+        //{
         base.RefreshTile(position, tilemap);
+        //}
+
+        //When placing the true wall
+        //if (!isPreview && !isPending)
+        //{
+        CommonMethodWall.RefreshNeighbourWallsMethod(position, tilemap);
+        //}
     }
 
     /**
@@ -32,11 +46,10 @@ public class WallTile : TileBase
         //Add the wall prefab based on the composition
         rotPrefab = SetWallBasedOnComposition(composition, ref tileData);
 
-
         //Delete the sprite below the wall
         tileData.sprite = null;
 
-        base.GetTileData(position, tilemap, ref tileData);
+        //Debug.Log("getTileData @" + position + ", preview : " + this.isPreview + ", pending : " + this.isPending +", test : " + test);
     }
 
     /**
@@ -52,6 +65,17 @@ public class WallTile : TileBase
         //Handle rotation based on the composition
         go.transform.Rotate(Vector3.up * rotPrefab);
 
+        if (this.isPending)
+        {
+            UtilitiesMethod.ChangeMaterialOfRecChildGameObject(go, PendingMaterial);
+        }
+        else
+        {
+            UtilitiesMethod.ChangeMaterialOfRecChildGameObject(go, WallMaterial);
+        }
+
+
+
         return true;
     }
 
@@ -63,6 +87,7 @@ public class WallTile : TileBase
     {
         float rot = 0f;
         GameObject prefab;
+        
 
         // Only one neighbour situation
         if (composition.Equals("EEEW") || composition.Equals("EEWE") || composition.Equals("EWEE") || composition.Equals("WEEE"))

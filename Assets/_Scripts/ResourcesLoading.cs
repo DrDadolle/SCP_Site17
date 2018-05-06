@@ -49,6 +49,8 @@ public class ResourcesLoading : MonoBehaviour {
     [System.Serializable]
     public enum TileBasesName
     {
+        //For special cases
+        Empty,
         DarkGrey_Floor_Tile,
         Orange_Floor_Tile,
         Computer,
@@ -58,7 +60,7 @@ public class ResourcesLoading : MonoBehaviour {
     }
     // One dictionnary per TileBase child class
     public static Dictionary<TileBasesName, FurnitureTile> FurnitureTileDic      = new Dictionary<TileBasesName, FurnitureTile>();
-    public static Dictionary<TileBasesName, FloorTile> FloorTileDic          = new Dictionary<TileBasesName, FloorTile>();
+    public static Dictionary<TileBasesName, FloorTile> FloorTileDic              = new Dictionary<TileBasesName, FloorTile>();
     public static Dictionary<TileBasesName, WallTile> WallTileDic                = new Dictionary<TileBasesName, WallTile>();
     public static Dictionary<TileBasesName, WallWithDoorTile> WallDoorTileDic    = new Dictionary<TileBasesName, WallWithDoorTile>();
 

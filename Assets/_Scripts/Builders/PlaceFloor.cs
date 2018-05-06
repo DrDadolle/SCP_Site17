@@ -22,6 +22,9 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
     // Current Cell position of the drag and drop
     private Vector3Int currentpos;
 
+    // List of all pending tiles
+    private List<Vector3Int> listOfPendingTiles = new List<Vector3Int>();
+
     // Storing old positions
     public class OldTileData
     {
@@ -36,7 +39,7 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
     }
     private List<OldTileData> listOfOldTiles = new List<OldTileData>();
 
-
+    private List<Job> listOfPotentialJobs = new List<Job>();
 
     // On Awake
     void Awake()
@@ -65,11 +68,28 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
     {
         // Clean up the memory
         listOfOldTiles.Clear();
+
+        // Add all jobs
+        foreach (var j in listOfPotentialJobs)
+        {
+            JobManager.jobQueue.Enqueue(j);
+        }
+        // Change the preview tile to the pending tiles
+        foreach (var v in listOfPendingTiles)
+        {
+            (map.GetTile(v) as FloorTile).isPending = true;
+            map.RefreshTile(v);
+        }
+
+        listOfPotentialJobs.Clear();
+        listOfPendingTiles.Clear();
     }
 
     public void OnRightButtonPressDuringDragAndDrop(TileBase tile)
     {
         CleanUpPreviewTiles();
+        listOfPotentialJobs.Clear();
+        listOfPendingTiles.Clear();
     }
 
 
@@ -116,6 +136,8 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
 
         // Clean up old drag previews
         CleanUpPreviewTiles();
+        listOfPotentialJobs.Clear();
+        listOfPendingTiles.Clear();
 
 
         // Display a preview of the drag area
@@ -129,8 +151,25 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
                 OldTileData t_tmp = new OldTileData(npos, map.GetTile(npos));
                 listOfOldTiles.Add(t_tmp);
 
-                // Display the building hint on top of this tile position
+                //Set the pending tile
+                tile.isPending = false;
                 map.SetTile(npos, tile);
+                listOfPendingTiles.Add(npos);
+
+                /**
+                * JOBS !
+                * We should create all the jobs only on mousebutton release !
+                * We should create a tmp list of jobs !
+                */
+                Job j_tmp = new Job(npos, (theJob) =>
+                {
+                    // When job done, tile is not pending anymore and refresh it.
+                    (map.GetTile(npos) as FloorTile).isPending = false;
+                    map.RefreshTile(npos);
+
+                });
+
+                listOfPotentialJobs.Add(j_tmp);
             }
         }
     }

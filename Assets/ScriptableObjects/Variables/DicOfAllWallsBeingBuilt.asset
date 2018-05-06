@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: DicOfAllWallsBeingBuilt
+  m_EditorClassIdentifier: Assembly-CSharp::DictionnaryPosGoVariable
+  isPreviewGo: 0
+  PreviewMaterial: {fileID: 2100000, guid: 4e6fe78f8a55e524b90bf12d2769784a, type: 2}
+  FinishMaterial: {fileID: 2100000, guid: 472334e8ee4dc40219ca9ec770c536aa, type: 2}

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Name: Furniture_Tile_Test
   m_EditorClassIdentifier: 
   furnitureData: {fileID: 11400000, guid: 1fba0cf7ba331f448932751fd690c308, type: 2}
-  nameOfTheTileBeneath: {fileID: 11400000, guid: c98ee2e3faf68ec4da176cac9f302a39,
+  dictionnaryOfOldTiles: {fileID: 11400000, guid: 35f1f5b52287f1248a02b8f1b2681b29,
     type: 2}
   rotation: {fileID: 11400000, guid: e79e0f35d303af54b9ace79f9b764064, type: 2}

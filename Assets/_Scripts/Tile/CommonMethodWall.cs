@@ -16,8 +16,12 @@ public class CommonMethodWall {
         //Check horizontal neighbours
         for (int x = -1; x <= 1; x++)
         {
-            Vector3Int nPos = new Vector3Int(position.x + x, position.y, position.z);
-            RefreshNeighbourWallTiles(tilemap, nPos);
+            // Do not refresh itself !!!!
+            if (x != 0)
+            {
+                Vector3Int nPos = new Vector3Int(position.x + x, position.y, position.z);
+                RefreshNeighbourWallTiles(tilemap, nPos);
+            }
 
         }
 
@@ -25,8 +29,12 @@ public class CommonMethodWall {
         //Note : it is Y because tilemap are XY based
         for (int y = -1; y <= 1; y++)
         {
-            Vector3Int nPos = new Vector3Int(position.x, position.y + y, position.z);
-            RefreshNeighbourWallTiles(tilemap, nPos);
+            // Do not refresh itself !!!!
+            if (y != 0)
+            {
+                Vector3Int nPos = new Vector3Int(position.x, position.y + y, position.z);
+                RefreshNeighbourWallTiles(tilemap, nPos);
+            }
         }
 
     }
@@ -38,7 +46,12 @@ public class CommonMethodWall {
     {
         if (HasWall(tilemap, pos))
         {
+            //TODO : add the same for WallWithDoorTile
+
+            Debug.Log("Pending : " + tilemap.GetTile<WallTile>(pos).isPending);
+            //The following line is buggy :
             tilemap.RefreshTile(pos);
+            Debug.Log("Pending : " + tilemap.GetTile<WallTile>(pos).isPending);
         }
     }
 

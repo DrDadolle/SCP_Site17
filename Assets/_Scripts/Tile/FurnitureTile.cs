@@ -13,7 +13,8 @@ public class FurnitureTile : TileBase
     public FurnitureData furnitureData;
 
     //The sprite
-    public StringVariable nameOfTheTileBeneath;
+    private string OldFloorTileName;
+    public DictionnaryVariable dictionnaryOfOldTiles;
 
     // Ref to the rotation float
     public FloatVariable rotation;
@@ -38,21 +39,30 @@ public class FurnitureTile : TileBase
         tileData.gameObject = furnitureData.furniturePrefab;
 
         //Normal behaviour
-        if (!SaveAndLoadController.IsRechargingFurnitures)
+        if (!SaveAndLoadController.IsLoading)
         {
+            Vector3 v3 = new Vector3(position.x, position.y, position.z);
+            // if contains, get the name, else it is "Empty"
+            if(dictionnaryOfOldTiles.theDict.ContainsKey(v3))
+            {
+                OldFloorTileName = dictionnaryOfOldTiles.theDict[v3];
+            }
+            else
+            {
+                OldFloorTileName = "Empty";
+            }
+
             // get the floorTiles Name, then place the sprite accordinly
-            ResourcesLoading.TileBasesName tileBeneath = (ResourcesLoading.TileBasesName)System.Enum.Parse(typeof(ResourcesLoading.TileBasesName), nameOfTheTileBeneath.theString);
+            ResourcesLoading.TileBasesName tileBeneath = (ResourcesLoading.TileBasesName)System.Enum.Parse(typeof(ResourcesLoading.TileBasesName), OldFloorTileName);
             tileData.sprite = ResourcesLoading.FloorTileDic[tileBeneath].SpriteOfFloor;
         }
         //if we are reloading all furnitures based on the current models
         // recharging sprite
         else
         {
-            FurnitureModel _model = FurnitureManager.Instance.GetModelFromAllDictionnaries(position);
-            if (_model != null)
-            {
-                tileData.sprite = ResourcesLoading.FloorTileDic[_model.tileItWasPutOn].SpriteOfFloor;
-            }
+            ResourcesLoading.TileBasesName tileBeneath = SaveAndLoadController.GetSpriteFromLoadedFurnitureList(position, SaveAndLoadController.loadedData);
+            tileData.sprite = ResourcesLoading.FloorTileDic[tileBeneath].SpriteOfFloor;
+            OldFloorTileName = tileBeneath.ToString();
         }
     }
 
@@ -68,18 +78,9 @@ public class FurnitureTile : TileBase
         go.transform.Rotate(Vector3.up * rotation.thefloat);
         go.name = furnitureData.nameOfFurniture + " : " + position.x + "_" + position.y;
 
-        // Create the office data class and add it to the total game data
-        if (!SaveAndLoadController.IsRechargingFurnitures)
-        {
-            ResourcesLoading.TileBasesName tileBeneath = (ResourcesLoading.TileBasesName)System.Enum.Parse(typeof(ResourcesLoading.TileBasesName), nameOfTheTileBeneath.theString);
-            FurnitureFactory.BuildFurniture(furnitureData, position, rotation.thefloat, go, tileBeneath);
-        }
-        //if we are reloading all furnitures based on the current models
-        // do nothing as the FurnitureManagers contains already correct models
-        else
-        {
-            //DO NOTHING
-        }
+        // Create the furniture data class and add it to the total game data
+        ResourcesLoading.TileBasesName tileBeneath = (ResourcesLoading.TileBasesName)System.Enum.Parse(typeof(ResourcesLoading.TileBasesName), OldFloorTileName);
+        FurnitureFactory.BuildFurniture(furnitureData, position, rotation.thefloat, go, tileBeneath);
         return true;
     }
 

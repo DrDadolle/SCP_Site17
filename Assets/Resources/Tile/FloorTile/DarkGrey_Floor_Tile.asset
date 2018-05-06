@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Name: DarkGrey_Floor_Tile
   m_EditorClassIdentifier: 
   SpriteOfFloor: {fileID: 21300000, guid: 8ce6ffeb1426dcc4f8e45f0ec5b1ea9a, type: 3}
+  PendingSprite: {fileID: 21300000, guid: ff865f9165f9b3b418cfb8f16f2c1676, type: 3}
+  isPending: 1

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Wall_With_A_Hole_Prefab: {fileID: 1582415056137110, guid: d43de1630d952394aa40c00eaf758272,
     type: 2}
-  oldSpriteOfFloor: {fileID: 11400000, guid: e1d5ea59e9ecca84da51959b447015a7, type: 2}
+  dictionnaryOfOldTiles: {fileID: 11400000, guid: 35f1f5b52287f1248a02b8f1b2681b29,
+    type: 2}

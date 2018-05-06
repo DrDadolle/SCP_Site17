@@ -18,8 +18,8 @@ public class BuildWallWithDoor : MonoBehaviour, IBuildingMethod
     //It is empty
     public WallWithDoorTile tile;
 
-    //Reference to the old sprite
-    public SpriteVariable oldSpriteOfFloor;
+    //The sprite dict
+    public DictionnaryVariable dictionnaryOfOldTiles;
 
     // On Awake
     void Awake()
@@ -73,13 +73,36 @@ public class BuildWallWithDoor : MonoBehaviour, IBuildingMethod
             return;
         }
 
-        //If we are over a floorTile, set the old sprite
+        //If we are over a floorTile, keep the old sprite
         if ((map.GetTile(tilePos) is FloorTile))
-            oldSpriteOfFloor.sprite = ((FloorTile)map.GetTile(tilePos)).SpriteOfFloor;
+            AddFloorTileToDict(tilePos, ((FloorTile)map.GetTile(tilePos)).name);
         else
-            oldSpriteOfFloor.sprite = null;
+            AddFloorTileToDict(tilePos, "Empty");
 
-        //Place the wall
-        map.SetTile(tilePos, tile);
+        /**
+        * JOBS !
+        * We should create all the jobs only on mousebutton release !
+        * We should create a tmp list of jobs !
+        */
+        Job j_tmp = new Job(tilePos, (theJob) =>
+        {
+            // Display the building hint on top of this tile position
+            map.SetTile(tilePos, tile);
+            //FIXME : Maybe indicates that a job is going on
+        });
+
+        JobManager.jobQueue.Enqueue(j_tmp);
+    }
+
+    private void AddFloorTileToDict(Vector3Int v, string s)
+    {
+        //Save old sprite
+        Vector3 v3 = new Vector3(v.x, v.y, v.z);
+        // If it contains already this tile
+        if (!dictionnaryOfOldTiles.AddToDict(v3, s))
+        {
+            Debug.LogError("Trying to add twice the old tile data. Return.");
+            return;
+        }
     }
 }

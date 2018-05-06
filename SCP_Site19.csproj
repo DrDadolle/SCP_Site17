@@ -289,13 +289,17 @@
     <Compile Include="Assets\_Scripts\Builders\PlaceFurnitures.cs" />
     <Compile Include="Assets\_Scripts\Controllers\ConstructionController.cs" />
     <Compile Include="Assets\_Scripts\Controllers\MouseController.cs" />
+    <Compile Include="Assets\_Scripts\Controllers\NavMeshController.cs" />
     <Compile Include="Assets\_Scripts\Controllers\SaveAndLoadController.cs" />
     <Compile Include="Assets\_Scripts\GridMesh.cs" />
     <Compile Include="Assets\_Scripts\IBuildingMethod.cs" />
-    <Compile Include="Assets\_Scripts\Job.cs" />
-    <Compile Include="Assets\_Scripts\JobQueue.cs" />
     <Compile Include="Assets\_Scripts\Managers\FurnitureManager.cs" />
+    <Compile Include="Assets\_Scripts\Managers\JobManager.cs" />
+    <Compile Include="Assets\_Scripts\Managers\NPCManager.cs" />
+    <Compile Include="Assets\_Scripts\Managers\WallsWithDoorManager.cs" />
     <Compile Include="Assets\_Scripts\Managers\WeatherManager.cs" />
+    <Compile Include="Assets\_Scripts\Models\Job.cs" />
+    <Compile Include="Assets\_Scripts\Models\JobQueue.cs" />
     <Compile Include="Assets\_Scripts\Models\SCP\SCPClassification.cs" />
     <Compile Include="Assets\_Scripts\Models\Single Object Models\ComputerModel.cs" />
     <Compile Include="Assets\_Scripts\Models\Single Object Models\FurnitureFactory.cs" />
@@ -303,12 +307,17 @@
     <Compile Include="Assets\_Scripts\Models\Single Object Models\OfficeModel.cs" />
     <Compile Include="Assets\_Scripts\Models\Single Object Models\WallWithDoorsModel.cs" />
     <Compile Include="Assets\_Scripts\MoveCamera.cs" />
+    <Compile Include="Assets\_Scripts\NPC\DClassBehaviour.cs" />
+    <Compile Include="Assets\_Scripts\NPC\NPCBasicBehaviour.cs" />
+    <Compile Include="Assets\_Scripts\NPC\ScientistBehaviour.cs" />
     <Compile Include="Assets\_Scripts\ResourcesLoading.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\CameraSpeedData.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\InitializeScene.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\Models\FurnitureData.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\MousePointer.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\BooleanVariables.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\DictionnaryPosGoVariale.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\DictionnaryVariable.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\FloatVariable.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\SpriteVariable.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\StringVariable.cs" />
@@ -319,6 +328,10 @@
     <Compile Include="Assets\_Scripts\Tile\WallTile.cs" />
     <Compile Include="Assets\_Scripts\Tile\WallWithDoorTile.cs" />
     <Compile Include="Assets\_Scripts\UtilitiesMethod.cs" />
+    <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshLink.cs" />
+    <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshModifier.cs" />
+    <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshModifierVolume.cs" />
+    <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshSurface.cs" />
     <Compile Include="Assets\UI\AutomaticSetVerticalSize.cs" />
   </ItemGroup>
   <ItemGroup>

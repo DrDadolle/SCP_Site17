@@ -28,7 +28,8 @@ public class SaveAndLoadController : MonoBehaviour {
 
     // Used to fix RefreshTileBug
     public static bool IsLoading;
-    public static bool IsRechargingFurnitures;
+
+    public static SaveData loadedData;
 
     //On awake
     private void Awake()
@@ -45,8 +46,10 @@ public class SaveAndLoadController : MonoBehaviour {
         }
     }
 
-    // Remove everything from the world tilemap
-    public void ResetWorld()
+    /**
+     * Remove everything from the world tilema
+     */
+    private void ResetWorld()
     {
         //TODO : When more complexe objects and data will be created, do not forget to reset then
         // Does not clear characters
@@ -61,6 +64,17 @@ public class SaveAndLoadController : MonoBehaviour {
     } 
 
     /**
+     *  reset Everything
+     */
+    public void NewGame()
+    {
+        ResetWorld();
+        // Clear the furniture Manager
+        FurnitureManager.Instance.ClearAll();
+        WallsWithDoorManager.Instance.listOfAllWalls.Clear();
+    }
+
+    /**
      *  Handle saving with an xml
      *  TODO : Save only  tilemaps and its go
      */
@@ -69,7 +83,7 @@ public class SaveAndLoadController : MonoBehaviour {
         Debug.Log("trying to save in the following file : " + completeSaveFilePath);
         FileStream saveFile = File.Open(completeSaveFilePath, FileMode.OpenOrCreate);
 
-        SaveData data = new SaveData(worldTileMapRef, FurnitureManager.Instance);
+        SaveData data = new SaveData(worldTileMapRef, FurnitureManager.Instance, WallsWithDoorManager.Instance);
 
         BinaryFormatter bf = new BinaryFormatter();
 
@@ -88,7 +102,7 @@ public class SaveAndLoadController : MonoBehaviour {
             Debug.Log("trying to load the following file : " + completeSaveFilePath);
             FileStream loadFile = File.Open(completeSaveFilePath, FileMode.Open);
             BinaryFormatter bf = new BinaryFormatter();
-            SaveData loadData = (SaveData)bf.Deserialize(loadFile);
+            loadedData = (SaveData)bf.Deserialize(loadFile);
             loadFile.Close();
 
             Debug.Log("Trying to convert LoadData to map");
@@ -97,36 +111,103 @@ public class SaveAndLoadController : MonoBehaviour {
             ResetWorld();
             // Clear the furniture Manager
             FurnitureManager.Instance.ClearAll();
+            WallsWithDoorManager.Instance.listOfAllWalls.Clear();
 
             rotationOfFurniture.thefloat = 0;
             IsLoading = true;
 
-            //Recharge the world to recreate all Tiles and update their managers
-            worldTileMapRef = loadData.ConvertDataToTileMap(worldTileMapRef);
-            // Reset the world
-            ResetWorld();
-
-            // Replace all existing models !
-            AssignGameObjectToAModel(loadData);
-
             //Reload the world now with correct tiles
-            IsRechargingFurnitures = true;
-            worldTileMapRef = loadData.ConvertDataToTileMap(worldTileMapRef);
-            IsRechargingFurnitures = false;
+            // Put already correct sprite under furnitures
+            worldTileMapRef = loadedData.ConvertDataToTileMap(worldTileMapRef);
+
+            // Replace all existing models data
+            //Furniture
+            AssignGameObjectToAModel(loadedData);
+            //Walls
+            AssignGameObjectsToWallWithDoorsModel(loadedData);
 
             //Rotate
             FurnitureManager.Instance.OnLoading();
+            // Build NavMesh
+            NavMeshController.Instance.BuildNavMesh();
             IsLoading = false;
 
         }
     }
 
+    /**
+     *  For furniture manager
+     */
      private void AssignGameObjectToAModel(SaveData loadData)
     {
         // Replace the model created by furnitureTile by the loaded one.
-        FurnitureManager.Instance.listOfAllOffices =  FurnitureManager.Instance.ReplaceKeysOfDictByList<OfficeModel>(FurnitureManager.Instance.listOfAllOffices, loadData.allOfficeModels);
-        FurnitureManager.Instance.listOfAllComputers = FurnitureManager.Instance.ReplaceKeysOfDictByList<ComputerModel>(FurnitureManager.Instance.listOfAllComputers, loadData.allComputerModels);
+        FurnitureManager.Instance.listOfAllOffices = UtilitiesMethod.ReplaceKeysOfDictByList<OfficeModel>(FurnitureManager.Instance.listOfAllOffices, loadData.allOfficeModels);
+        FurnitureManager.Instance.listOfAllComputers = UtilitiesMethod.ReplaceKeysOfDictByList<ComputerModel>(FurnitureManager.Instance.listOfAllComputers, loadData.allComputerModels);
     }
+
+    /**
+    *  For Wall with doors manager
+     */
+    private void AssignGameObjectsToWallWithDoorsModel(SaveData loadData)
+    {
+        // Replace the model created by WallWithDoorTile by the loaded one.
+        WallsWithDoorManager.Instance.listOfAllWalls = UtilitiesMethod.ReplaceKeysOfDictByList<WallWithDoorsModel>(WallsWithDoorManager.Instance.listOfAllWalls, loadData.allWallsWithDoor);
+    }
+
+    /**
+     * Get sprite under a furniture based on Vector3Int Position
+     */
+     public static ResourcesLoading.TileBasesName GetSpriteFromLoadedFurnitureList(Vector3Int pos, SaveData loadData)
+    {
+
+        FurnitureModel ret = null;
+        //Office
+        foreach (var model in loadData.allOfficeModels)
+        {
+            if (model.GetTilePos().Equals(pos))
+            {
+                ret = model;
+            }
+        }
+        //Computers
+        foreach (var model in loadData.allComputerModels)
+        {
+            if (model.GetTilePos().Equals(pos))
+            {
+                ret = model;
+            }
+        }
+
+        if (ret != null)
+        {
+            return ret.tileItWasPutOn;
+        }
+        return ResourcesLoading.TileBasesName.Empty;
+    }
+
+    /**
+ * Get sprite under a furniture based on Vector3Int Position
+ */
+    public static ResourcesLoading.TileBasesName GetSpriteFromLoadedWallsList(Vector3Int pos, SaveData loadData)
+    {
+
+        WallWithDoorsModel ret = null;
+        //Wall with Doors
+        foreach (var model in loadData.allWallsWithDoor)
+        {
+            if (model.GetTilePos().Equals(pos))
+            {
+                ret = model;
+            }
+        }
+
+        if (ret != null)
+        {
+            return ret.tileItWasPutOn;
+        }
+        return ResourcesLoading.TileBasesName.Empty;
+    }
+
 
     /**
      * This class will save :
@@ -146,17 +227,24 @@ public class SaveAndLoadController : MonoBehaviour {
         // All models of the furnitures
         public List<OfficeModel> allOfficeModels;
         public List<ComputerModel> allComputerModels;
+
+        // Wall with doors
+        public List<WallWithDoorsModel> allWallsWithDoor;
         
         /**
          *  Create the class which contains all saveable data
          */
-        public SaveData(Tilemap map, FurnitureManager furnitureManager)
+        public SaveData(Tilemap map, FurnitureManager furnitureManager, WallsWithDoorManager wallsWithDoorManager)
         {
             // Save tilemap
             SaveMapTilesData(map);
 
             //Save Furnitures
-            SavaFurnituresDataList(map, furnitureManager);
+            SaveFurnituresDataList(map, furnitureManager);
+
+            //Save Walls
+            SaveWalls(map, wallsWithDoorManager);
+
         }
 
         private void SaveMapTilesData(Tilemap map)
@@ -234,10 +322,15 @@ public class SaveAndLoadController : MonoBehaviour {
         /**
          *  Save the data of furnitures
          */
-        private void SavaFurnituresDataList(Tilemap map, FurnitureManager furnitureManager)
+        private void SaveFurnituresDataList(Tilemap map, FurnitureManager furnitureManager)
         {
-            allOfficeModels = furnitureManager.GetListOfModelFromDictionnary<OfficeModel>(furnitureManager.listOfAllOffices);
-            allComputerModels = furnitureManager.GetListOfModelFromDictionnary<ComputerModel>(furnitureManager.listOfAllComputers);
+            allOfficeModels = UtilitiesMethod.GetListOfModelFromDictionnary<OfficeModel>(furnitureManager.listOfAllOffices);
+            allComputerModels = UtilitiesMethod.GetListOfModelFromDictionnary<ComputerModel>(furnitureManager.listOfAllComputers);
+        }
+
+        private void SaveWalls(Tilemap map, WallsWithDoorManager wallDManager)
+        {
+            allWallsWithDoor = UtilitiesMethod.GetListOfModelFromDictionnary<WallWithDoorsModel>(wallDManager.listOfAllWalls);
         }
 
     }

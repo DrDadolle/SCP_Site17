@@ -62,7 +62,10 @@ public class FurnitureModel {
     */
     public override bool Equals(object o)
     {
-        return this.GetTilePos().Equals(((FurnitureModel)o).GetTilePos());
+        if (!(o is FurnitureModel))
+            return false;
+        else
+            return this.GetTilePos().Equals(((FurnitureModel)o).GetTilePos());
     }
 
     public override int GetHashCode()
