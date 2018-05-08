@@ -19,6 +19,9 @@ public class FloorTile : TileBase
     //Is this a pending tile ?
     public bool isPending;
 
+    // Time to build
+    public float buildingTime;
+
 
     public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)
     {

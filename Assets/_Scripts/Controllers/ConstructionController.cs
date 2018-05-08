@@ -11,6 +11,7 @@ public class ConstructionController : MonoBehaviour
 
     //Reference to the GameObjectVariable MousePointer
     public MousePointer mousePointer;
+    private Vector3 lastMousePosition;
 
     // Ref to the rotation float
     public FloatVariable rotationOfFurniture;
@@ -25,8 +26,8 @@ public class ConstructionController : MonoBehaviour
     BuildingObjects DuringDragAndDropMethod;
     BuildingObjects OnLeftButtonReleaseDuringDragAndDropMethod;
     BuildingObjects OnRightButtonPressDuringDragAndDropMethod;
-    private delegate void BuildingObjects_withoutTileAndPointer();
-    BuildingObjects_withoutTileAndPointer OnKeyboardPressMethod;
+    BuildingObjects OnUpdateWhenTileIsChangedMethod;
+    BuildingObjects OnKeyboardPressMethod;
 
     //Indicate if currently drag&dropping
     private bool dragAndDropping;
@@ -45,7 +46,9 @@ public class ConstructionController : MonoBehaviour
     //On Awake
     void Awake () {
         Instance = this;
-	}
+        lastMousePosition = Vector3.zero;
+        areWeBuilding.theboolean = false;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -87,6 +90,13 @@ public class ConstructionController : MonoBehaviour
             isFirstCallSinceChangeMode = false;
         }
 
+        // Update once each time the tile of the cursor is changed
+        if (mousePointer.go.transform.position != lastMousePosition)
+        {
+            lastMousePosition = mousePointer.go.transform.position;
+            OnUpdateWhenTileIsChangedMethod(tile);
+        }
+
         //When clicking for the first time,
         if (Input.GetMouseButtonDown(0))
         {
@@ -97,7 +107,7 @@ public class ConstructionController : MonoBehaviour
         //FIXME because not very clean
         if(Input.anyKeyDown && !(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2)))
         {
-            OnKeyboardPressMethod();
+            OnKeyboardPressMethod(tile);
         }
 
         //During a drap and drop
@@ -187,5 +197,6 @@ public class ConstructionController : MonoBehaviour
         OnLeftButtonReleaseDuringDragAndDropMethod = buildingMethod.OnLeftButtonReleaseDuringDragAndDrop;
         OnRightButtonPressDuringDragAndDropMethod = buildingMethod.OnRightButtonPressDuringDragAndDrop;
         OnKeyboardPressMethod = buildingMethod.OnKeyboardPress;
+        OnUpdateWhenTileIsChangedMethod = buildingMethod.OnUpdateWhenTileIsChanged;
     }
 }

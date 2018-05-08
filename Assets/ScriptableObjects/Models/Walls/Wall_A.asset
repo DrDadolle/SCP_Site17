@@ -14,4 +14,4 @@ MonoBehaviour:
   nameOfWall: Wall_A
   costDollar: 75
   maxHealth: 3000
-  furniturePrefab: {fileID: 0}
+  buildingTime: 1

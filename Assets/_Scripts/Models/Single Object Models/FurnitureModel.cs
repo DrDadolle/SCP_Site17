@@ -5,6 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class FurnitureModel {
 
+    // SUPER IMPORTANT TO IDENTIFY THE TYPE !
+    public string typeOfFurniture;
+
     // Position of the tile
     [SerializeField]
     private int x;
@@ -19,24 +22,33 @@ public class FurnitureModel {
     //The tile type
     public ResourcesLoading.TileBasesName tileItWasPutOn;
 
+    //Hp of the furniture
     public float hp
     {
         get; protected set;
     }
 
+    //Cost of the furniture
     public float cost
     {
         get; protected set;
     }
 
+    // Boolean for placing
+    public bool isPending;
+    public bool isPreview;
+
     //Public constructor using InGame data
-    public FurnitureModel(Vector3Int pos, float rot, ResourcesLoading.TileBasesName tileName)
+    public FurnitureModel(Vector3Int pos, string NameOfFurniture, float rot, ResourcesLoading.TileBasesName tileName, bool preview, bool pending)
     {
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
+        this.typeOfFurniture = NameOfFurniture;
         this.rotationOfTheFurniture = rot;
         this.tileItWasPutOn = tileName;
+        this.isPending = pending;
+        this.isPreview = preview;
     }
 
     /**

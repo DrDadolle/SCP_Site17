@@ -18,8 +18,8 @@ public class FurnitureManager : MonoBehaviour {
     public Dictionary<OfficeModel, GameObject> listOfAllOffices;
     public Dictionary<ComputerModel, GameObject> listOfAllComputers;
 
-	// OnAwake
-	void Awake () {
+    // OnAwake
+    void Awake () {
         listOfAllOffices = new Dictionary<OfficeModel, GameObject>();
         listOfAllComputers = new Dictionary<ComputerModel, GameObject>();
         Instance = this;
@@ -36,7 +36,7 @@ public class FurnitureManager : MonoBehaviour {
         }
         foreach (var v in listOfAllOffices.Values)
         {
-            //v.transform.Rotate(Vector3.up * Random.Range(5f, 10f) * Time.deltaTime);
+            v.transform.Rotate(Vector3.up * Random.Range(5f, 10f) * Time.deltaTime);
             //Debug.Log(v.rotationOfTheFurniture);
         }
     }
@@ -104,6 +104,84 @@ public class FurnitureManager : MonoBehaviour {
             }
         }
         return ret;
+    }
+
+    /**
+     *  Remove model from the dict.
+     *  False = not removed
+     */
+     public bool RemoveModelFromDictionnaries(Vector3Int pos, bool preview, bool pending)
+    {
+        bool ret = false;
+        OfficeModel office = null;
+        ComputerModel computer = null;
+
+        //Office
+        foreach (var model in listOfAllOffices.Keys)
+        {
+            if (model.GetTilePos().Equals(pos))
+            {
+                if(model.isPending != pending || model.isPreview != preview)
+                    return false;
+                ret = true;
+                office = model;
+                break;
+            }
+        }
+        if (ret) {
+            return (listOfAllOffices.Remove(office));
+        }
+
+        //Computers
+        foreach (var model in listOfAllComputers.Keys)
+        {
+            if (model.GetTilePos().Equals(pos))
+            {
+                if (model.isPending != pending || model.isPreview != preview)
+                    return false;
+                ret = true;
+                computer = model;
+                break;
+            }
+        }
+        if (ret)
+        {
+            return (listOfAllComputers.Remove(computer));
+        }
+
+        // Not found
+        return ret;
+    }
+
+    /**
+    *  Get the model based on position from all the dictionnary
+    */
+    public bool AddGameObjectToModelFromAllDictionnaries(Vector3Int pos, string TypeOfFurniture, GameObject go)
+    {
+        switch (TypeOfFurniture)
+        {
+            case "Office":
+                foreach (var model in listOfAllOffices.Keys)
+                {
+                    if (model.GetTilePos().Equals(pos))
+                    {
+                        listOfAllOffices[model] = go;
+                        return true;
+                    }
+                }
+                break;
+            case "Computer":
+                //Computers
+                foreach (var model in listOfAllComputers.Keys)
+                {
+                    if (model.GetTilePos().Equals(pos))
+                    {
+                        return true;
+                    }
+                }
+                break;
+        }
+        return false;
     }
 
 }

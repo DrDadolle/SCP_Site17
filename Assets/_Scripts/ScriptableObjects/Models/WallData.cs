@@ -15,6 +15,9 @@ public class WallData : ScriptableObject
     //Max health of the furniture
     public float maxHealth;
 
+    // Time to build
+    public float buildingTime;
+
     // The prefab in itself
     // TODO : not required for now
     // Should be a list of prefab ??? to handle all corners ?

@@ -18,3 +18,4 @@ MonoBehaviour:
     type: 2}
   tilesItCanBePlacedOn:
   - {fileID: 11400000, guid: b6876b1375b7512499c0990e622bd1a4, type: 2}
+  buildingTime: 1

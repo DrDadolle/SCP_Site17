@@ -64,6 +64,10 @@ public class FurnitureTile : TileBase
             tileData.sprite = ResourcesLoading.FloorTileDic[tileBeneath].SpriteOfFloor;
             OldFloorTileName = tileBeneath.ToString();
         }
+
+        // TODO : add some behaviour based on the pending/preview booleans
+
+
     }
 
     /**
@@ -80,7 +84,12 @@ public class FurnitureTile : TileBase
 
         // Create the furniture data class and add it to the total game data
         ResourcesLoading.TileBasesName tileBeneath = (ResourcesLoading.TileBasesName)System.Enum.Parse(typeof(ResourcesLoading.TileBasesName), OldFloorTileName);
-        FurnitureFactory.BuildFurniture(furnitureData, position, rotation.thefloat, go, tileBeneath);
+        FurnitureModel _fm = FurnitureManager.Instance.GetModelFromAllDictionnaries(position);
+        _fm.rotationOfTheFurniture = rotation.thefloat;
+        _fm.tileItWasPutOn = tileBeneath;
+        FurnitureManager.Instance.AddGameObjectToModelFromAllDictionnaries(position, furnitureData.nameOfFurniture, go);
+
+        //FurnitureFactory.BuildFurniture(furnitureData, position, rotation.thefloat, go, tileBeneath, false, false);
         return true;
     }
 

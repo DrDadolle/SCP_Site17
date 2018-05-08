@@ -50,9 +50,14 @@ public class BuildWallWithDoor : MonoBehaviour, IBuildingMethod
         //Do Nothing
     }
 
-    public void OnKeyboardPress()
+    public void OnKeyboardPress(TileBase tile)
     {
         //Do Nothing
+    }
+
+    public void OnUpdateWhenTileIsChanged(TileBase tile)
+    {
+        // TODO : Show Preview
     }
 
     // =========================== End Implement IBuildingMethod ==============================

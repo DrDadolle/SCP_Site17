@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Name: Empty
   m_EditorClassIdentifier: 
   SpriteOfFloor: {fileID: 0}
+  PendingSprite: {fileID: 0}
+  isPending: 0
+  buildingTime: 0

@@ -92,9 +92,14 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
         ClearAllLists();
     }
 
-    public void OnKeyboardPress()
+    public void OnKeyboardPress(TileBase tile)
     {
         //Do Nothing
+    }
+
+    public void OnUpdateWhenTileIsChanged(TileBase tile)
+    {
+        // TODO : Show Wall ?
     }
 
     // =========================== End Implement IBuildingMethod ==============================
@@ -172,7 +177,6 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
                 // Null GO for now. Will be updated in WallTile StartUp method
                 WallManager.Instance.listOfAllWalls.Add(_wall, null);
 
-                Debug.Log("Current position : " + npos);
                 map.SetTile(npos, tile);
                 listOfPendingTiles.Add(npos);
                 
@@ -188,7 +192,7 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
                     WallManager.Instance.GetWallModelFromDict(npos).isPreview = false;
                     map.RefreshTile(npos);
 
-                });
+                }, tile.wallData.buildingTime);
 
                 listOfPotentialJobs.Add(j_tmp);
             }

@@ -44,8 +44,6 @@ public class WallTile : TileBase
 
         //Delete the sprite below the wall
         tileData.sprite = null;
-
-        //Debug.Log("getTileData @" + position + ", preview : " + this.isPreview + ", pending : " + this.isPending +", test : " + test);
     }
 
     /**

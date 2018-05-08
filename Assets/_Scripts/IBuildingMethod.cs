@@ -6,6 +6,10 @@ using UnityEngine.Tilemaps;
 //Interface of ALL the buildings functions
 public interface IBuildingMethod
 {
+    // OnUpdateWhenTileIsChanged
+    // Used for placement of objects
+    void OnUpdateWhenTileIsChanged(TileBase tile);
+
     // OnLeftButtonPress
     // Used for placing object or initiating drag and dropping
     void OnLeftButtonPress(TileBase tile);
@@ -24,6 +28,6 @@ public interface IBuildingMethod
 
     // OnKeyboardPress
     //Use to handle shortcuts, rotation and other behaviours
-    void OnKeyboardPress();
+    void OnKeyboardPress(TileBase tile);
 
 }

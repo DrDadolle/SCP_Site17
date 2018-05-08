@@ -43,7 +43,12 @@ public class Bulldoze : MonoBehaviour, IBuildingMethod{
         // Do nothing
     }
 
-    public void OnKeyboardPress()
+    public void OnKeyboardPress(TileBase tile)
+    {
+        // Do nothing
+    }
+
+    public void OnUpdateWhenTileIsChanged(TileBase tile)
     {
         // Do nothing
     }

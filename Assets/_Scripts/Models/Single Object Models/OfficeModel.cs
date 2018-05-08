@@ -9,7 +9,8 @@ public class OfficeModel : FurnitureModel
     public SCPClassification.Classification ResearchClassification;
 
     //Public constructor using InGame data
-    public OfficeModel(Vector3Int pos, float rot, FurnitureData data, ResourcesLoading.TileBasesName tileName) : base(pos, rot, tileName)
+    public OfficeModel(Vector3Int pos, float rot, FurnitureData data, ResourcesLoading.TileBasesName tileName, bool preview, bool pending) :
+        base(pos, data.nameOfFurniture, rot, tileName, preview, pending)
     {
         this.hp = data.maxHealth;
         this.cost = data.costDollar;

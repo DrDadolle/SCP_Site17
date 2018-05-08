@@ -21,7 +21,26 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
     //The sprite dict
     public DictionnaryVariable dictionnaryOfOldTiles;
 
+    //List of pending job
     private List<Job> listOfPotentialJobs = new List<Job>();
+
+    // List of all pending tiles
+    // Will be used for MultiTiles Objects
+    private List<Vector3Int> listOfPendingTiles = new List<Vector3Int>();
+
+    // Storing old positions
+    public class OldTileData
+    {
+        public Vector3Int npos;
+        public TileBase tileBase;
+
+        public OldTileData(Vector3Int npos, TileBase tileBase)
+        {
+            this.npos = npos;
+            this.tileBase = tileBase;
+        }
+    }
+    private OldTileData OldTile = new OldTileData(Vector3Int.zero, null);
 
     // On Awake
     void Awake()
@@ -32,12 +51,13 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
     // ============================== Implement IBuildingMethod ==============================
     // These methods are called by the MouseController
 
-    public void OnKeyboardPress()
+    public void OnKeyboardPress(TileBase tile)
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
             rotation.thefloat += 90;
             rotation.thefloat = rotation.thefloat % 360;
+            PreviewFurniture(tile as FurnitureTile);
         }
     }
 
@@ -61,15 +81,91 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
         //Do nothing
     }
 
+    public void OnUpdateWhenTileIsChanged(TileBase tile)
+    {
+        PreviewFurniture(tile as FurnitureTile);
+    }
+
     // ============================== Implement IPlaceObjectMethod ==============================
+
+    private void PreviewFurniture(FurnitureTile tile)
+    {
+        //Remove previous model and add back the other one
+        Vector3Int previousPosition = OldTile.npos;
+
+        //Remove old previews models
+        FurnitureModel _fm = FurnitureManager.Instance.GetModelFromAllDictionnaries(previousPosition);
+        if (_fm != null && !_fm.isPending && _fm.isPreview)
+        {
+            FurnitureManager.Instance.RemoveModelFromDictionnaries(previousPosition, true, false);
+
+            map.SetTile(previousPosition, OldTile.tileBase);
+            dictionnaryOfOldTiles.RemoveFromDict(previousPosition);
+        }
+
+        Vector3Int tilePos = map.WorldToCell(pointer.GetWorldPoint());
+
+        //FIXME : for now, we do not override furnitures
+        TileBase _tb = map.GetTile(tilePos);
+        if (_tb == null || !(_tb is FloorTile) || ((_tb as FloorTile).isPending))
+            return;
+
+        //FIXME : large furnitures
+        OldTile = new OldTileData(tilePos, _tb);
+
+        //Check if Tile Placeable
+        CheckIsThisFurniturePlaceable(tile, tilePos);
+
+        //Create the model and add it to the Furnituremanager
+        // GO and Tile are null. Furniture Tile will handle them later
+        // TODO : move it instead of creating/Deletion ? #Opti
+        FurnitureFactory.BuildFurniture(tile.furnitureData, tilePos, 0f, null, ResourcesLoading.TileBasesName.Empty, true, false);
+
+        //Set the furniture tile on the map
+        map.SetTile(tilePos, tile);
+    }
+
 
     private void UpdateTile(FurnitureTile tile)
     {
         Vector3Int tilePos = map.WorldToCell(pointer.GetWorldPoint());
 
-        // Check if we can put this furniture there
-        //If we are not over a valid floorTile, bail out
-        if (!tile.furnitureData.tilesItCanBePlacedOn.Contains((FloorTile)map.GetTile(tilePos)))
+        // IF there is already a pending furniture, bail out
+        if (FurnitureManager.Instance.GetModelFromAllDictionnaries(tilePos).isPending)
+            return;
+
+        //Put preview :
+        FurnitureManager.Instance.GetModelFromAllDictionnaries(tilePos).isPending = true;
+        FurnitureManager.Instance.GetModelFromAllDictionnaries(tilePos).isPreview = false;
+        map.RefreshTile(tilePos);
+
+
+        /**
+        * JOBS !
+        * We should create all the jobs only on mousebutton release !
+        * We should create a tmp list of jobs !
+        */
+        Job j_tmp = new Job(tilePos, (theJob) =>
+        {
+            //Refresh based on the model
+            FurnitureManager.Instance.GetModelFromAllDictionnaries(tilePos).isPending = false;
+            FurnitureManager.Instance.GetModelFromAllDictionnaries(tilePos).isPreview = false;
+            map.RefreshTile(tilePos);
+        }, tile.furnitureData.buildingTime);
+
+        JobManager.jobQueue.Enqueue(j_tmp);
+    }
+
+
+    // Check if we can put this furniture there
+    //If we are not over a valid floorTile, bail out
+    private void CheckIsThisFurniturePlaceable(FurnitureTile tile, Vector3Int tilePos)
+    {
+        //If not a FloorTile, bail out
+        if (!(map.GetTile(tilePos) is FloorTile))
+            return;
+
+        if (!tile.furnitureData.tilesItCanBePlacedOn.Contains(map.GetTile(tilePos) as FloorTile))
         {
             // Bail out
             Debug.Log("Can't place " + tile.furnitureData.furniturePrefab.name + " on " + map.GetTile(tilePos).name + " tile !");
@@ -84,18 +180,5 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
             Debug.LogError("Trying to add twice the old tile data. Return.");
             return;
         }
-
-        /**
-        * JOBS !
-        * We should create all the jobs only on mousebutton release !
-        * We should create a tmp list of jobs !
-        */
-        Job j_tmp = new Job(tilePos, (theJob) =>
-        {
-            //Set the furniture tile on the map
-            map.SetTile(tilePos, tile);
-            //FIXME : Maybe indicates that a job is going on
-        });
-        JobManager.jobQueue.Enqueue(j_tmp);
     }
 }

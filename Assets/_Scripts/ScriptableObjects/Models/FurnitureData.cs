@@ -20,4 +20,7 @@ public class FurnitureData : ScriptableObject {
 
     // Where you can put this on
     public List<FloorTile> tilesItCanBePlacedOn;
+
+    // Time to build
+    public float buildingTime;
 }

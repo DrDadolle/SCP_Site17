@@ -16,4 +16,14 @@ public class DictionnaryVariable : ScriptableObject
         theDict.Add(v, s);
         return true;
     }
+
+    public bool RemoveFromDict(Vector3 v)
+    {
+        if (theDict.ContainsKey(v))
+        {
+            theDict.Remove(v);
+            return true;
+        }
+        return false;
+    }
 }

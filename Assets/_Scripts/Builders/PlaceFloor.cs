@@ -93,9 +93,14 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
     }
 
 
-    public void OnKeyboardPress()
+    public void OnKeyboardPress(TileBase tile)
     {
-        //DO NOTHING
+        // Do nothing
+    }
+
+    public void OnUpdateWhenTileIsChanged(TileBase tile)
+    {
+        // TODO : Show preview ?
     }
 
     // ========================== End Implement IPlacingFloorTile ==============================
@@ -167,7 +172,7 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
                     (map.GetTile(npos) as FloorTile).isPending = false;
                     map.RefreshTile(npos);
 
-                });
+                }, tile.buildingTime);
 
                 listOfPotentialJobs.Add(j_tmp);
             }
