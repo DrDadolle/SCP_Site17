@@ -9,7 +9,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName = "Tile/Furniture Tile")]
 public class FurnitureTile : TileBase
 {
-    //The prefab
+    //The data
     public FurnitureData furnitureData;
 
     //The sprite

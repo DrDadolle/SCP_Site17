@@ -14,10 +14,6 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
     // Store the ref to the mouse pointer
     public MousePointer pointer;
 
-    // Reference to the Walltile
-    //It is empty
-    public WallTile tile;
-
     // Starting Cell position of the drag and drop
     private Vector3Int startpos;
 	int start_x;
@@ -28,6 +24,9 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 
     // List of all pending tiles
     private List<Vector3Int> listOfPendingTiles = new List<Vector3Int>();
+
+    //Storing potential Jobs
+    private List<Job> listOfPotentialJobs = new List<Job>();
 
     // Storing old positions
     public class OldTileData
@@ -43,7 +42,6 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 	}
     private List<OldTileData> listOfOldTiles = new List<OldTileData>();
 
-    private List<Job> listOfPotentialJobs = new List<Job>();
 
     // On Awake
     void Awake()
@@ -56,7 +54,7 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 
     public void DuringDragAndDrop(TileBase tile)
     {
-        UpdateTile();
+        UpdateTile(tile as WallTile);
     }
 
     public void OnLeftButtonPress(TileBase tile)
@@ -80,8 +78,8 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
         // Change the preview tile to the pending tiles
         foreach (var v in listOfPendingTiles)
         {
-            map.GetTile<WallTile>(v).isPending = true;
-            map.GetTile<WallTile>(v).isPreview = false;
+            WallManager.Instance.GetWallModelFromDict(v).isPending = true;
+            WallManager.Instance.GetWallModelFromDict(v).isPreview = false;
             map.RefreshTile(v);  
         }
         listOfPendingTiles.Clear();
@@ -90,9 +88,8 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 
     public void OnRightButtonPressDuringDragAndDrop(TileBase tile)
     {
-        CleanUpPreviewTiles();
-        listOfPotentialJobs.Clear();
-        listOfPendingTiles.Clear();
+        //Clear everything
+        ClearAllLists();
     }
 
     public void OnKeyboardPress()
@@ -102,7 +99,7 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 
     // =========================== End Implement IBuildingMethod ==============================
 
-    private void UpdateTile()
+    private void UpdateTile(WallTile tile)
     {
 
 		// Avoid calling the updatetile method every frame if nothing changed
@@ -142,14 +139,12 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 			start_max = tmp;
 		}
 
-		/**
+        /**
          * Now start_x start_y is smaller to the end point
          */
 
-		// Clean up old drag previews
-		CleanUpPreviewTiles();
-        listOfPotentialJobs.Clear();
-        listOfPendingTiles.Clear();
+        //Clear everything
+        ClearAllLists();
 
         // Display a preview of the drag area
         for (int m = start_max; m <= end_max; m++)
@@ -172,11 +167,15 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
                 OldTileData t_tmp = new OldTileData(npos, map.GetTile(npos));
                 listOfOldTiles.Add(t_tmp);
 
-                //Set the pending tile
-                tile.isPreview = true;
-                tile.isPending = false;
+                // Add model to WallmanagerDic
+                WallModel _wall = new WallModel(npos, tile.wallData, true, false);
+                // Null GO for now. Will be updated in WallTile StartUp method
+                WallManager.Instance.listOfAllWalls.Add(_wall, null);
+
+                Debug.Log("Current position : " + npos);
                 map.SetTile(npos, tile);
                 listOfPendingTiles.Add(npos);
+                
 
                 /**
                 * JOBS !
@@ -185,8 +184,8 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
                 */
                 Job j_tmp = new Job(npos, (theJob) =>
                 {
-                    map.GetTile<WallTile>(npos).isPending = false;
-                    map.GetTile<WallTile>(npos).isPreview = false;
+                    WallManager.Instance.GetWallModelFromDict(npos).isPending = false;
+                    WallManager.Instance.GetWallModelFromDict(npos).isPreview = false;
                     map.RefreshTile(npos);
 
                 });
@@ -208,4 +207,22 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 			map.SetTile(t.npos, t.tileBase);
 		}
 	}
+
+    /**
+     *  Clear every local lists
+     */
+     private void ClearAllLists()
+    {
+        // Clean up old drag previews
+        CleanUpPreviewTiles();
+        listOfPotentialJobs.Clear();
+
+        //Remove all preview Walls Models before clearing tiles
+        foreach (var v in listOfPendingTiles)
+        {
+            WallManager.Instance.RemoveWallModelFromDict(v);
+        }
+        listOfPendingTiles.Clear();
+
+    }
 }

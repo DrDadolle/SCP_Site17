@@ -43,7 +43,7 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
 
     public void OnLeftButtonPress(TileBase tile)
     {
-        UpdateTile((FurnitureTile)tile);
+        UpdateTile(tile as FurnitureTile);
     }
 
     public void OnLeftButtonReleaseDuringDragAndDrop(TileBase tile)

@@ -6,17 +6,16 @@ using UnityEngine.Tilemaps;
  */
 [CreateAssetMenu(menuName = "Tile/Wall Tile")]
 public class WallTile : TileBase
-{   
-    
+{
+
+    //The data
+    public WallData wallData;
+
     //Rotation value (in degree) of the prefab to align them correctly
     private float rotPrefab;
 
     public Material WallMaterial;
     public Material PendingMaterial;
-
-    //TODO Move it to model ? Copy it ?
-    public bool isPending;
-    public bool isPreview;
 
     /**
      * Is called whenever a tile at "position" is placed
@@ -29,11 +28,7 @@ public class WallTile : TileBase
         base.RefreshTile(position, tilemap);
         //}
 
-        //When placing the true wall
-        //if (!isPreview && !isPending)
-        //{
         CommonMethodWall.RefreshNeighbourWallsMethod(position, tilemap);
-        //}
     }
 
     /**
@@ -58,6 +53,10 @@ public class WallTile : TileBase
      */
     public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go)
     {
+        WallModel wallModel = WallManager.Instance.GetWallModelFromDict(position);
+        //Add the gameobject to dictionnary of WallManager
+        WallManager.Instance.listOfAllWalls[wallModel] = go;
+
         //Center the position of the game object
         //By default the position starts at Left bottom point of the cell
         // TODO need to add anchor points  (vertical and horisontal (left,centre,right)(top,centre,bottom))
@@ -66,7 +65,7 @@ public class WallTile : TileBase
         //Handle rotation based on the composition
         go.transform.Rotate(Vector3.up * rotPrefab);
 
-        if (this.isPending)
+        if (wallModel.isPending)
         {
             UtilitiesMethod.ChangeMaterialOfRecChildGameObject(go, PendingMaterial);
         }

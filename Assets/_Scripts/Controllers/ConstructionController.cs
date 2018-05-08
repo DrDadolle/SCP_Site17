@@ -63,7 +63,7 @@ public class ConstructionController : MonoBehaviour
         }
 
         if(areWeBuilding.theboolean)
-            ConstructionController.Instance.CallingBuildingAction(tb);
+            CallingBuildingAction(tb);
 
         //Change the mode of construction
         if (areWeBuilding.theboolean && Input.GetMouseButtonUp(1))
@@ -127,11 +127,13 @@ public class ConstructionController : MonoBehaviour
 
 
     //Sets the building mode to BuildingWall;
-    public void Set_Mode_Build_Wall()
+    public void Set_Mode_Build_Wall(WallTile tile)
     {
         areWeBuilding.theboolean = true;
         SetBuildingMethods(BuildWall.Instance);
-        currentBuildingModeUsed = typeof(BuildWall).ToString() + ":";
+        currentBuildingModeUsed = typeof(BuildWall).ToString() + ":" + tile.name;
+        // Select the tile
+        this.tb = tile;
     }
 
     //Sets the building mode to BuildingWall;

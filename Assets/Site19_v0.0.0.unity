@@ -4259,10 +4259,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 773772701}
         m_MethodName: Set_Mode_Build_Wall
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 5ecb9a6ea45a8f74c885438acb7d016d,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: WallTile, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -12236,6 +12237,7 @@ GameObject:
   m_Component:
   - component: {fileID: 974371709}
   - component: {fileID: 974371710}
+  - component: {fileID: 974371711}
   m_Layer: 0
   m_Name: WallManager
   m_TagString: Untagged
@@ -12265,6 +12267,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7961ea07a4ec10f4b94fa91860934b3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  world: {fileID: 1868598882}
+--- !u!114 &974371711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 974371708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6742cc6a2b59d24fb802e7fbfa90e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   world: {fileID: 1868598882}
@@ -12560,7 +12574,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   world: {fileID: 1868598882}
-  goArray: []
 --- !u!1 &1204818127
 GameObject:
   m_ObjectHideFlags: 0
@@ -21228,7 +21241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map: {fileID: 1868598882}
   pointer: {fileID: 11400000, guid: 2de0d8e8a0ab6e9479e0344b0f82f357, type: 2}
-  tile: {fileID: 11400000, guid: 5ecb9a6ea45a8f74c885438acb7d016d, type: 2}
 --- !u!114 &2106517851
 MonoBehaviour:
   m_ObjectHideFlags: 0
