@@ -180,8 +180,8 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
                     */
                     Job j_tmp = new Job(npos, (theJob) =>
                     {
-                    // When job done, tile is not pending anymore and refresh it.
-                    FloorManager.Instance.listOfFloors[npos].isPending = false;
+                        // When job done, tile is not pending anymore and refresh it.
+                        FloorManager.Instance.listOfFloors[npos].isPending = false;
                         FloorManager.Instance.listOfFloors[npos].isPreview = false;
                         map.RefreshTile(npos);
 

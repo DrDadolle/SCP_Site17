@@ -290,6 +290,7 @@
     <Compile Include="Assets\_Scripts\Controllers\ConstructionController.cs" />
     <Compile Include="Assets\_Scripts\Controllers\MouseController.cs" />
     <Compile Include="Assets\_Scripts\Controllers\NavMeshController.cs" />
+    <Compile Include="Assets\_Scripts\Controllers\NPCController.cs" />
     <Compile Include="Assets\_Scripts\Controllers\SaveAndLoadController.cs" />
     <Compile Include="Assets\_Scripts\GridMesh.cs" />
     <Compile Include="Assets\_Scripts\IBuildingMethod.cs" />

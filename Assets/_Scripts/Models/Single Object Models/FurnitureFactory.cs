@@ -16,10 +16,12 @@ static public class FurnitureFactory {
         switch(data.nameOfFurniture)
         {
             case "Office":
-                FurnitureManager.Instance.listOfAllOffices.Add(new OfficeModel(pos, rotation, data, tileName, preview, pending), go);
+                FurnitureManager.OfficeObject _off = new FurnitureManager.OfficeObject(new OfficeModel(pos, rotation, data, tileName, preview, pending), go);
+                FurnitureManager.Instance.listOfAllOffices.Add(pos, _off);
                 break;
             case "Computer":
-                FurnitureManager.Instance.listOfAllComputers.Add(new ComputerModel(pos, rotation, data, tileName, preview, pending), go);
+                FurnitureManager.ComputerObject _com = new FurnitureManager.ComputerObject(new ComputerModel(pos, rotation, data, tileName, preview, pending), go);
+                FurnitureManager.Instance.listOfAllComputers.Add(pos, _com);
                 break;
         }
     }

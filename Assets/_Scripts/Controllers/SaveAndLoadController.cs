@@ -72,6 +72,11 @@ public class SaveAndLoadController : MonoBehaviour {
         // Clear the furniture Manager
         FurnitureManager.Instance.ClearAll();
         WallsWithDoorManager.Instance.listOfAllWalls.Clear();
+        //TODO : add it properly to the saveData !
+        //FloorManager.Instance.listOfFloors.Clear();
+
+       //TODO : We do not add back the jobs because not saveable 
+        //JobManager.jobQueue.ClearAll();
     }
 
     /**
@@ -141,8 +146,19 @@ public class SaveAndLoadController : MonoBehaviour {
      private void AssignGameObjectToAModel(SaveData loadData)
     {
         // Replace the model created by furnitureTile by the loaded one.
-        FurnitureManager.Instance.listOfAllOffices = UtilitiesMethod.ReplaceKeysOfDictByList<OfficeModel>(FurnitureManager.Instance.listOfAllOffices, loadData.allOfficeModels);
-        FurnitureManager.Instance.listOfAllComputers = UtilitiesMethod.ReplaceKeysOfDictByList<ComputerModel>(FurnitureManager.Instance.listOfAllComputers, loadData.allComputerModels);
+        foreach (var v in loadData.allOfficeModels)
+        {
+            FurnitureManager.OfficeObject _obj = FurnitureManager.Instance.listOfAllOffices[v.GetTilePos()];
+            FurnitureManager.Instance.listOfAllOffices[v.GetTilePos()] = new FurnitureManager.OfficeObject(v, _obj.go);
+        }
+
+        foreach (var v in loadData.allComputerModels)
+        {
+            FurnitureManager.ComputerObject _obj = FurnitureManager.Instance.listOfAllComputers[v.GetTilePos()];
+            FurnitureManager.Instance.listOfAllComputers[v.GetTilePos()] = new FurnitureManager.ComputerObject(v, _obj.go);
+        }
+
+        
     }
 
     /**
@@ -324,8 +340,19 @@ public class SaveAndLoadController : MonoBehaviour {
          */
         private void SaveFurnituresDataList(Tilemap map, FurnitureManager furnitureManager)
         {
-            allOfficeModels = UtilitiesMethod.GetListOfModelFromDictionnary<OfficeModel>(furnitureManager.listOfAllOffices);
-            allComputerModels = UtilitiesMethod.GetListOfModelFromDictionnary<ComputerModel>(furnitureManager.listOfAllComputers);
+            // TODO : optimize this ?
+
+            allOfficeModels = new List<OfficeModel>();
+            foreach (var v in furnitureManager.listOfAllOffices.Values)
+            {
+                allOfficeModels.Add(v.model);
+            }
+
+            allComputerModels = new List<ComputerModel>();
+            foreach (var v in furnitureManager.listOfAllComputers.Values)
+            {
+                allComputerModels.Add(v.model);
+            }
         }
 
         private void SaveWalls(Tilemap map, WallsWithDoorManager wallDManager)

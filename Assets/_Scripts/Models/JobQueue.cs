@@ -32,4 +32,9 @@ public class JobQueue
         return jobQueue.Count;
     }
 
+    public void ClearAll()
+    {
+        jobQueue.Clear();
+    }
+
 }

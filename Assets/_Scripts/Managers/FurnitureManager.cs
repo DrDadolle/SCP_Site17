@@ -14,14 +14,40 @@ public class FurnitureManager : MonoBehaviour {
     //Map of the world
     public Tilemap world;
 
+    // Struct of the OfficeObject
+    public struct OfficeObject
+    {
+        public OfficeModel model;
+        public GameObject go;
+
+        public OfficeObject(OfficeModel m, GameObject g)
+        {
+            model = m;
+            go = g;
+        }
+    }
+
+    // Struct of the ComputerObject
+    public struct ComputerObject
+    {
+        public ComputerModel model;
+        public GameObject go;
+
+        public ComputerObject(ComputerModel m, GameObject g)
+        {
+            model = m;
+            go = g;
+        }
+    }
+
     // Dictionnary of all the gameobjects furnitures
-    public Dictionary<OfficeModel, GameObject> listOfAllOffices;
-    public Dictionary<ComputerModel, GameObject> listOfAllComputers;
+    public Dictionary<Vector3Int, OfficeObject> listOfAllOffices;
+    public Dictionary<Vector3Int, ComputerObject> listOfAllComputers;
 
     // OnAwake
     void Awake () {
-        listOfAllOffices = new Dictionary<OfficeModel, GameObject>();
-        listOfAllComputers = new Dictionary<ComputerModel, GameObject>();
+        listOfAllOffices = new Dictionary<Vector3Int, OfficeObject>();
+        listOfAllComputers = new Dictionary<Vector3Int, ComputerObject>();
         Instance = this;
     }
 
@@ -32,11 +58,11 @@ public class FurnitureManager : MonoBehaviour {
     {
         foreach (var v in listOfAllComputers.Values)
         {
-            v.transform.Rotate(Vector3.up * Random.Range(5f, 10f) * Time.deltaTime);
+            v.go.transform.Rotate(Vector3.up * Random.Range(5f, 10f) * Time.deltaTime);
         }
         foreach (var v in listOfAllOffices.Values)
         {
-            v.transform.Rotate(Vector3.up * Random.Range(5f, 10f) * Time.deltaTime);
+            v.go.transform.Rotate(Vector3.up * Random.Range(5f, 10f) * Time.deltaTime);
             //Debug.Log(v.rotationOfTheFurniture);
         }
     }
@@ -66,16 +92,15 @@ public class FurnitureManager : MonoBehaviour {
      private void RotateAllGameObjects()
     {
         // Offices
-        foreach (var model in listOfAllOffices.Keys)
+        foreach (var v in listOfAllOffices.Values)
         {
-            //Debug.Log(listOfAllOffices[model].name);
-            listOfAllOffices[model].transform.Rotate(Vector3.up * model.rotationOfTheFurniture);
+            v.go.transform.Rotate(Vector3.up * v.model.rotationOfTheFurniture);
         }
 
         //Computers
-        foreach (var model in listOfAllComputers.Keys)
+        foreach (var v in listOfAllComputers.Values)
         {
-            listOfAllComputers[model].transform.Rotate(Vector3.up * model.rotationOfTheFurniture);
+            v.go.transform.Rotate(Vector3.up * v.model.rotationOfTheFurniture);
         }
     }
 
@@ -86,22 +111,17 @@ public class FurnitureManager : MonoBehaviour {
     public FurnitureModel GetModelFromAllDictionnaries(Vector3Int pos)
     {
         FurnitureModel ret = null;
+
         //Office
-       foreach(var model in listOfAllOffices.Keys)
-       {
-            if(model.GetTilePos().Equals(pos))
-            {
-                return model;
-            }
-       }
+        if (listOfAllOffices.ContainsKey(pos))
+        {
+            return listOfAllOffices[pos].model;
+        }
 
         //Computers
-        foreach (var model in listOfAllComputers.Keys)
+        if (listOfAllComputers.ContainsKey(pos))
         {
-            if (model.GetTilePos().Equals(pos))
-            {
-                return model;
-            }
+            return listOfAllComputers[pos].model;
         }
         return ret;
     }
@@ -112,45 +132,28 @@ public class FurnitureManager : MonoBehaviour {
      */
      public bool RemoveModelFromDictionnaries(Vector3Int pos, bool preview, bool pending)
     {
-        bool ret = false;
-        OfficeModel office = null;
-        ComputerModel computer = null;
-
         //Office
-        foreach (var model in listOfAllOffices.Keys)
+        if(listOfAllOffices.ContainsKey(pos))
         {
-            if (model.GetTilePos().Equals(pos))
-            {
-                if(model.isPending != pending || model.isPreview != preview)
+            OfficeModel _office = listOfAllOffices[pos].model;
+                if (_office.isPending != pending || _office.isPreview != preview)
                     return false;
-                ret = true;
-                office = model;
-                break;
-            }
-        }
-        if (ret) {
-            return (listOfAllOffices.Remove(office));
+                else
+                    return (listOfAllOffices.Remove(pos));
         }
 
         //Computers
-        foreach (var model in listOfAllComputers.Keys)
+        if (listOfAllComputers.ContainsKey(pos))
         {
-            if (model.GetTilePos().Equals(pos))
-            {
-                if (model.isPending != pending || model.isPreview != preview)
-                    return false;
-                ret = true;
-                computer = model;
-                break;
-            }
-        }
-        if (ret)
-        {
-            return (listOfAllComputers.Remove(computer));
+            ComputerModel _computer = listOfAllComputers[pos].model;
+            if (_computer.isPending != pending || _computer.isPreview != preview)
+                return false;
+            else
+                return (listOfAllComputers.Remove(pos));
         }
 
         // Not found
-        return ret;
+        return false;
     }
 
     /**
@@ -161,23 +164,17 @@ public class FurnitureManager : MonoBehaviour {
         switch (TypeOfFurniture)
         {
             case "Office":
-                foreach (var model in listOfAllOffices.Keys)
+                if (listOfAllOffices.ContainsKey(pos))
                 {
-                    if (model.GetTilePos().Equals(pos))
-                    {
-                        listOfAllOffices[model] = go;
-                        return true;
-                    }
+                    listOfAllOffices[pos] = new OfficeObject(listOfAllOffices[pos].model, go);
+                    return true;
                 }
                 break;
             case "Computer":
-                //Computers
-                foreach (var model in listOfAllComputers.Keys)
+                if (listOfAllComputers.ContainsKey(pos))
                 {
-                    if (model.GetTilePos().Equals(pos))
-                    {
-                        return true;
-                    }
+                    listOfAllComputers[pos] = new ComputerObject(listOfAllComputers[pos].model, go);
+                    return true;
                 }
                 break;
         }

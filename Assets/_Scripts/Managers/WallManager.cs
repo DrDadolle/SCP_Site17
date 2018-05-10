@@ -15,13 +15,26 @@ public class WallManager : MonoBehaviour {
     //Map of the world
     public Tilemap world;
 
+    // Struct of the OfficeObject
+    public struct WallObject
+    {
+        public WallModel model;
+        public GameObject go;
+
+        public WallObject(WallModel m, GameObject g)
+        {
+            model = m;
+            go = g;
+        }
+    }
+
     // Dictionnary of all the gameobjects furnitures
-    public Dictionary<WallModel, GameObject> listOfAllWalls;
+    public Dictionary<Vector3Int, WallObject> listOfAllWalls;
 
     // OnAwake
     void Awake()
     {
-        listOfAllWalls = new Dictionary<WallModel, GameObject>();
+        listOfAllWalls = new Dictionary<Vector3Int, WallObject>();
         Instance = this;
     }
 
@@ -41,39 +54,6 @@ public class WallManager : MonoBehaviour {
     public void OnLoading()
     {
 
-    }
-
-    /**
-     *  Get the model based on position from all the dictionnary
-    */
-    public WallModel GetWallModelFromDict(Vector3Int pos)
-    {
-        WallModel ret = null;
-        //Walls
-        foreach (var model in listOfAllWalls.Keys)
-        {
-            if (model.GetTilePos().Equals(pos))
-            {
-                return model;
-            }
-        }
-        return ret;
-    }
-
-    /**
-     * Check if there is a wallModel at the position
-     */
-     public bool CheckIfWallExistsAtPosition(Vector3Int pos)
-    {
-        return (GetWallModelFromDict(pos) != null);
-    }
-
-    /**
-     * Remove wallmodel from dict
-     */
-     public void RemoveWallModelFromDict(Vector3Int pos)
-    {
-        listOfAllWalls.Remove(GetWallModelFromDict(pos));
     }
 
 }

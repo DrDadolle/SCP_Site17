@@ -51,9 +51,10 @@ public class WallTile : TileBase
      */
     public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go)
     {
-        WallModel wallModel = WallManager.Instance.GetWallModelFromDict(position);
+        WallModel wallModel = WallManager.Instance.listOfAllWalls[position].model;
         //Add the gameobject to dictionnary of WallManager
-        WallManager.Instance.listOfAllWalls[wallModel] = go;
+        WallManager.WallObject _obj = new WallManager.WallObject(wallModel, go);
+        WallManager.Instance.listOfAllWalls[position] = _obj;
 
         //Center the position of the game object
         //By default the position starts at Left bottom point of the cell

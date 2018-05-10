@@ -78,8 +78,8 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
         // Change the preview tile to the pending tiles
         foreach (var v in listOfPendingTiles)
         {
-            WallManager.Instance.GetWallModelFromDict(v).isPending = true;
-            WallManager.Instance.GetWallModelFromDict(v).isPreview = false;
+            WallManager.Instance.listOfAllWalls[v].model.isPending = true;
+            WallManager.Instance.listOfAllWalls[v].model.isPreview = false;
             map.RefreshTile(v);  
         }
         listOfPendingTiles.Clear();
@@ -173,9 +173,9 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
                 listOfOldTiles.Add(t_tmp);
 
                 // Add model to WallmanagerDic
-                WallModel _wall = new WallModel(npos, tile.wallData, true, false);
+                WallManager.WallObject _obj = new WallManager.WallObject(new WallModel(npos, tile.wallData, true, false), null);
                 // Null GO for now. Will be updated in WallTile StartUp method
-                WallManager.Instance.listOfAllWalls.Add(_wall, null);
+                WallManager.Instance.listOfAllWalls.Add(npos, _obj);
 
                 map.SetTile(npos, tile);
                 listOfPendingTiles.Add(npos);
@@ -188,8 +188,8 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
                 */
                 Job j_tmp = new Job(npos, (theJob) =>
                 {
-                    WallManager.Instance.GetWallModelFromDict(npos).isPending = false;
-                    WallManager.Instance.GetWallModelFromDict(npos).isPreview = false;
+                    WallManager.Instance.listOfAllWalls[npos].model.isPending = false;
+                    WallManager.Instance.listOfAllWalls[npos].model.isPreview = false;
                     map.RefreshTile(npos);
 
                 }, tile.wallData.buildingTime);
@@ -224,7 +224,7 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
         //Remove all preview Walls Models before clearing tiles
         foreach (var v in listOfPendingTiles)
         {
-            WallManager.Instance.RemoveWallModelFromDict(v);
+            WallManager.Instance.listOfAllWalls.Remove(v);
         }
         listOfPendingTiles.Clear();
 
