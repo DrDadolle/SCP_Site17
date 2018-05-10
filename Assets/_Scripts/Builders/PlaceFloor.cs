@@ -77,7 +77,8 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
         // Change the preview tile to the pending tiles
         foreach (var v in listOfPendingTiles)
         {
-            (map.GetTile(v) as FloorTile).isPending = true;
+            FloorManager.Instance.listOfFloors[v].isPending = true;
+            FloorManager.Instance.listOfFloors[v].isPreview = true;
             map.RefreshTile(v);
         }
 
@@ -138,11 +139,8 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
         /**
          * Now start_x start_y is smaller to the end point
          */
+        ClearAll();
 
-        // Clean up old drag previews
-        CleanUpPreviewTiles();
-        listOfPotentialJobs.Clear();
-        listOfPendingTiles.Clear();
 
 
         // Display a preview of the drag area
@@ -157,30 +155,45 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
                 listOfOldTiles.Add(t_tmp);
 
                 //Set the pending tile
-                tile.isPending = false;
-                map.SetTile(npos, tile);
-                listOfPendingTiles.Add(npos);
-
-                /**
-                * JOBS !
-                * We should create all the jobs only on mousebutton release !
-                * We should create a tmp list of jobs !
-                */
-                Job j_tmp = new Job(npos, (theJob) =>
+                // Add model to FloorManager
+                bool wasEmpty = false; ;
+                if(!FloorManager.Instance.listOfFloors.ContainsKey(npos))
                 {
+                    wasEmpty = true;
+                    FloorManager.Instance.listOfFloors.Add(npos, new FloorModel(npos, tile.SpriteOfFloor.name, true, false));
+                }
+
+                FloorModel _model = FloorManager.Instance.listOfFloors[npos];
+
+                // If the floor behind is Pending, or the same type : do nothing
+                bool conditionOfPlacingFloors = !_model.isPending && (_model.nameOfFloor != tile.SpriteOfFloor.name  || wasEmpty);
+
+                if (conditionOfPlacingFloors)
+                {
+                    map.SetTile(npos, tile);
+                    listOfPendingTiles.Add(npos);
+
+                    /**
+                    * JOBS !
+                    * We should create all the jobs only on mousebutton release !
+                    * We should create a tmp list of jobs !
+                    */
+                    Job j_tmp = new Job(npos, (theJob) =>
+                    {
                     // When job done, tile is not pending anymore and refresh it.
-                    (map.GetTile(npos) as FloorTile).isPending = false;
-                    map.RefreshTile(npos);
+                    FloorManager.Instance.listOfFloors[npos].isPending = false;
+                        FloorManager.Instance.listOfFloors[npos].isPreview = false;
+                        map.RefreshTile(npos);
 
-                }, tile.buildingTime);
+                    }, tile.buildingTime);
 
-                listOfPotentialJobs.Add(j_tmp);
+                    listOfPotentialJobs.Add(j_tmp);
+                }
             }
         }
     }
 
     /** Remove the previewTiles and add back the old one
-     * FIXME special case with furnitures
      */
     private void CleanUpPreviewTiles()
     {
@@ -191,5 +204,19 @@ public class PlaceFloor : MonoBehaviour, IBuildingMethod
             map.SetTile(t.npos, t.tileBase);
         }
     }
+
+    private void ClearAll()
+    {
+        // Clean up old drag previews
+        CleanUpPreviewTiles();
+        listOfPotentialJobs.Clear();
+        //Remove all preview Walls Models before clearing tiles
+        foreach (var v in listOfPendingTiles)
+        {
+            FloorManager.Instance.listOfFloors.Remove(v);
+        }
+        listOfPendingTiles.Clear();
+    }
+
 
 }

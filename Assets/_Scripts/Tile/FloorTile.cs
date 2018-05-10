@@ -16,16 +16,14 @@ public class FloorTile : TileBase
     public Sprite SpriteOfFloor;
     public Sprite PendingSprite;
 
-    //Is this a pending tile ?
-    public bool isPending;
-
     // Time to build
     public float buildingTime;
 
 
     public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)
     {
-        if (isPending)
+        FloorModel _floor = FloorManager.Instance.listOfFloors[position];
+        if (_floor.isPending)
         {
             tileData.sprite = PendingSprite;
         }
@@ -33,6 +31,9 @@ public class FloorTile : TileBase
         {
             tileData.sprite = SpriteOfFloor;
         }
+
+        //Update the model
+        _floor.nameOfFloor = tileData.sprite.name;
 
         base.GetTileData(position, tilemap, ref tileData);
     }

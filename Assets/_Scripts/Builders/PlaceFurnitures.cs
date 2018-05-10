@@ -107,7 +107,7 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
 
         //FIXME : for now, we do not override furnitures
         TileBase _tb = map.GetTile(tilePos);
-        if (_tb == null || !(_tb is FloorTile) || ((_tb as FloorTile).isPending))
+        if (_tb == null || !(_tb is FloorTile) || (FloorManager.Instance.listOfFloors[tilePos].isPending))
             return;
 
         //FIXME : large furnitures
