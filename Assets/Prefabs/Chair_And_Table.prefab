@@ -71,7 +71,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4816190737079708}
   m_Layer: 11
-  m_Name: 'Office : 1_-3'
+  m_Name: Chair_And_Table
   m_TagString: Furniture
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
