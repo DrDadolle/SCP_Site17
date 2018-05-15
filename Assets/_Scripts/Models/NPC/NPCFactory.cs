@@ -28,4 +28,27 @@ static public class NPCFactory {
                 break;
         }
     }
+
+    /**
+    *  Create the gameobject based on the model
+    */
+    public static void BuildNPCBasedOnModel(NPCModel _model)
+    {
+        GameObject go = null;
+        switch (_model.typeOfNpc)
+        {
+            case "Scientist":
+                go = GameObject.Instantiate(ResourcesLoading.NPCPrefabDic[ResourcesLoading.NPCPrefabNames.Scientist], _model.GetPos(), Quaternion.identity);
+                go.transform.Rotate(Vector3.up * _model.rotation);
+                go.GetComponent<ScientistBehaviour>().theModel = _model;
+                NPCManager.Instance.listOfNPCS.Add(_model, go);
+                break;
+            case "Construction_Engineer":
+                go = GameObject.Instantiate(ResourcesLoading.NPCPrefabDic[ResourcesLoading.NPCPrefabNames.Construction_Engineer], _model.GetPos(), Quaternion.identity);
+                go.transform.Rotate(Vector3.up * _model.rotation);
+                go.GetComponent<ConstructionEngineerBehaviour>().theModel = _model;
+                NPCManager.Instance.listOfNPCS.Add(_model, go);
+                break;
+        }
+    }
 }

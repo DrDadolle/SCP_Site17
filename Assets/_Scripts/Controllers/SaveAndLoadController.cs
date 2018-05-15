@@ -157,12 +157,11 @@ public class SaveAndLoadController : MonoBehaviour {
     }
 
     // Add the NPC and its model in the world !
-    // TODO : handle multiple NPC types (cf AssignGameObjectToAModel)
     private void AssignModelsAndGameObjectForNPCS(SaveData loadedData)
     {
         foreach(var v in loadedData.allNpcs)
         {
-            NPCController.Instance.PopulateNPCWithModel(v);
+            NPCFactory.BuildNPCBasedOnModel(v);
         }
     }
 
