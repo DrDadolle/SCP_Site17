@@ -22,10 +22,11 @@ public class NPCController : MonoBehaviour {
     }
 
     // Populate a NPC (for test purpose for now)
-    public void PopulateNPC()
+    public void PopulateNPC(GameObject _go)
     {
+        Vector3 spawnPosition = new Vector3(Random.Range(-2f, 2f), 0, Random.Range(-2f, 2f));
         //Quaternion to be changed
-        GameObject go = GameObject.Instantiate(npcPrefab, Vector3.zero, Quaternion.identity);
+        GameObject go = GameObject.Instantiate(_go, spawnPosition, Quaternion.identity);
         go.transform.parent = gameObject.transform;
         NPCModel nPCModel = new NPCModel(Vector3.zero, 100);
 

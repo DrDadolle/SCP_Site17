@@ -313,6 +313,7 @@
     <Compile Include="Assets\_Scripts\Models\Single Object Models\WallModel.cs" />
     <Compile Include="Assets\_Scripts\Models\Single Object Models\WallWithDoorsModel.cs" />
     <Compile Include="Assets\_Scripts\MoveCamera.cs" />
+    <Compile Include="Assets\_Scripts\NPC\ConstructionEngineerBehaviour.cs" />
     <Compile Include="Assets\_Scripts\NPC\DClassBehaviour.cs" />
     <Compile Include="Assets\_Scripts\NPC\NPCBasicBehaviour.cs" />
     <Compile Include="Assets\_Scripts\NPC\ScientistBehaviour.cs" />

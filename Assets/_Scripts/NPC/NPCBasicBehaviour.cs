@@ -8,13 +8,16 @@ using UnityEngine.AI;
  * It handles :
  * -Getting and doing a job
  */
-public class NPCBasicBehaviour : MonoBehaviour {
+public abstract class NPCBasicBehaviour : MonoBehaviour {
 
     // To move
     NavMeshAgent agent;
 
     //TODO : to be moved to the model for saveLoad reason ONCE JOB GETS SERIALIZED
     public Job myJob;
+
+    // Idling 
+    public bool isIdling;
 
     // To remove ? To keep ?
     // TODO : maybe to keep for now, then to remove to use specific model for specific behaviours !
@@ -25,20 +28,21 @@ public class NPCBasicBehaviour : MonoBehaviour {
         agent = GetComponent<NavMeshAgent>();
     }
 
-    private void Update()
+    /*private void Update()
     {
         // FIXME : Should release the job when it is proven impossible to reach
         GetAJob();
         DoAJob();
-    }
+    }*/
 
-    protected void GetAJob()
+    // Get job from an unique jobqueue
+    protected void GetAJobFromJobQueue(JobQueue queue)
     {
         // Get a job
         if (myJob == null)
         {
             //try to grab a job
-            myJob = JobManager.jobQueue.Dequeue();
+            myJob = queue.Dequeue();
             if (myJob == null)
             {
                 return;

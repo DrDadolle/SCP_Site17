@@ -6,7 +6,8 @@ using UnityEngine;
  *  Manager of all NPCs.
  *  Might become abstract
  */
-public class NPCManager : MonoBehaviour {
+public class NPCManager : MonoBehaviour
+{
 
     public static NPCManager Instance;
 
@@ -24,7 +25,7 @@ public class NPCManager : MonoBehaviour {
      */
     public void UpdatePositionOfAllNPCModels()
     {
-        foreach(var v in listOfNPCS)
+        foreach (var v in listOfNPCS)
         {
             NPCModel _model = v.Key;
             GameObject _go = v.Value;
