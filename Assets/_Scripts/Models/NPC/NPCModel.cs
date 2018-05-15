@@ -23,6 +23,8 @@ public class NPCModel {
     [SerializeField]
     private float z;
 
+    public float rotation;
+
     //Job stuff
     // Keep reference of the job here or in NPCbehaviour ?
     // Or behaviour keep a ref to the model ?

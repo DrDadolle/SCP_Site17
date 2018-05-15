@@ -44,6 +44,7 @@ public class NPCController : MonoBehaviour {
         //Quaternion to be changed
         GameObject go = GameObject.Instantiate(npcPrefab, model.GetPos(), Quaternion.identity);
         go.transform.parent = gameObject.transform;
+        go.transform.Rotate(Vector3.up * model.rotation);
 
         // Add a ref to the model in the behaviour script
         go.GetComponent<NPCBasicBehaviour>().theModel = model;

@@ -26,7 +26,11 @@ public class NPCManager : MonoBehaviour {
     {
         foreach(var v in listOfNPCS)
         {
-            v.Key.SetPos(v.Value.transform.position);
+            NPCModel _model = v.Key;
+            GameObject _go = v.Value;
+
+            _model.SetPos(_go.transform.position);
+            _model.rotation = _go.transform.rotation.eulerAngles.y;
         }
     }
 
