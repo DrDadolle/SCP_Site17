@@ -29,12 +29,13 @@ public class NPCModel {
     // Keep reference of the job here or in NPCbehaviour ?
     // Or behaviour keep a ref to the model ?
 
-    public NPCModel(Vector3 pos, float maxHealth)
+    public NPCModel(NPCData data, Vector3 pos)
     {
         this.x = pos.x;
         this.y = pos.y;
         this.z = pos.z;
-        this.hp = maxHealth;
+        this.hp = data.maxHealth;
+        this.typeOfNpc = data.typeOfNPC;
 
     }
 

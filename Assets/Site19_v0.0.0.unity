@@ -12462,9 +12462,9 @@ MonoBehaviour:
         m_MethodName: PopulateNPC
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1360931252604440, guid: f064eab550c28d54b8a967dcf2ea8e45,
+          m_ObjectArgument: {fileID: 11400000, guid: d7b78ea6514cad742a7266ccf6f3b60d,
             type: 2}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: NPCData, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -17059,7 +17059,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -65, y: 0}
-  m_SizeDelta: {x: 100, y: 35}
+  m_SizeDelta: {x: 100, y: 70}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1778577690
 MonoBehaviour:
@@ -17249,9 +17249,9 @@ MonoBehaviour:
         m_MethodName: PopulateNPC
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1518643161468782, guid: 75093aa7621239b4bb56f263a3ba9e72,
+          m_ObjectArgument: {fileID: 11400000, guid: 181d29944a1eb6f44b061c18eaad9b74,
             type: 2}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: NPCData, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
