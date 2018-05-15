@@ -18,10 +18,10 @@ public class SaveAndLoadController : MonoBehaviour {
     private string completeSaveFilePath;
 
     // path of the savefiles
-    private string savePath = "/Resources/SavedMaps";
+    private string savePath = "/Resources/Save";
 
     // name of the saveFile
-    private string saveFileName = "/mysave.dat";
+    private string saveFileName = "/mysave.scp";
 
     // Variables used by furnitures
     public FloatVariable rotationOfFurniture;
@@ -75,8 +75,17 @@ public class SaveAndLoadController : MonoBehaviour {
         //TODO : add it properly to the saveData !
         //FloorManager.Instance.listOfFloors.Clear();
 
-       //TODO : We do not add back the jobs because not saveable 
+        //TODO : We do not add back the jobs because not saveable 
         //JobManager.jobQueue.ClearAll();
+
+        //TODO : add npcs !
+        // Clear all NPCs
+        foreach(var v in NPCManager.Instance.listOfNPCS.Values)
+        {
+            Destroy(v);
+        }
+        NPCManager.Instance.listOfNPCS.Clear();
+
     }
 
     /**
@@ -88,7 +97,10 @@ public class SaveAndLoadController : MonoBehaviour {
         Debug.Log("trying to save in the following file : " + completeSaveFilePath);
         FileStream saveFile = File.Open(completeSaveFilePath, FileMode.OpenOrCreate);
 
-        SaveData data = new SaveData(worldTileMapRef, FurnitureManager.Instance, WallsWithDoorManager.Instance);
+        SaveData data = new SaveData(worldTileMapRef,
+            FurnitureManager.Instance,
+            WallsWithDoorManager.Instance,
+            NPCManager.Instance);
 
         BinaryFormatter bf = new BinaryFormatter();
 
@@ -133,6 +145,10 @@ public class SaveAndLoadController : MonoBehaviour {
 
             //Rotate
             FurnitureManager.Instance.OnLoading();
+
+            // Add NPCs
+            AssignModelsAndGameObjectForNPCS(loadedData);
+
             // Build NavMesh
             NavMeshController.Instance.BuildNavMesh();
             IsLoading = false;
@@ -140,10 +156,20 @@ public class SaveAndLoadController : MonoBehaviour {
         }
     }
 
+    // Add the NPC and its model in the world !
+    // TODO : handle multiple NPC types (cf AssignGameObjectToAModel)
+    private void AssignModelsAndGameObjectForNPCS(SaveData loadedData)
+    {
+        foreach(var v in loadedData.allNpcs)
+        {
+            NPCController.Instance.PopulateNPCWithModel(v);
+        }
+    }
+
     /**
      *  For furniture manager
      */
-     private void AssignGameObjectToAModel(SaveData loadData)
+    private void AssignGameObjectToAModel(SaveData loadData)
     {
         // Replace the model created by furnitureTile by the loaded one.
         foreach (var v in loadData.allOfficeModels)
@@ -246,11 +272,14 @@ public class SaveAndLoadController : MonoBehaviour {
 
         // Wall with doors
         public List<WallWithDoorsModel> allWallsWithDoor;
+
+        // List of All NPC models
+        public List<NPCModel> allNpcs;
         
         /**
          *  Create the class which contains all saveable data
          */
-        public SaveData(Tilemap map, FurnitureManager furnitureManager, WallsWithDoorManager wallsWithDoorManager)
+        public SaveData(Tilemap map, FurnitureManager furnitureManager, WallsWithDoorManager wallsWithDoorManager, NPCManager NpcManager)
         {
             // Save tilemap
             SaveMapTilesData(map);
@@ -260,6 +289,9 @@ public class SaveAndLoadController : MonoBehaviour {
 
             //Save Walls
             SaveWalls(map, wallsWithDoorManager);
+
+            //Save NPCs
+            SaveNPC(NpcManager);
 
         }
 
@@ -358,6 +390,13 @@ public class SaveAndLoadController : MonoBehaviour {
         private void SaveWalls(Tilemap map, WallsWithDoorManager wallDManager)
         {
             allWallsWithDoor = UtilitiesMethod.GetListOfModelFromDictionnary<WallWithDoorsModel>(wallDManager.listOfAllWalls);
+        }
+
+        private void SaveNPC(NPCManager manager)
+        {
+            //Update v3 position of all NPCModels
+            manager.UpdatePositionOfAllNPCModels();
+            allNpcs = UtilitiesMethod.GetListOfModelFromDictionnary<NPCModel>(manager.listOfNPCS);
         }
 
     }

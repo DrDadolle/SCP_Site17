@@ -303,6 +303,7 @@
     <Compile Include="Assets\_Scripts\Managers\WeatherManager.cs" />
     <Compile Include="Assets\_Scripts\Models\Job.cs" />
     <Compile Include="Assets\_Scripts\Models\JobQueue.cs" />
+    <Compile Include="Assets\_Scripts\Models\NPC\NPCModel.cs" />
     <Compile Include="Assets\_Scripts\Models\SCP\SCPClassification.cs" />
     <Compile Include="Assets\_Scripts\Models\Single Object Models\ComputerModel.cs" />
     <Compile Include="Assets\_Scripts\Models\Single Object Models\FloorModel.cs" />

@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 195119241267627624}
   m_Layer: 0
   m_Name: Dummy_NPC
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,6 +96,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9175099a88b5b254d9f60f448290941b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  theModel:
+    typeOfNpc: 
+    hp: 0
+    position: {x: 0, y: 0, z: 0}
 --- !u!136 &136537295696356018
 CapsuleCollider:
   m_ObjectHideFlags: 1

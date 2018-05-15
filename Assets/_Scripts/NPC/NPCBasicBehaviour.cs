@@ -10,9 +10,15 @@ using UnityEngine.AI;
  */
 public class NPCBasicBehaviour : MonoBehaviour {
 
+    // To move
     NavMeshAgent agent;
 
+    //TODO : to be moved to the model for saveLoad reason ONCE JOB GETS SERIALIZED
     public Job myJob;
+
+    // To remove ? To keep ?
+    // TODO : maybe to keep for now, then to remove to use specific model for specific behaviours !
+    public NPCModel theModel;
 
     void Start()
     {

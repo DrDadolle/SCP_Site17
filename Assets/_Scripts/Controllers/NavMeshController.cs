@@ -32,7 +32,7 @@ public class NavMeshController : MonoBehaviour {
         mouseCursor.GetComponent<MeshRenderer>().enabled = true;
 
         // update path after each back for NPCS with job !
-        foreach(var v in NPCManager.Instance.listOfNPCS)
+        foreach(var v in NPCManager.Instance.listOfNPCS.Values)
         {
             // If has a job, reupdate the destination
             if(v.GetComponent<NPCBasicBehaviour>().myJob != null)
