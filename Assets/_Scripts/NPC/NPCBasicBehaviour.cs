@@ -76,15 +76,8 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
         }
     }
 
-    protected void OnJobEnded(Job j)
+    protected void OnJobEnded()
     {
-        // Job completed or was cancelled.
-
-        if (j != myJob)
-        {
-            Debug.LogError("Character being told about job that isn't his. You forgot to unregister something.");
-            return;
-        }
         //Refresh the navmesh
         NavMeshController.Instance.BuildNavMesh();
         agent.ResetPath();

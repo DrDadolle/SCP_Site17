@@ -145,7 +145,7 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
         * We should create all the jobs only on mousebutton release !
         * We should create a tmp list of jobs !
         */
-        Job j_tmp = new Job(tilePos, (theJob) =>
+        Job j_tmp = new Job(tilePos, () =>
         {
             //Refresh based on the model
             FurnitureManager.Instance.GetModelFromAllDictionnaries(tilePos).isPending = false;

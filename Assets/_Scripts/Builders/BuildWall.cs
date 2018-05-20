@@ -186,7 +186,7 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
                  * We should create all the jobs only on mousebutton release !
                 * We should create a tmp list of jobs !
                 */
-                Job j_tmp = new Job(npos, (theJob) =>
+                Job j_tmp = new Job(npos, () =>
                 {
                     WallManager.Instance.listOfAllWalls[npos].model.isPending = false;
                     WallManager.Instance.listOfAllWalls[npos].model.isPreview = false;

@@ -14,12 +14,12 @@ public class Job
     float jobTime;
 
     [Serializable]
-    public class JobCompleteEvent : UnityEvent<Job>
+    public class JobCompleteEvent : UnityEvent
     {
     };
 
     [Serializable]
-    public class JobCancelEvent : UnityEvent<Job>
+    public class JobCancelEvent : UnityEvent
     {
     };
 
@@ -31,7 +31,7 @@ public class Job
      * Create a job.
      * Default time to complete is 1 second.
      */ 
-    public Job(Vector3Int tileposition, UnityAction<Job> cbJobComplete, float jobTime = 1f)
+    public Job(Vector3Int tileposition, UnityAction cbJobComplete, float jobTime = 1f)
     {
         onJobComplete = new JobCompleteEvent();
         onJobCancel = new JobCancelEvent();
@@ -55,7 +55,7 @@ public class Job
         if (jobTime <= 0)
         {
             if (onJobComplete != null)
-                onJobComplete.Invoke(this);
+                onJobComplete.Invoke();
         }
     }
 
@@ -65,7 +65,7 @@ public class Job
     public void CancelJob()
     {
         if (onJobCancel != null)
-            onJobCancel.Invoke(this);
+            onJobCancel.Invoke();
     }
 
     /**
