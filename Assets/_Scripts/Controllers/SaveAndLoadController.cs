@@ -274,6 +274,9 @@ public class SaveAndLoadController : MonoBehaviour {
 
         // List of All NPC models
         public List<NPCModel> allNpcs;
+
+        // List of all jobs
+        public List<Job> allJobs;
         
         /**
          *  Create the class which contains all saveable data
@@ -292,6 +295,14 @@ public class SaveAndLoadController : MonoBehaviour {
             //Save NPCs
             SaveNPC(NpcManager);
 
+            //Save Jobs
+            SaveJobs();
+
+        }
+
+        private void SaveJobs()
+        {
+            allJobs = JobManager.jobQueue.ConvertToJobList();
         }
 
         private void SaveMapTilesData(Tilemap map)

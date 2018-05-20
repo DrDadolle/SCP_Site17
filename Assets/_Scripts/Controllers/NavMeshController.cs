@@ -35,11 +35,11 @@ public class NavMeshController : MonoBehaviour {
         foreach(var v in NPCManager.Instance.listOfNPCS.Values)
         {
             // If has a job, reupdate the destination
-            if(v.GetComponent<NPCBasicBehaviour>().myJob != null)
+            if(v.GetComponent<NPCBasicBehaviour>().theModel.myJob != null)
             {
                 NavMeshAgent agent = v.GetComponent<NavMeshAgent>();
                 agent.isStopped = false;
-                agent.destination = v.GetComponent<NPCBasicBehaviour>().myJob.GetTilePos();
+                agent.destination = v.GetComponent<NPCBasicBehaviour>().theModel.myJob.GetTilePos();
             }
         }
 

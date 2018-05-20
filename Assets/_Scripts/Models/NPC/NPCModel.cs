@@ -25,6 +25,9 @@ public class NPCModel {
 
     public float rotation;
 
+    // Its job
+    public Job myJob;
+
     //Job stuff
     // Keep reference of the job here or in NPCbehaviour ?
     // Or behaviour keep a ref to the model ?

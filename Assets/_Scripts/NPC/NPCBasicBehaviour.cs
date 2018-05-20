@@ -13,9 +13,6 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
     // To move
     NavMeshAgent agent;
 
-    //TODO : to be moved to the model for saveLoad reason ONCE JOB GETS SERIALIZED
-    public Job myJob;
-
     // Idling 
     public bool isIdling;
 
@@ -39,31 +36,33 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
     protected void GetAJobFromJobQueue(JobQueue queue)
     {
         // Get a job
-        if (myJob == null)
+        if (theModel.myJob == null)
         {
             //try to grab a job
-            myJob = queue.Dequeue();
-            if (myJob == null)
+            theModel.myJob = queue.Dequeue();
+            if (theModel.myJob == null)
             {
                 return;
             }
+
+
             //Set destination
-            //Debug.Log("destination : " + myJob.GetTilePos());
-            agent.destination = myJob.GetTilePos();
+            //Debug.Log("destination : " + theModel.myJob.GetTilePos());
+            agent.destination = theModel.myJob.GetTilePos();
 
             //Set callbacks
-            myJob.onJobComplete.AddListener(OnJobEnded);
-            myJob.onJobCancel.AddListener(OnJobEnded);
+            theModel.myJob.onJobComplete.AddListener(OnJobEnded);
+            theModel.myJob.onJobCancel.AddListener(OnJobEnded);
         }
     }
 
     protected void DoAJob()
     {
-        if (myJob != null)
+        if (theModel.myJob != null)
         {
             //If close, stop, do job
-            float _x = Mathf.Abs(gameObject.transform.position.x - myJob.GetTilePos().x);
-            float _z = Mathf.Abs(gameObject.transform.position.z - myJob.GetTilePos().z);
+            float _x = Mathf.Abs(gameObject.transform.position.x - theModel.myJob.GetTilePos().x);
+            float _z = Mathf.Abs(gameObject.transform.position.z - theModel.myJob.GetTilePos().z);
             //if (((_x * _x) + (_z * _z)) < 0.75f )
             if (_x < .5f && _z < .5f)
             {
@@ -71,7 +70,7 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
 
                 //DoJob
                 // FIXME : not spending one second to do it
-                myJob.DoWork(Time.deltaTime);
+                theModel.myJob.DoWork(Time.deltaTime);
             }
         }
     }
@@ -81,7 +80,7 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
         //Refresh the navmesh
         NavMeshController.Instance.BuildNavMesh();
         agent.ResetPath();
-        myJob = null;
+        theModel.myJob = null;
     }
 
 }

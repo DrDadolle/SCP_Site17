@@ -11,6 +11,7 @@ public class JobQueue
         jobQueue = new Queue<Job>();
     }
 
+    // Enqueue
     public void Enqueue(Job j)
     {
         //Check for duplicates !!!!! because of build wall issue
@@ -19,12 +20,25 @@ public class JobQueue
 
     }
 
+    //Dequeue
     public Job Dequeue()
     {
         if (jobQueue.Count == 0)
             return null;
 
         return jobQueue.Dequeue();
+    }
+
+    public List<Job> ConvertToJobList()
+    {
+        List<Job> allJobs = new List<Job>();
+
+        while (this.jobQueue.Count > 0)
+        {
+            allJobs.Add(JobManager.jobQueue.Dequeue());
+        }
+
+        return allJobs;
     }
 
     public int GetJobCount()

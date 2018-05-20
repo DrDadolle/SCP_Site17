@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.Events;
 
+[Serializable]
 public class Job
 {
 
@@ -10,7 +11,14 @@ public class Job
     // things like placing furniture, moving stored inventory,
     // working at a desk, and maybe even fighting enemies.
 
-    private Vector3Int tileposition;
+    // Position of the job
+    [SerializeField]
+    private float x;
+    [SerializeField]
+    private float y;
+    [SerializeField]
+    private float z;
+
     float jobTime;
 
     [Serializable]
@@ -23,8 +31,8 @@ public class Job
     {
     };
 
-
     public JobCompleteEvent onJobComplete;
+
     public JobCancelEvent onJobCancel;
 
     /**
@@ -33,16 +41,33 @@ public class Job
      */ 
     public Job(Vector3Int tileposition, UnityAction cbJobComplete, float jobTime = 1f)
     {
+        // FIXME : not serializable
         onJobComplete = new JobCompleteEvent();
-        onJobCancel = new JobCancelEvent();
-        this.tileposition = tileposition;
-        onJobComplete.AddListener(cbJobComplete);
+        //onJobCancel = new JobCancelEvent();
+        //onJobComplete.AddListener(cbJobComplete);
+        SetTilePos(tileposition);
         this.jobTime = jobTime;
     }
 
+
     public Vector3 GetTilePos()
     {
-        return new Vector3(tileposition.x + .5f, tileposition.z, tileposition.y + .5f);
+        return new Vector3(x, y, z);
+    }
+
+    public void SetTilePos(Vector3 pos)
+    {
+        this.x = pos.x;
+        this.y = pos.y;
+        this.z = pos.z;
+    }
+
+    // Interverting the values because of the map
+    public void SetTilePos(Vector3Int pos)
+    {
+        this.x = pos.x + .5f;
+        this.y = pos.z;
+        this.z = pos.y + +.5f;
     }
 
 

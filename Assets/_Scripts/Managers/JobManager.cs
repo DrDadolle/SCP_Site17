@@ -11,9 +11,13 @@ public class JobManager : MonoBehaviour {
 
     private bool IsCalled = false;
 
+    // For access purposes
+    public static JobManager Instance;
+
     // On Awake
     void Awake () {
         jobQueue = new JobQueue();
+        Instance = this;
     }
 
 }
