@@ -69,11 +69,11 @@ public class SaveAndLoadController : MonoBehaviour {
     public void NewGame()
     {
         ResetWorld();
-        // Clear the furniture Manager
+        // Clear All Managers
         FurnitureManager.Instance.ClearAll();
         WallsWithDoorManager.Instance.listOfAllWalls.Clear();
-        //TODO : add it properly to the saveData !
-        //FloorManager.Instance.listOfFloors.Clear();
+        FloorManager.Instance.listOfFloors.Clear();
+        WallManager.Instance.listOfAllWalls.Clear();
 
         //TODO : We do not add back the jobs because not saveable 
         //JobManager.jobQueue.ClearAll();
@@ -85,6 +85,7 @@ public class SaveAndLoadController : MonoBehaviour {
             Destroy(v);
         }
         NPCManager.Instance.listOfNPCS.Clear();
+
 
     }
 
@@ -98,8 +99,10 @@ public class SaveAndLoadController : MonoBehaviour {
         FileStream saveFile = File.Open(completeSaveFilePath, FileMode.OpenOrCreate);
 
         SaveData data = new SaveData(worldTileMapRef,
+            FloorManager.Instance,
             FurnitureManager.Instance,
             WallsWithDoorManager.Instance,
+            WallManager.Instance,
             NPCManager.Instance);
 
         BinaryFormatter bf = new BinaryFormatter();
@@ -126,12 +129,12 @@ public class SaveAndLoadController : MonoBehaviour {
 
             // Reset the world
             ResetWorld();
-            // Clear the furniture Manager
-            FurnitureManager.Instance.ClearAll();
-            WallsWithDoorManager.Instance.listOfAllWalls.Clear();
 
             rotationOfFurniture.thefloat = 0;
             IsLoading = true;
+
+            // Add the FloorModels before loading them
+            LoadingFloorModels(loadedData);
 
             //Reload the world now with correct tiles
             // Put already correct sprite under furnitures
@@ -140,19 +143,42 @@ public class SaveAndLoadController : MonoBehaviour {
             // Replace all existing models data
             //Furniture
             AssignGameObjectToAModel(loadedData);
-            //Walls
-            AssignGameObjectsToWallWithDoorsModel(loadedData);
-
-            //Rotate
             FurnitureManager.Instance.OnLoading();
 
+            // FIX WALLS TOO
+
+            //Walls with Doors
+            AssignGameObjectsToWallWithDoorsModel(loadedData);
+
             // Add NPCs
-            AssignModelsAndGameObjectForNPCS(loadedData);
+            //AssignModelsAndGameObjectForNPCS(loadedData);
 
             // Build NavMesh
             NavMeshController.Instance.BuildNavMesh();
+
+            // Add jobs
+            //LoadAllJobsToQueue(loadedData);
+
             IsLoading = false;
 
+        }
+    }
+
+    // Load all floor models and add them to the manager
+    private void LoadingFloorModels(SaveData loadedData)
+    {
+        foreach(var v in loadedData.allFloors)
+        {
+            FloorManager.Instance.listOfFloors[v.GetTilePos()] = v;
+        }
+    }
+
+    // Load all jobs to the queue (conversion from JobLite)
+    private void LoadAllJobsToQueue(SaveData data)
+    {
+        foreach(var l in data.allJobsLite)
+        {
+            JobManager.jobQueue.Enqueue(new Job(l));
         }
     }
 
@@ -166,7 +192,7 @@ public class SaveAndLoadController : MonoBehaviour {
     }
 
     /**
-     *  For furniture manager
+     *  For furniture manager andWall manager
      */
     private void AssignGameObjectToAModel(SaveData loadData)
     {
@@ -183,7 +209,13 @@ public class SaveAndLoadController : MonoBehaviour {
             FurnitureManager.Instance.listOfAllComputers[v.GetTilePos()] = new FurnitureManager.ComputerObject(v, _obj.go);
         }
 
-        
+        foreach (var v in loadData.allWall)
+        {
+            WallManager.WallObject _obj = WallManager.Instance.listOfAllWalls[v.GetTilePos()];
+            WallManager.Instance.listOfAllWalls[v.GetTilePos()] = new WallManager.WallObject(v, _obj.go);
+        }
+
+
     }
 
     /**
@@ -272,37 +304,65 @@ public class SaveAndLoadController : MonoBehaviour {
         // Wall with doors
         public List<WallWithDoorsModel> allWallsWithDoor;
 
+        // Walls
+        public List<WallModel> allWall;
+
+        // All FloorTiles
+        public List<FloorModel> allFloors;
+
         // List of All NPC models
         public List<NPCModel> allNpcs;
 
         // List of all jobs
-        public List<Job> allJobs;
+        public List<JobLite> allJobsLite;
+
         
         /**
          *  Create the class which contains all saveable data
          */
-        public SaveData(Tilemap map, FurnitureManager furnitureManager, WallsWithDoorManager wallsWithDoorManager, NPCManager NpcManager)
+        public SaveData(Tilemap map, FloorManager floorManager, FurnitureManager furnitureManager, WallsWithDoorManager wallsWithDoorManager, WallManager wallManager, NPCManager NpcManager)
         {
             // Save tilemap
             SaveMapTilesData(map);
+
+            // Save Floor
+            SaveFloorList(floorManager);
 
             //Save Furnitures
             SaveFurnituresDataList(map, furnitureManager);
 
             //Save Walls
-            SaveWalls(map, wallsWithDoorManager);
+            SaveWalls(map, wallsWithDoorManager, wallManager);
 
             //Save NPCs
-            SaveNPC(NpcManager);
+            //SaveNPC(NpcManager);
 
             //Save Jobs
-            SaveJobs();
+            //SaveJobs();
 
+        }
+
+        private void SaveFloorList(FloorManager floorManager)
+        {
+            allFloors = new List<FloorModel>();
+            foreach(var v in floorManager.listOfFloors.Values)
+            {
+                allFloors.Add(v);
+            }
         }
 
         private void SaveJobs()
         {
-            allJobs = JobManager.jobQueue.ConvertToJobList();
+            // Only for Joblitebuildwalls for now
+            allJobsLite = new List<JobLite>();
+
+            while( JobManager.jobQueue.GetJobCount() >0 )
+            {
+                // big SWITCH CASE
+                // because the TYPE of the job is X, we add a JobLiteBuildWall with the right argument ?
+                // FIXME : where to stock the variability of the tile ?
+                allJobsLite.Add(new JobLiteBuildWalls(JobManager.jobQueue.Dequeue(), ResourcesLoading.TileBasesName.Wall_Tile));
+            }
         }
 
         private void SaveMapTilesData(Tilemap map)
@@ -397,9 +457,17 @@ public class SaveAndLoadController : MonoBehaviour {
             }
         }
 
-        private void SaveWalls(Tilemap map, WallsWithDoorManager wallDManager)
+        private void SaveWalls(Tilemap map, WallsWithDoorManager wallDManager, WallManager WallManager)
         {
+            // To refacto like normal walls !
             allWallsWithDoor = UtilitiesMethod.GetListOfModelFromDictionnary<WallWithDoorsModel>(wallDManager.listOfAllWalls);
+
+            //Walls
+            allWall = new List<WallModel>();
+            foreach (var v in WallManager.listOfAllWalls.Values)
+            {
+                allWall.Add(v.model);
+            }
         }
 
         private void SaveNPC(NPCManager manager)

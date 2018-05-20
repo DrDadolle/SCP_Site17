@@ -179,20 +179,14 @@ public class BuildWall : MonoBehaviour, IBuildingMethod {
 
                 map.SetTile(npos, tile);
                 listOfPendingTiles.Add(npos);
-                
+
 
                 /**
                 * JOBS !
                  * We should create all the jobs only on mousebutton release !
                 * We should create a tmp list of jobs !
                 */
-                Job j_tmp = new Job(npos, () =>
-                {
-                    WallManager.Instance.listOfAllWalls[npos].model.isPending = false;
-                    WallManager.Instance.listOfAllWalls[npos].model.isPreview = false;
-                    map.RefreshTile(npos);
-
-                }, tile.wallData.buildingTime);
+                Job j_tmp = JobActions.BuildWallJob(map, npos, tile);
 
                 listOfPotentialJobs.Add(j_tmp);
             }

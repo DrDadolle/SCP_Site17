@@ -301,8 +301,12 @@
     <Compile Include="Assets\_Scripts\Managers\WallManager.cs" />
     <Compile Include="Assets\_Scripts\Managers\WallsWithDoorManager.cs" />
     <Compile Include="Assets\_Scripts\Managers\WeatherManager.cs" />
-    <Compile Include="Assets\_Scripts\Models\Job.cs" />
-    <Compile Include="Assets\_Scripts\Models\JobQueue.cs" />
+    <Compile Include="Assets\_Scripts\Managers\WorldManager.cs" />
+    <Compile Include="Assets\_Scripts\Models\Job\Job.cs" />
+    <Compile Include="Assets\_Scripts\Models\Job\JobLite\JobActions.cs" />
+    <Compile Include="Assets\_Scripts\Models\Job\JobLite\JobLite.cs" />
+    <Compile Include="Assets\_Scripts\Models\Job\JobLite\JobLiteBuildWalls.cs" />
+    <Compile Include="Assets\_Scripts\Models\Job\JobQueue.cs" />
     <Compile Include="Assets\_Scripts\Models\NPC\NPCFactory.cs" />
     <Compile Include="Assets\_Scripts\Models\NPC\NPCModel.cs" />
     <Compile Include="Assets\_Scripts\Models\SCP\SCPClassification.cs" />
