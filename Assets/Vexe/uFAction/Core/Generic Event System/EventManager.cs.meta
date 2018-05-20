@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: e96ad3393c682914e8d7f94d3c0e646f
+labels:
+- eventsystem
+- genericeventsystem
+- events
+- serializedevents
+timeCreated: 18446744011573954816
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
