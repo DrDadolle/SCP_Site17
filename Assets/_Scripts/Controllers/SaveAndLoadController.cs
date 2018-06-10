@@ -133,9 +133,15 @@ public class SaveAndLoadController : MonoBehaviour {
             rotationOfFurniture.thefloat = 0;
             IsLoading = true;
 
+            // == BEFORE LOADING 
             // Add the FloorModels before loading them
             LoadingFloorModels(loadedData);
 
+            // Add the WallModels before loading them
+            LoadingWallModels(loadedData);
+
+
+            // == LOADING THE MAP
             //Reload the world now with correct tiles
             // Put already correct sprite under furnitures
             worldTileMapRef = loadedData.ConvertDataToTileMap(worldTileMapRef);
@@ -144,8 +150,6 @@ public class SaveAndLoadController : MonoBehaviour {
             //Furniture
             AssignGameObjectToAModel(loadedData);
             FurnitureManager.Instance.OnLoading();
-
-            // FIX WALLS TOO
 
             //Walls with Doors
             AssignGameObjectsToWallWithDoorsModel(loadedData);
@@ -170,6 +174,17 @@ public class SaveAndLoadController : MonoBehaviour {
         foreach(var v in loadedData.allFloors)
         {
             FloorManager.Instance.listOfFloors[v.GetTilePos()] = v;
+        }
+    }
+
+    // Load all Wall models and add them to the manager
+    // The Game Object will be added in the WallTile Tilebase Class
+    private void LoadingWallModels(SaveData loadedData)
+    {
+        foreach (var v in loadedData.allWall)
+        {
+            WallManager.WallObject _w = new WallManager.WallObject(v, null);
+            WallManager.Instance.listOfAllWalls[v.GetTilePos()] = _w;
         }
     }
 
@@ -208,14 +223,6 @@ public class SaveAndLoadController : MonoBehaviour {
             FurnitureManager.ComputerObject _obj = FurnitureManager.Instance.listOfAllComputers[v.GetTilePos()];
             FurnitureManager.Instance.listOfAllComputers[v.GetTilePos()] = new FurnitureManager.ComputerObject(v, _obj.go);
         }
-
-        foreach (var v in loadData.allWall)
-        {
-            WallManager.WallObject _obj = WallManager.Instance.listOfAllWalls[v.GetTilePos()];
-            WallManager.Instance.listOfAllWalls[v.GetTilePos()] = new WallManager.WallObject(v, _obj.go);
-        }
-
-
     }
 
     /**
@@ -223,8 +230,15 @@ public class SaveAndLoadController : MonoBehaviour {
      */
     private void AssignGameObjectsToWallWithDoorsModel(SaveData loadData)
     {
-        // Replace the model created by WallWithDoorTile by the loaded one.
+        // TODO : Replace the model created by WallWithDoorTile by the loaded one.
         WallsWithDoorManager.Instance.listOfAllWalls = UtilitiesMethod.ReplaceKeysOfDictByList<WallWithDoorsModel>(WallsWithDoorManager.Instance.listOfAllWalls, loadData.allWallsWithDoor);
+
+        // Normal Walls
+        foreach (var v in loadData.allWall)
+        {
+            WallManager.WallObject _obj = WallManager.Instance.listOfAllWalls[v.GetTilePos()];
+            WallManager.Instance.listOfAllWalls[v.GetTilePos()] = new WallManager.WallObject(v, _obj.go);
+        }
     }
 
     /**
@@ -279,204 +293,6 @@ public class SaveAndLoadController : MonoBehaviour {
             return ret.tileItWasPutOn;
         }
         return ResourcesLoading.TileBasesName.Empty;
-    }
-
-
-    /**
-     * This class will save :
-     *  - All tiles
-     *  - All go linked to tiles
-     *  
-     *  Furnitures :
-     *      - Offices
-     * 
-     */
-    [Serializable]
-    public class SaveData
-    {
-        // All the tiles
-        public List<SaveableTile> allTiles;
-
-        // All models of the furnitures
-        public List<OfficeModel> allOfficeModels;
-        public List<ComputerModel> allComputerModels;
-
-        // Wall with doors
-        public List<WallWithDoorsModel> allWallsWithDoor;
-
-        // Walls
-        public List<WallModel> allWall;
-
-        // All FloorTiles
-        public List<FloorModel> allFloors;
-
-        // List of All NPC models
-        public List<NPCModel> allNpcs;
-
-        // List of all jobs
-        public List<JobLite> allJobsLite;
-
-        
-        /**
-         *  Create the class which contains all saveable data
-         */
-        public SaveData(Tilemap map, FloorManager floorManager, FurnitureManager furnitureManager, WallsWithDoorManager wallsWithDoorManager, WallManager wallManager, NPCManager NpcManager)
-        {
-            // Save tilemap
-            SaveMapTilesData(map);
-
-            // Save Floor
-            SaveFloorList(floorManager);
-
-            //Save Furnitures
-            SaveFurnituresDataList(map, furnitureManager);
-
-            //Save Walls
-            SaveWalls(map, wallsWithDoorManager, wallManager);
-
-            //Save NPCs
-            //SaveNPC(NpcManager);
-
-            //Save Jobs
-            //SaveJobs();
-
-        }
-
-        private void SaveFloorList(FloorManager floorManager)
-        {
-            allFloors = new List<FloorModel>();
-            foreach(var v in floorManager.listOfFloors.Values)
-            {
-                allFloors.Add(v);
-            }
-        }
-
-        private void SaveJobs()
-        {
-            // Only for Joblitebuildwalls for now
-            allJobsLite = new List<JobLite>();
-
-            while( JobManager.jobQueue.GetJobCount() >0 )
-            {
-                // big SWITCH CASE
-                // because the TYPE of the job is X, we add a JobLiteBuildWall with the right argument ?
-                // FIXME : where to stock the variability of the tile ?
-                allJobsLite.Add(new JobLiteBuildWalls(JobManager.jobQueue.Dequeue(), ResourcesLoading.TileBasesName.Wall_Tile));
-            }
-        }
-
-        private void SaveMapTilesData(Tilemap map)
-        {
-            allTiles = new List<SaveableTile>();
-
-            //Get Array of all existing TileBase
-            BoundsInt bounds = map.cellBounds;
-            TileBase[] _allTiles = map.GetTilesBlock(bounds);
-            // for all tiles
-            for (int x = 0; x < bounds.size.x; x++)
-            {
-                for (int y = 0; y < bounds.size.y; y++)
-                {
-                    // If the tile exists and isn't null
-                    TileBase tile = _allTiles[x + y * bounds.size.x];
-                    if (tile != null)
-                    {
-                        Vector3Int npos = new Vector3Int(x + bounds.position.x, y + bounds.position.y, 0);
-                        //Convert the name of the tile to the TileBasesNames from the resources loading class
-                        //Array containing all possibles names of tiles & enums
-                        string[] names = Enum.GetNames(typeof(ResourcesLoading.TileBasesName));
-                        ResourcesLoading.TileBasesName[] values = (ResourcesLoading.TileBasesName[])System.Enum.GetValues(typeof(ResourcesLoading.TileBasesName));
-
-                        //Find the enum type according to the tile name
-                        for (var i = 0; i < names.Length; i++)
-                        {
-                            if (tile.name.Equals(names[i]))
-                            {
-                                allTiles.Add(new SaveableTile(npos, values[i]));
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-        /**
-         *  Return the saved tilemap
-         */
-        public Tilemap ConvertDataToTileMap(Tilemap worldtilemap)
-        {
-
-            // Load the tiles
-            foreach (var t in allTiles)
-            {
-                Vector3Int vpos = new Vector3Int(t.x, t.y, t.z);
-                // Check if the tile is located in every dictionnary
-                if (ResourcesLoading.FloorTileDic.ContainsKey(t.tiletype))
-                {
-                    FloorTile ft = (FloorTile)ResourcesLoading.FloorTileDic[t.tiletype];
-                    worldtilemap.SetTile(vpos, ft);
-                }
-                else if (ResourcesLoading.FurnitureTileDic.ContainsKey(t.tiletype))
-                {
-                    FurnitureTile ft = (FurnitureTile)ResourcesLoading.FurnitureTileDic[t.tiletype];
-                    worldtilemap.SetTile(vpos, ft);
-                }
-                if (ResourcesLoading.WallTileDic.ContainsKey(t.tiletype))
-                {
-                    WallTile wt = (WallTile)ResourcesLoading.WallTileDic[t.tiletype];
-                    worldtilemap.SetTile(vpos, wt);
-                }
-                if (ResourcesLoading.WallDoorTileDic.ContainsKey(t.tiletype))
-                {
-                    WallWithDoorTile wwdt = (WallWithDoorTile)ResourcesLoading.WallDoorTileDic[t.tiletype];
-                    worldtilemap.SetTile(vpos, wwdt);
-                }
-            }
-            return worldtilemap;
-        }
-
-
-        /**
-         *  Save the data of furnitures
-         */
-        private void SaveFurnituresDataList(Tilemap map, FurnitureManager furnitureManager)
-        {
-            // TODO : optimize this ?
-
-            allOfficeModels = new List<OfficeModel>();
-            foreach (var v in furnitureManager.listOfAllOffices.Values)
-            {
-                allOfficeModels.Add(v.model);
-            }
-
-            allComputerModels = new List<ComputerModel>();
-            foreach (var v in furnitureManager.listOfAllComputers.Values)
-            {
-                allComputerModels.Add(v.model);
-            }
-        }
-
-        private void SaveWalls(Tilemap map, WallsWithDoorManager wallDManager, WallManager WallManager)
-        {
-            // To refacto like normal walls !
-            allWallsWithDoor = UtilitiesMethod.GetListOfModelFromDictionnary<WallWithDoorsModel>(wallDManager.listOfAllWalls);
-
-            //Walls
-            allWall = new List<WallModel>();
-            foreach (var v in WallManager.listOfAllWalls.Values)
-            {
-                allWall.Add(v.model);
-            }
-        }
-
-        private void SaveNPC(NPCManager manager)
-        {
-            //Update v3 position of all NPCModels
-            manager.UpdatePositionOfAllNPCModels();
-            allNpcs = UtilitiesMethod.GetListOfModelFromDictionnary<NPCModel>(manager.listOfNPCS);
-        }
-
     }
 
 }

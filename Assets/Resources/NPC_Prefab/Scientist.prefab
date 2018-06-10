@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd765031dd61ffa49951809ffd2afb49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isIdling: 0
   theModel:
     typeOfNpc: 
     hp: 0
@@ -103,6 +104,20 @@ MonoBehaviour:
     y: 0
     z: 0
     rotation: 0
+    myJob:
+      x: 0
+      y: 0
+      z: 0
+      onJobComplete:
+        m_PersistentCalls:
+          m_Calls: []
+        m_TypeName: Job+JobCompleteEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+      onJobCancel:
+        m_PersistentCalls:
+          m_Calls: []
+        m_TypeName: Job+JobCancelEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
 --- !u!136 &136208309189210638
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -125,8 +140,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 50
-  m_Acceleration: 50
+  m_Speed: 5
+  m_Acceleration: 5
   avoidancePriority: 50
   m_AngularSpeed: 360
   m_StoppingDistance: 0

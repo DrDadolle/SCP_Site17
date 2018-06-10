@@ -292,6 +292,7 @@
     <Compile Include="Assets\_Scripts\Controllers\NavMeshController.cs" />
     <Compile Include="Assets\_Scripts\Controllers\NPCController.cs" />
     <Compile Include="Assets\_Scripts\Controllers\SaveAndLoadController.cs" />
+    <Compile Include="Assets\_Scripts\Controllers\SaveData.cs" />
     <Compile Include="Assets\_Scripts\GridMesh.cs" />
     <Compile Include="Assets\_Scripts\IBuildingMethod.cs" />
     <Compile Include="Assets\_Scripts\Managers\FloorManager.cs" />

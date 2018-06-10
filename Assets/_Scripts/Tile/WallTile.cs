@@ -51,11 +51,6 @@ public class WallTile : TileBase
      */
     public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go)
     {
-        WallModel wallModel = WallManager.Instance.listOfAllWalls[position].model;
-        //Add the gameobject to dictionnary of WallManager
-        WallManager.WallObject _obj = new WallManager.WallObject(wallModel, go);
-        WallManager.Instance.listOfAllWalls[position] = _obj;
-
         //Center the position of the game object
         //By default the position starts at Left bottom point of the cell
         // TODO need to add anchor points  (vertical and horisontal (left,centre,right)(top,centre,bottom))
@@ -64,6 +59,12 @@ public class WallTile : TileBase
         //Handle rotation based on the composition
         go.transform.Rotate(Vector3.up * rotPrefab);
 
+        WallModel wallModel = WallManager.Instance.listOfAllWalls[position].model;
+        //Add the gameobject to dictionnary of WallManager
+        WallManager.WallObject _obj = new WallManager.WallObject(wallModel, go);
+        WallManager.Instance.listOfAllWalls[position] = _obj;
+
+        // TODO : change with a shader
         if (wallModel.isPending)
         {
             UtilitiesMethod.ChangeMaterialOfRecChildGameObject(go, PendingMaterial);
@@ -73,15 +74,13 @@ public class WallTile : TileBase
             UtilitiesMethod.ChangeMaterialOfRecChildGameObject(go, WallMaterial);
         }
 
-
-
         return true;
     }
 
     /**
- *  handle Exhaustively the composition cases
- *  return the rotation
- */
+     *  handle Exhaustively the composition cases
+     *  return the rotation
+    */
     private float SetWallBasedOnComposition(string composition, ref TileData tileData)
     {
         float rot = 0f;
