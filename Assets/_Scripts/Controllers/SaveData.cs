@@ -60,7 +60,7 @@ public class SaveData
         //SaveNPC(NpcManager);
 
         //Save Jobs
-        //SaveJobs();
+        SaveJobs();
 
     }
 
@@ -80,10 +80,8 @@ public class SaveData
 
         while (JobManager.jobQueue.GetJobCount() > 0)
         {
-            // big SWITCH CASE
-            // because the TYPE of the job is X, we add a JobLiteBuildWall with the right argument ?
-            // FIXME : where to stock the variability of the tile ?
-            allJobsLite.Add(new JobLiteBuildWalls(JobManager.jobQueue.Dequeue(), ResourcesLoading.TileBasesName.Wall_Tile));
+            // Pauvre Passe-Plat
+            allJobsLite.Add(new JobLite(JobManager.jobQueue.Dequeue()));
         }
     }
 

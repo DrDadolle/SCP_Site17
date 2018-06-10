@@ -50,6 +50,7 @@ public class Job
         onJobComplete.AddListener(cbJobComplete);
         SetTilePos(tileposition);
         this.JobTime = jobTime;
+        this.TypeOfJob = TypeOfJob;
     }
 
     /**
@@ -66,8 +67,25 @@ public class Job
         this.JobTime = j.jobTime;
         this.TypeOfJob = j.JobType;
 
-        //SWITCH CASE THEN
-        onJobComplete.AddListener(JobActions.BuildWallJob(WorldManager.Instance.world, Vector3Int.CeilToInt(GetTilePos())));
+        //Fixing the job position issue when creating the callbacks, so we target the correct position in the managers
+        // We intervert back x and y field, and remove the 0.5f used to center the position of the job !
+        // TODO : replace the getPostion by GetCenterOfTile and GetPosition to avoid having to much of these weird conversion
+        Vector3Int correctedPosition = Vector3Int.CeilToInt(new Vector3(GetTilePos().x - .5f, GetTilePos().z - .5f, GetTilePos().y));
+
+
+        //SWITCH CASE to determine the job type
+        switch (j.JobType) {
+            case "Wall":
+                onJobComplete.AddListener(JobActions.BuildWallJob(WorldManager.Instance.world, correctedPosition));
+                break;
+            case "Furniture":
+                onJobComplete.AddListener(JobActions.BuildFurnitureJob(WorldManager.Instance.world, correctedPosition));
+                break;
+            case "Floor":
+                onJobComplete.AddListener(JobActions.BuildFloorJob(WorldManager.Instance.world, correctedPosition));
+                break;
+        }
+
     }
 
     public Vector3 GetTilePos()
@@ -88,7 +106,6 @@ public class Job
         this.x = pos.x + .5f;
         this.y = pos.z;
         this.z = pos.y + +.5f;
-        //Debug.Log(x + ", " + y + ", " + z);
     }
 
 

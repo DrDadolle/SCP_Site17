@@ -6,7 +6,7 @@ using UnityEngine;
  *  Lite job ONLY FOR SAVE/LOAD purposes
  */
 [System.Serializable]
-public abstract class JobLite {
+public class JobLite {
 
     // Position
     [SerializeField]
@@ -18,6 +18,7 @@ public abstract class JobLite {
 
     // Who is doing the job
     // TODO : give unique name to NPCS
+    // Usefull?
     public string NameOfNPC;
 
     // Time spent on the task

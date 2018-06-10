@@ -17,7 +17,6 @@ public class JobQueue
         //Check for duplicates !!!!! because of build wall issue
         if (!jobQueue.Contains(j))
                 jobQueue.Enqueue(j);
-
     }
 
     //Dequeue

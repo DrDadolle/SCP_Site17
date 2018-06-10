@@ -75,8 +75,7 @@ public class SaveAndLoadController : MonoBehaviour {
         FloorManager.Instance.listOfFloors.Clear();
         WallManager.Instance.listOfAllWalls.Clear();
 
-        //TODO : We do not add back the jobs because not saveable 
-        //JobManager.jobQueue.ClearAll();
+        JobManager.jobQueue.ClearAll();
 
         //TODO : add npcs !
         // Clear all NPCs
@@ -90,8 +89,7 @@ public class SaveAndLoadController : MonoBehaviour {
     }
 
     /**
-     *  Handle saving with an xml
-     *  TODO : Save only  tilemaps and its go
+     *  Save as a Binary
      */
     public void Save()
     {
@@ -124,8 +122,6 @@ public class SaveAndLoadController : MonoBehaviour {
             BinaryFormatter bf = new BinaryFormatter();
             loadedData = (SaveData)bf.Deserialize(loadFile);
             loadFile.Close();
-
-            Debug.Log("Trying to convert LoadData to map");
 
             // Reset the world
             ResetWorld();
@@ -161,7 +157,7 @@ public class SaveAndLoadController : MonoBehaviour {
             NavMeshController.Instance.BuildNavMesh();
 
             // Add jobs
-            //LoadAllJobsToQueue(loadedData);
+            LoadAllJobsToQueue(loadedData);
 
             IsLoading = false;
 
