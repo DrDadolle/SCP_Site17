@@ -310,6 +310,7 @@
     <Compile Include="Assets\_Scripts\Models\Job\JobQueue.cs" />
     <Compile Include="Assets\_Scripts\Models\NPC\NPCFactory.cs" />
     <Compile Include="Assets\_Scripts\Models\NPC\NPCModel.cs" />
+    <Compile Include="Assets\_Scripts\Models\RoomTypes.cs" />
     <Compile Include="Assets\_Scripts\Models\SCP\SCPClassification.cs" />
     <Compile Include="Assets\_Scripts\Models\Single Object Models\ComputerModel.cs" />
     <Compile Include="Assets\_Scripts\Models\Single Object Models\FloorModel.cs" />
@@ -328,6 +329,7 @@
     <Compile Include="Assets\_Scripts\ScriptableObjects\InitializeScene.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\Models\FurnitureData.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\Models\NPCData.cs" />
+    <Compile Include="Assets\_Scripts\ScriptableObjects\Models\RoomData.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\Models\WallData.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\MousePointer.cs" />
     <Compile Include="Assets\_Scripts\ScriptableObjects\Variables\BooleanVariables.cs" />
@@ -348,6 +350,7 @@
     <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshModifierVolume.cs" />
     <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshSurface.cs" />
     <Compile Include="Assets\UI\AutomaticSetVerticalSize.cs" />
+    <Compile Include="Assets\UI\Show_Hide_Menu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Downloaded_Resources\BodyGuards\ReadMe.txt.txt" />
