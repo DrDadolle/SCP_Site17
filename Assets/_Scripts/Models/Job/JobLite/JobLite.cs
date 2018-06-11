@@ -8,6 +8,12 @@ using UnityEngine;
 [System.Serializable]
 public class JobLite {
 
+    // This class holds info for a queued up job, which can include
+    // things like placing furniture, moving stored inventory,
+    // working at a desk, and maybe even fighting enemies.
+
+    // Position of the job
+
     // Position
     [SerializeField]
     protected float x;
@@ -16,35 +22,28 @@ public class JobLite {
     [SerializeField]
     protected float z;
 
-    // Who is doing the job
-    // TODO : give unique name to NPCS
-    // Usefull?
-    public string NameOfNPC;
-
     // Time spent on the task
     public float jobTime;
 
     // Type of the job, refers to job type name in JobActions
     public string JobType;
 
-    public JobLite(Vector3 position, string nameOfWorker, string typeOfJob, float jobTime)
+    // Parent constructor used by Job Class
+    public JobLite(string typeOfJob, float jobTime)
     {
-        this.x = position.x;
-        this.y = position.y;
-        this.z = position.z;
-        this.NameOfNPC = nameOfWorker;
         this.JobType = typeOfJob;
         this.jobTime = jobTime;
     }
 
+    //Convert Job to JobLite !
     public JobLite(Job j)
     {
-        this.x = j.GetTilePos().x;
-        this.y = j.GetTilePos().y;
-        this.z = j.GetTilePos().z;
-        this.NameOfNPC = null;
-        this.JobType = j.TypeOfJob;
-        this.jobTime = j.JobTime;
+        this.x = j.GetPosition().x;
+        this.y = j.GetPosition().y;
+        this.z = j.GetPosition().z;
+        this.jobTime = j.jobTime;
+        this.JobType = j.JobType;
+
     }
 
     public Vector3 GetPosition()

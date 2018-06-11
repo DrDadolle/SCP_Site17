@@ -4,27 +4,8 @@ using System;
 using UnityEngine.Events;
 
 [Serializable]
-public class Job
+public class Job : JobLite
 {
-
-    // This class holds info for a queued up job, which can include
-    // things like placing furniture, moving stored inventory,
-    // working at a desk, and maybe even fighting enemies.
-
-    // Position of the job
-    [SerializeField]
-    private float x;
-    [SerializeField]
-    private float y;
-    [SerializeField]
-    private float z;
-
-    public float JobTime
-    { get; private set; }
-
-    public string TypeOfJob
-    { get; private set; }
-
     [Serializable]
     public class JobCompleteEvent : UnityEvent
     {
@@ -39,33 +20,32 @@ public class Job
 
     public JobCancelEvent onJobCancel;
 
-    /**
+    /**Vector3 position, string nameOfWorker, string typeOfJob, float jobTime
      * Create a job.
      * Default time to complete is 1 second.
-     */ 
-    public Job(Vector3Int tileposition, UnityAction cbJobComplete, float jobTime = 1f, string TypeOfJob = "")
+     */
+    public Job(Vector3Int tileposition, UnityAction cbJobComplete, float jobTime = 1f, string TypeOfJob = "") : base(TypeOfJob, jobTime)
     {
         onJobComplete = new JobCompleteEvent();
         onJobCancel = new JobCancelEvent();
         onJobComplete.AddListener(cbJobComplete);
         SetTilePos(tileposition);
-        this.JobTime = jobTime;
-        this.TypeOfJob = TypeOfJob;
+
     }
 
     /**
      *  Create job from job lite !
      *  On Load
      */
-     public Job(JobLite j)
+     public Job(JobLite j) : base(j.JobType, j.jobTime)
     {
         //Special Switch Case to add the callbacks !
         onJobComplete = new JobCompleteEvent();
         onJobCancel = new JobCancelEvent();
 
         SetTilePos(j.GetPosition());
-        this.JobTime = j.jobTime;
-        this.TypeOfJob = j.JobType;
+        this.jobTime = j.jobTime;
+        this.JobType = j.JobType;
 
         //Fixing the job position issue when creating the callbacks, so we target the correct position in the managers
         // We intervert back x and y field, and remove the 0.5f used to center the position of the job !
@@ -114,8 +94,8 @@ public class Job
      */
     public void DoWork(float workTime)
     {
-        JobTime -= workTime;
-        if (JobTime <= 0)
+        jobTime -= workTime;
+        if (jobTime <= 0)
         {
             if (onJobComplete != null)
                 onJobComplete.Invoke();
