@@ -5,7 +5,7 @@ using UnityEngine;
 /**
  *  Factory of NPC
  */
-static public class NPCFactory {
+public class NPCFactory {
 
     /**
      *  Create the NPC model and add it to the NPC manager !
@@ -31,6 +31,7 @@ static public class NPCFactory {
 
     /**
     *  Create the gameobject based on the model
+    *  Only used by SaveLoad Controller
     */
     public static void BuildNPCBasedOnModel(NPCModel _model)
     {
@@ -38,17 +39,25 @@ static public class NPCFactory {
         switch (_model.typeOfNpc)
         {
             case "Scientist":
-                go = GameObject.Instantiate(ResourcesLoading.NPCPrefabDic[ResourcesLoading.NPCPrefabNames.Scientist], _model.GetPos(), Quaternion.identity);
-                go.transform.Rotate(Vector3.up * _model.rotation);
-                go.GetComponent<ScientistBehaviour>().theModel = _model;
-                NPCManager.Instance.listOfNPCS.Add(_model, go);
+                SetParamersFromLoad(go, _model, ResourcesLoading.NPCPrefabNames.Scientist);
                 break;
             case "Construction_Engineer":
-                go = GameObject.Instantiate(ResourcesLoading.NPCPrefabDic[ResourcesLoading.NPCPrefabNames.Construction_Engineer], _model.GetPos(), Quaternion.identity);
-                go.transform.Rotate(Vector3.up * _model.rotation);
-                go.GetComponent<ConstructionEngineerBehaviour>().theModel = _model;
-                NPCManager.Instance.listOfNPCS.Add(_model, go);
+                SetParamersFromLoad(go, _model, ResourcesLoading.NPCPrefabNames.Construction_Engineer);
                 break;
         }
     }
+
+    private static void SetParamersFromLoad(GameObject go, NPCModel _model, ResourcesLoading.NPCPrefabNames nameOfNpcPrefabNames)
+    {
+        go = GameObject.Instantiate(ResourcesLoading.NPCPrefabDic[nameOfNpcPrefabNames], _model.GetPos(), Quaternion.identity);
+        go.transform.Rotate(Vector3.up * _model.rotation);
+        NPCBasicBehaviour Behav = go.GetComponent<NPCBasicBehaviour>();
+        Behav.theModel = _model;
+        NPCManager.Instance.listOfNPCS.Add(_model, go);
+
+        // Convert Back the job from jobLite
+        _model.myJob = new Job(_model.myJobLite);
+        Behav.SetEndCallback();
+    }
+
 }

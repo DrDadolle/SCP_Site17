@@ -77,7 +77,6 @@ public class SaveAndLoadController : MonoBehaviour {
 
         JobManager.jobQueue.ClearAll();
 
-        //TODO : add npcs !
         // Clear all NPCs
         foreach(var v in NPCManager.Instance.listOfNPCS.Values)
         {
@@ -124,7 +123,7 @@ public class SaveAndLoadController : MonoBehaviour {
             loadFile.Close();
 
             // Reset the world
-            ResetWorld();
+            NewGame();
 
             rotationOfFurniture.thefloat = 0;
             IsLoading = true;
@@ -151,7 +150,7 @@ public class SaveAndLoadController : MonoBehaviour {
             AssignGameObjectsToWallWithDoorsModel(loadedData);
 
             // Add NPCs
-            //AssignModelsAndGameObjectForNPCS(loadedData);
+            AssignModelsAndGameObjectForNPCS(loadedData);
 
             // Build NavMesh
             NavMeshController.Instance.BuildNavMesh();

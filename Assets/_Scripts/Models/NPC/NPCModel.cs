@@ -26,7 +26,12 @@ public class NPCModel {
     public float rotation;
 
     // Its job
+    [NonSerialized]
     public Job myJob;
+
+    // JobLite only for saveLoad
+    public JobLite myJobLite;
+
 
     //Job stuff
     // Keep reference of the job here or in NPCbehaviour ?

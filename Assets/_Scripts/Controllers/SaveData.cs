@@ -35,7 +35,7 @@ public class SaveData
     // List of All NPC models
     public List<NPCModel> allNpcs;
 
-    // List of all jobs
+    // List of all jobs from the JobManager
     public List<JobLite> allJobsLite;
 
 
@@ -57,11 +57,10 @@ public class SaveData
         SaveWalls(map, wallsWithDoorManager, wallManager);
 
         //Save NPCs
-        //SaveNPC(NpcManager);
+        SaveNPC(NpcManager);
 
         //Save Jobs
         SaveJobs();
-
     }
 
     private void SaveFloorList(FloorManager floorManager)
@@ -126,7 +125,6 @@ public class SaveData
      */
     public Tilemap ConvertDataToTileMap(Tilemap worldtilemap)
     {
-
         // Load the tiles
         foreach (var t in allTiles)
         {
@@ -162,8 +160,6 @@ public class SaveData
      */
     private void SaveFurnituresDataList(Tilemap map, FurnitureManager furnitureManager)
     {
-        // TODO : optimize this ?
-
         allOfficeModels = new List<OfficeModel>();
         foreach (var v in furnitureManager.listOfAllOffices.Values)
         {
@@ -192,8 +188,9 @@ public class SaveData
 
     private void SaveNPC(NPCManager manager)
     {
-        //Update v3 position of all NPCModels
-        manager.UpdatePositionOfAllNPCModels();
+        //Update v3 position and Job of all NPCModels
+        manager.UpdatePositionAndJobLiteOfAllNPCModels();
+
         allNpcs = UtilitiesMethod.GetListOfModelFromDictionnary<NPCModel>(manager.listOfNPCS);
     }
 

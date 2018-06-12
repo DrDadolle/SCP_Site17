@@ -23,7 +23,7 @@ public class NPCManager : MonoBehaviour
     /**
      *  Update the position of all NPCMOdel
      */
-    public void UpdatePositionOfAllNPCModels()
+    public void UpdatePositionAndJobLiteOfAllNPCModels()
     {
         foreach (var v in listOfNPCS)
         {
@@ -32,6 +32,7 @@ public class NPCManager : MonoBehaviour
 
             _model.SetPos(_go.transform.position);
             _model.rotation = _go.transform.rotation.eulerAngles.y;
+            _model.myJobLite = new JobLite(_model.myJob);
         }
     }
 

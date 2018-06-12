@@ -45,14 +45,10 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
                 return;
             }
 
-
             //Set destination
-            //Debug.Log("destination : " + theModel.myJob.GetTilePos());
             agent.destination = theModel.myJob.GetTilePos();
 
-            //Set callbacks
-            theModel.myJob.onJobComplete.AddListener(OnJobEnded);
-            theModel.myJob.onJobCancel.AddListener(OnJobEnded);
+            SetEndCallback();
         }
     }
 
@@ -63,13 +59,11 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
             //If close, stop, do job
             float _x = Mathf.Abs(gameObject.transform.position.x - theModel.myJob.GetTilePos().x);
             float _z = Mathf.Abs(gameObject.transform.position.z - theModel.myJob.GetTilePos().z);
-            //if (((_x * _x) + (_z * _z)) < 0.75f )
             if (_x < .5f && _z < .5f)
             {
                 agent.isStopped = true;
 
                 //DoJob
-                // FIXME : not spending one second to do it
                 theModel.myJob.DoWork(Time.deltaTime);
             }
         }
@@ -81,6 +75,13 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
         NavMeshController.Instance.BuildNavMesh();
         agent.ResetPath();
         theModel.myJob = null;
+    }
+
+    public void SetEndCallback()
+    {
+        //Set callbacks
+        theModel.myJob.onJobComplete.AddListener(OnJobEnded);
+        theModel.myJob.onJobCancel.AddListener(OnJobEnded);
     }
 
 }
