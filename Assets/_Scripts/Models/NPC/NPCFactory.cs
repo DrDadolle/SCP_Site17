@@ -56,8 +56,11 @@ public class NPCFactory {
         NPCManager.Instance.listOfNPCS.Add(_model, go);
 
         // Convert Back the job from jobLite
-        _model.myJob = new Job(_model.myJobLite);
-        Behav.SetEndCallback();
+        if (_model.myJobLite != null)
+        {
+            _model.myJob = new Job(_model.myJobLite);
+            Behav.SetEndCallback();
+        }
     }
 
 }

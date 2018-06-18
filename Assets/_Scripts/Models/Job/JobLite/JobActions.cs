@@ -19,6 +19,8 @@ public class JobActions {
         {
             WallManager.Instance.listOfAllWalls[npos].model.isPending = false;
             WallManager.Instance.listOfAllWalls[npos].model.isPreview = false;
+            //TODO not working
+            WallManager.Instance.listOfAllWalls[npos].go.layer += 1;
             map.RefreshTile(npos);
 
         };
@@ -31,6 +33,8 @@ public class JobActions {
         {
             WallManager.Instance.listOfAllWalls[npos].model.isPending = false;
             WallManager.Instance.listOfAllWalls[npos].model.isPreview = false;
+            //TODO not working
+            WallManager.Instance.listOfAllWalls[npos].go.layer += 1; 
             map.RefreshTile(npos);
 
         }, tile.wallData.buildingTime, "Wall");
@@ -63,6 +67,7 @@ public class JobActions {
 
     // === FURNITURE BUILDING
     // For Save
+    //TODO : change layer ?
     public static UnityAction BuildFurnitureJob(Tilemap map, Vector3Int npos)
     {
         return () =>

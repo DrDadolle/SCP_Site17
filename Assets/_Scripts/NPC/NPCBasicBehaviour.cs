@@ -23,6 +23,7 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        isIdling = true;
     }
 
     /*private void Update()
@@ -40,6 +41,7 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
         {
             //try to grab a job
             theModel.myJob = queue.Dequeue();
+            isIdling = false;
             if (theModel.myJob == null)
             {
                 return;
@@ -72,9 +74,10 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
     protected void OnJobEnded()
     {
         //Refresh the navmesh
-        NavMeshController.Instance.BuildNavMesh();
+        StartCoroutine(NavMeshController.Instance.UpdateNavMesh());
         agent.ResetPath();
         theModel.myJob = null;
+        isIdling = true;
     }
 
     public void SetEndCallback()

@@ -343,6 +343,7 @@
     <Compile Include="Assets\_Scripts\Tile\SaveableTile.cs" />
     <Compile Include="Assets\_Scripts\Tile\WallTile.cs" />
     <Compile Include="Assets\_Scripts\Tile\WallWithDoorTile.cs" />
+    <Compile Include="Assets\_Scripts\UI\AutoCreationOfRoomButton.cs" />
     <Compile Include="Assets\_Scripts\UtilitiesMethod.cs" />
     <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshLink.cs" />
     <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshModifier.cs" />

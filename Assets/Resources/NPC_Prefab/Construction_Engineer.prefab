@@ -104,20 +104,12 @@ MonoBehaviour:
     y: 0
     z: 0
     rotation: 0
-    myJob:
+    myJobLite:
       x: 0
       y: 0
       z: 0
-      onJobComplete:
-        m_PersistentCalls:
-          m_Calls: []
-        m_TypeName: Job+JobCompleteEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-      onJobCancel:
-        m_PersistentCalls:
-          m_Calls: []
-        m_TypeName: Job+JobCancelEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
+      jobTime: 0
+      JobType: 
 --- !u!136 &136993302333715760
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -139,7 +131,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1518643161468782}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_Speed: 5
   m_Acceleration: 5
   avoidancePriority: 50

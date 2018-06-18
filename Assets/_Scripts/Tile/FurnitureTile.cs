@@ -89,7 +89,6 @@ public class FurnitureTile : TileBase
         // Create the furniture data class and add it to the total game data
         ResourcesLoading.TileBasesName tileBeneath = (ResourcesLoading.TileBasesName)System.Enum.Parse(typeof(ResourcesLoading.TileBasesName), OldFloorTileName);
         FurnitureModel _fm = FurnitureManager.Instance.GetModelFromAllDictionnaries(position);
-        Debug.Log(_fm.rotationOfTheFurniture);
         _fm.rotationOfTheFurniture = rotation.thefloat;
         _fm.tileItWasPutOn = tileBeneath;
         FurnitureManager.Instance.AddGameObjectToModelFromAllDictionnaries(position, furnitureData.nameOfFurniture, go);

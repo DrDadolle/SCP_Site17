@@ -32,7 +32,13 @@ public class NPCManager : MonoBehaviour
 
             _model.SetPos(_go.transform.position);
             _model.rotation = _go.transform.rotation.eulerAngles.y;
-            _model.myJobLite = new JobLite(_model.myJob);
+
+            //No job
+            if(_model.myJob != null)
+            {
+                _model.myJobLite = new JobLite(_model.myJob);
+            }
+            
         }
     }
 
