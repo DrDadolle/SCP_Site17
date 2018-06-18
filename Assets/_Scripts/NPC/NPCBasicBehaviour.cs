@@ -41,13 +41,13 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
         {
             //try to grab a job
             theModel.myJob = queue.Dequeue();
-            isIdling = false;
             if (theModel.myJob == null)
             {
                 return;
             }
-
+            isIdling = false;
             //Set destination
+
             agent.destination = theModel.myJob.GetTilePos();
 
             SetEndCallback();
@@ -63,10 +63,14 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
             float _z = Mathf.Abs(gameObject.transform.position.z - theModel.myJob.GetTilePos().z);
             if (_x < .5f && _z < .5f)
             {
+                //Remove as we will be using the stoppingdistance property
                 agent.isStopped = true;
-
+                //If close enough (via StoppingDistance
+            //if (agent.isStopped)
+            //{
                 //DoJob
                 theModel.myJob.DoWork(Time.deltaTime);
+            //}
             }
         }
     }
