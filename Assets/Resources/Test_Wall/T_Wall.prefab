@@ -55,7 +55,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4922319381697342}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: T_Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -4160,7 +4160,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4805936349097884, guid: 3552bbe88a4436e4ba1f9e23815eec78, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0.5
+      value: 0.44
       objectReference: {fileID: 0}
     - target: {fileID: 4805936349097884, guid: 3552bbe88a4436e4ba1f9e23815eec78, type: 2}
       propertyPath: m_LocalPosition.y
@@ -13123,7 +13123,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294948831
+    m_Bits: 4294948319
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
@@ -13131,7 +13131,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.06666667
+  m_VoxelSize: 0.033333335
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 0}
 --- !u!1 &1226045502

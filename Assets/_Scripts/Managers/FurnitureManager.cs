@@ -181,4 +181,24 @@ public class FurnitureManager : MonoBehaviour {
         return false;
     }
 
+    /**
+     *  Get GameObject based on v3 position, from all the dictionnaries
+     */
+     public GameObject GetGameObjectFromAllDictionnaries(Vector3Int pos)
+    {
+        GameObject ret = null;
+
+        //Office
+        if (listOfAllOffices.ContainsKey(pos))
+        {
+            return listOfAllOffices[pos].go;
+        }
+
+        //Computers
+        if (listOfAllComputers.ContainsKey(pos))
+        {
+            return listOfAllComputers[pos].go;
+        }
+        return ret;
+    }
 }

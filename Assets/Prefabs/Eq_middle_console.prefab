@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33683791709976998}
   - component: {fileID: 23551532768112128}
   - component: {fileID: 95628452433874342}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Eq_middle_console
   m_TagString: Furniture
   m_Icon: {fileID: 0}

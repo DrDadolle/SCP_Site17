@@ -19,9 +19,9 @@ public class JobActions {
         {
             WallManager.Instance.listOfAllWalls[npos].model.isPending = false;
             WallManager.Instance.listOfAllWalls[npos].model.isPreview = false;
-            //TODO not working
-            WallManager.Instance.listOfAllWalls[npos].go.layer += 1;
             map.RefreshTile(npos);
+            // Change the layer from GhostWalls to Walls
+            WallManager.Instance.listOfAllWalls[npos].go.layer = 10;
 
         };
     }
@@ -33,9 +33,9 @@ public class JobActions {
         {
             WallManager.Instance.listOfAllWalls[npos].model.isPending = false;
             WallManager.Instance.listOfAllWalls[npos].model.isPreview = false;
-            //TODO not working
-            WallManager.Instance.listOfAllWalls[npos].go.layer += 1; 
             map.RefreshTile(npos);
+            // Change the layer from GhostWalls to Walls
+            WallManager.Instance.listOfAllWalls[npos].go.layer = 10;
 
         }, tile.wallData.buildingTime, "Wall");
     }
@@ -67,14 +67,16 @@ public class JobActions {
 
     // === FURNITURE BUILDING
     // For Save
-    //TODO : change layer ?
     public static UnityAction BuildFurnitureJob(Tilemap map, Vector3Int npos)
     {
         return () =>
         {
-            FurnitureManager.Instance.GetModelFromAllDictionnaries(npos).isPending = false;
-            FurnitureManager.Instance.GetModelFromAllDictionnaries(npos).isPreview = false;
+            FurnitureModel _model = FurnitureManager.Instance.GetModelFromAllDictionnaries(npos);
+            _model.isPending = false;
+            _model.isPreview = false;
             map.RefreshTile(npos);
+            // Change the layer from GhostFurnitures to Furniture
+            FurnitureManager.Instance.GetGameObjectFromAllDictionnaries(npos).layer = 12;
         };
     }
 
@@ -84,9 +86,12 @@ public class JobActions {
         return new Job(npos, () =>
         {
             //Refresh based on the model
-            FurnitureManager.Instance.GetModelFromAllDictionnaries(npos).isPending = false;
-            FurnitureManager.Instance.GetModelFromAllDictionnaries(npos).isPreview = false;
+            FurnitureModel _model = FurnitureManager.Instance.GetModelFromAllDictionnaries(npos);
+            _model.isPending = false;
+            _model.isPreview = false;
             map.RefreshTile(npos);
+            // Change the layer from GhostFurnitures to Furniture
+            FurnitureManager.Instance.GetGameObjectFromAllDictionnaries(npos).layer = 12;
         }, tile.furnitureData.buildingTime, "Furniture");
     }
 
