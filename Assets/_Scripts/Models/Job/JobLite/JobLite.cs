@@ -25,14 +25,19 @@ public class JobLite {
     // Time spent on the task
     public float jobTime;
 
-    // Type of the job, refers to job type name in JobActions
-    public string JobType;
+    // General type of the job, like "construction job" or such.
+    // Used to determine the queueJob it belongs to.
+    public string jobMacroType;
+
+    // Name of the job, refers to job type name in JobActions. It's the ID on the jobType
+    public string jobName;
 
     // Parent constructor used by Job Class
-    public JobLite(string typeOfJob, float jobTime)
+    public JobLite(string typeOfJob, float jobTime, string jobMacroType)
     {
-        this.JobType = typeOfJob;
+        this.jobName = typeOfJob;
         this.jobTime = jobTime;
+        this.jobMacroType = jobMacroType;
     }
 
     //Convert Job to JobLite !
@@ -42,8 +47,8 @@ public class JobLite {
         this.y = j.GetPosition().y;
         this.z = j.GetPosition().z;
         this.jobTime = j.jobTime;
-        this.JobType = j.JobType;
-
+        this.jobName = j.jobName;
+        this.jobMacroType = j.jobMacroType;
     }
 
     public Vector3 GetPosition()

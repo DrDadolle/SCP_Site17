@@ -40,7 +40,7 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
         if (theModel.myJob == null)
         {
             //try to grab a job
-            theModel.myJob = queue.Dequeue();
+            theModel.myJob = queue.DequeueForNPC(gameObject.transform.position, "Building");
             if (theModel.myJob == null)
             {
                 return;

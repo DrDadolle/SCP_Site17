@@ -16,9 +16,6 @@ public class NavMeshController : MonoBehaviour {
         Instance = this;
         // Build Once
         BuildNavMesh();
-
-        //Changing the settings to some less expensive refreshes
-        NavMeshBuildSettings settings = WorldSurface.GetBuildSettings();
     }
 	
     public IEnumerator UpdateNavMesh()

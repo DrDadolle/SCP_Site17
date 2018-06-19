@@ -9,8 +9,6 @@ public class JobManager : MonoBehaviour {
 
     public static JobQueue jobQueue;
 
-    private bool IsCalled = false;
-
     // For access purposes
     public static JobManager Instance;
 

@@ -24,7 +24,7 @@ public class Job : JobLite
      * Create a job.
      * Default time to complete is 1 second.
      */
-    public Job(Vector3Int tileposition, UnityAction cbJobComplete, float jobTime = 1f, string TypeOfJob = "") : base(TypeOfJob, jobTime)
+    public Job(Vector3Int tileposition, UnityAction cbJobComplete, string TypeOfJob, string MacroType, float jobTime = 1f) : base(TypeOfJob, jobTime, MacroType)
     {
         onJobComplete = new JobCompleteEvent();
         onJobCancel = new JobCancelEvent();
@@ -37,15 +37,17 @@ public class Job : JobLite
      *  Create job from job lite !
      *  On Load
      */
-     public Job(JobLite j) : base(j.JobType, j.jobTime)
+     public Job(JobLite j) : base(j.jobName, j.jobTime, j.jobMacroType)
     {
         //Special Switch Case to add the callbacks !
         onJobComplete = new JobCompleteEvent();
         onJobCancel = new JobCancelEvent();
 
         SetTilePos(j.GetPosition());
+        // FIXME : useless next three lines ?
         this.jobTime = j.jobTime;
-        this.JobType = j.JobType;
+        this.jobName = j.jobName;
+        this.jobMacroType = j.jobMacroType;
 
         //Fixing the job position issue when creating the callbacks, so we target the correct position in the managers
         // We intervert back x and y field, and remove the 0.5f used to center the position of the job !
@@ -53,8 +55,8 @@ public class Job : JobLite
         Vector3Int correctedPosition = Vector3Int.CeilToInt(new Vector3(GetTilePos().x - .5f, GetTilePos().z - .5f, GetTilePos().y));
 
 
-        //SWITCH CASE to determine the job type
-        switch (j.JobType) {
+        //SWITCH CASE to determine the job Name
+        switch (j.jobName) {
             case "Wall":
                 onJobComplete.AddListener(JobActions.BuildWallJob(WorldManager.Instance.world, correctedPosition));
                 break;
@@ -113,6 +115,7 @@ public class Job : JobLite
 
     /**
     *  Override Equals method 
+    *  TODO : to be changed ????
     */
     public override bool Equals(object o)
     {

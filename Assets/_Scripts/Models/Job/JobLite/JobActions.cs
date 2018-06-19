@@ -37,7 +37,7 @@ public class JobActions {
             // Change the layer from GhostWalls to Walls
             WallManager.Instance.listOfAllWalls[npos].go.layer = 10;
 
-        }, tile.wallData.buildingTime, "Wall");
+        }, "Wall", "Building", tile.wallData.buildingTime);
     }
 
     // === FLOOR BUILDING
@@ -62,7 +62,7 @@ public class JobActions {
             FloorManager.Instance.listOfFloors[npos].isPreview = false;
             map.RefreshTile(npos);
 
-        }, tile.buildingTime, "Floor");
+        }, "Floor", "Building", tile.buildingTime);
     }
 
     // === FURNITURE BUILDING
@@ -92,7 +92,7 @@ public class JobActions {
             map.RefreshTile(npos);
             // Change the layer from GhostFurnitures to Furniture
             FurnitureManager.Instance.GetGameObjectFromAllDictionnaries(npos).layer = 12;
-        }, tile.furnitureData.buildingTime, "Furniture");
+        }, "Furniture", "Building", tile.furnitureData.buildingTime);
     }
 
 }

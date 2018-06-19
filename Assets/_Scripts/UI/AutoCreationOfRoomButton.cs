@@ -16,7 +16,7 @@ public class AutoCreationOfRoomButton : MonoBehaviour {
         foreach(var v in listOfFloorTile)
         {
             GameObject childObject = GameObject.Instantiate(RoomButtonPrefab);
-            childObject.transform.parent = gameObject.transform;
+            childObject.transform.SetParent(gameObject.transform, false);
             childObject.name = v.name + "_Button";
 
         }

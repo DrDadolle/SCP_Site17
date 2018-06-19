@@ -77,10 +77,9 @@ public class SaveData
         // Only for Joblitebuildwalls for now
         allJobsLite = new List<JobLite>();
 
-        while (JobManager.jobQueue.GetJobCount() > 0)
+        foreach (var v in JobManager.jobQueue.ConvertToJobList())
         {
-            // Pauvre Passe-Plat
-            allJobsLite.Add(new JobLite(JobManager.jobQueue.Dequeue()));
+            allJobsLite.Add(new JobLite(v));
         }
     }
 
