@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Name: Wall_Tile
   m_EditorClassIdentifier: 
   wallData: {fileID: 11400000, guid: 43cb75c885c4d9341a9944adfbd0d7f4, type: 2}
-  WallMaterial: {fileID: 2100000, guid: 472334e8ee4dc40219ca9ec770c536aa, type: 2}
-  PendingMaterial: {fileID: 2100000, guid: 4e6fe78f8a55e524b90bf12d2769784a, type: 2}
+  classicShader: {fileID: 4800000, guid: e4388b04b9f64bf40971a607873a7661, type: 3}
+  HologramShader: {fileID: 4800000, guid: ca468d436dbbd894cb57d66316a1cea2, type: 3}

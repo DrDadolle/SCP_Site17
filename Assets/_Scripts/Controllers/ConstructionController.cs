@@ -82,7 +82,7 @@ public class ConstructionController : MonoBehaviour
         if (isFirstCallSinceChangeMode)
         {
             // Changing the material of the pointer
-            mousePointer.go.GetComponent<Renderer>().material = (ResourcesLoading.MaterialDictionnary[ResourcesLoading.MaterialNames.MousePointerCube_Blue]);
+            mousePointer.go.GetComponent<Renderer>().material.shader = (ResourcesLoading.ShaderDic[ResourcesLoading.ShaderNames.BlueHologram]);
 
             //Reset rotation of furniture
             rotationOfFurniture.thefloat = 0.0f;

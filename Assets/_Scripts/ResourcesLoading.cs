@@ -7,20 +7,19 @@ using UnityEngine.Tilemaps;
 /**
  * Class containing the loaded resources (e.g. Materials)
  */
-[System.Serializable]
 public class ResourcesLoading : MonoBehaviour {
 
+    //FIXME : to be fixed !
+    public GameObject UglyWorkAroundToGetStandardShader;
+
     // Materials
-    protected static string PATH_TO_GHOST_MATERIALS = "Materials_Ghost";
-    public enum MaterialNames
+    protected static string PATH_TO_SHADER = "Shaders";
+    public enum ShaderNames
     {
-        Walls,
-        Ghost_Blue,
-        Ghost_Red,
-        MousePointerCube_Blue,
-        MousePointerCube_Red
+        BlueHologram,
+        Basic
     }
-    public static Dictionary<MaterialNames, Material> MaterialDictionnary = new Dictionary<MaterialNames, Material>();
+    public static Dictionary<ShaderNames, Shader> ShaderDic = new Dictionary<ShaderNames, Shader>();
 
     //Tiles
     protected static string PATH_TO_FLOOR_TILES = "Floor_Tiles";
@@ -47,7 +46,6 @@ public class ResourcesLoading : MonoBehaviour {
 
     // TileBases
     protected static string PATH_TO_TILEBASE = "Tile";
-    [System.Serializable]
     public enum TileBasesName
     {
         //For special cases
@@ -78,7 +76,7 @@ public class ResourcesLoading : MonoBehaviour {
     // Awake
     void Awake () {
         //Loading Materials for Ghostly effects 
-        LoadingMaterials();
+        LoadingShaders();
 
         //Loading Tiles sprites
         LoadingTiles();
@@ -193,26 +191,31 @@ public class ResourcesLoading : MonoBehaviour {
 
     }
 
-    // Loading Ghostly Materials
-    private void LoadingMaterials()
+    // Loading Shaders
+    private void LoadingShaders()
     {
-        UnityEngine.Object[] tmp_materials = Resources.LoadAll(PATH_TO_GHOST_MATERIALS, typeof(Material));
-        string[] names = System.Enum.GetNames(typeof(MaterialNames));
-        MaterialNames[] values = (MaterialNames[])System.Enum.GetValues(typeof(MaterialNames));
+        UnityEngine.Object[] tmp_shader = Resources.LoadAll(PATH_TO_SHADER, typeof(Shader));
+        string[] names = Enum.GetNames(typeof(ShaderNames));
+        ShaderNames[] values = (ShaderNames[])Enum.GetValues(typeof(ShaderNames));
 
-        foreach (var t in tmp_materials)
+        foreach (var t in tmp_shader)
         {
             for (int i = 0; i < names.Length; i++)
             {
-                if(t.name.Equals(names[i]))
-                    MaterialDictionnary.Add(values[i], (Material)t);
+                // taking only the end of the name because name are like "graphs/XXX" or "hidden/YYY"
+                if(t.name.Split('/')[1].Equals(names[i]))
+                    ShaderDic.Add(values[i], (Shader)t);
             }
             
         }
 
+        //FIXME : WORKAROUND
+        ShaderDic[ShaderNames.Basic] = UglyWorkAroundToGetStandardShader.GetComponentsInChildren<Renderer>()[0].sharedMaterial.shader;
+
         //Check that the loading was successful
-        if (MaterialDictionnary.Count != tmp_materials.Length)
-            Debug.LogError("Loading of Ghostly Materials failed");
+        // 2 hidden shader
+        if (ShaderDic.Count != tmp_shader.Length - 2)
+            Debug.LogError("Loading of Shaders failed");
     }
 
 }

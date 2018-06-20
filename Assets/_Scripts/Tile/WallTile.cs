@@ -7,15 +7,12 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName = "Tile/Wall Tile")]
 public class WallTile : TileBase
 {
-
     //The data
     public WallData wallData;
 
     //Rotation value (in degree) of the prefab to align them correctly
     private float rotPrefab;
-
-    public Material WallMaterial;
-    public Material PendingMaterial;
+    public Shader HologramShader;
 
     /**
      * Is called whenever a tile at "position" is placed
@@ -64,14 +61,14 @@ public class WallTile : TileBase
         WallManager.WallObject _obj = new WallManager.WallObject(wallModel, go);
         WallManager.Instance.listOfAllWalls[position] = _obj;
 
-        // TODO : change with a shader
         if (wallModel.isPending)
         {
-            UtilitiesMethod.ChangeMaterialOfRecChildGameObject(go, PendingMaterial);
+
+            UtilitiesMethod.ChangeShaderOfRecChildGameObject(go, HologramShader);
         }
         else
         {
-            UtilitiesMethod.ChangeMaterialOfRecChildGameObject(go, WallMaterial);
+            UtilitiesMethod.ChangeShaderOfRecChildGameObject(go, ResourcesLoading.ShaderDic[ResourcesLoading.ShaderNames.Basic]);
         }
 
         return true;

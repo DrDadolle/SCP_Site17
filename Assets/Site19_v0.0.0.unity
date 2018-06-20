@@ -5212,6 +5212,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04e5b7cb4df782349ada69d7133af598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UglyWorkAroundToGetStandardShader: {fileID: 1461894352400396, guid: 8892efcc6a9a2e84fb53c21bcaf48b4d,
+    type: 2}
 --- !u!1 &386480349
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,35 +4,19 @@ using UnityEngine;
 
 public class UtilitiesMethod {
 
-    //Utilities method to change the material of all the children
-    public static void ChangeMaterialOfRecChildGameObject(GameObject obj, Material material)
+    //Utilities method to change the shader of all the children
+    public static void ChangeShaderOfRecChildGameObject(GameObject go, Shader shader)
     {
-        Renderer[] children;
-        children = obj.GetComponentsInChildren<Renderer>();
+        Renderer[] children = go.GetComponentsInChildren<Renderer>();
         foreach (Renderer rend in children)
         {
-            var mats = new Material[rend.materials.Length];
-            for (var j = 0; j < rend.materials.Length; j++)
-            {
-                mats[j] = material;
-            }
-            rend.materials = mats;
+            rend.material.shader = shader;
         }
     }
 
-    //Return true if at least one material of the game object is from the specified Material
-    public static bool IsChildGameObjectOfSpecificMaterial(GameObject obj, Material material)
+    public static Shader GetFirstShaderOfRecChildGameObject(GameObject go)
     {
-        Renderer[] children;
-        children = obj.GetComponentsInChildren<Renderer>();
-        foreach (Renderer rend in children)
-        {
-            if (rend.sharedMaterial.Equals(material))
-            {
-                return true;
-            }
-        }
-        return false;
+        return go.GetComponentsInChildren<Renderer>()[0].material.shader;
     }
 
     /*
