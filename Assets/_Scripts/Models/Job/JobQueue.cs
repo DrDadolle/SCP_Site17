@@ -18,17 +18,11 @@ public class JobQueue
     // Science Jobs
     List<Job> scienceJobs;
 
-    // Deprecated...
-    Queue<Job> jobQueue;
-
     public JobQueue()
     {
 
         buildingJobs = new List<Job>();
         scienceJobs = new List<Job>();
-
-        // Deprecated
-        jobQueue = new Queue<Job>();
     }
 
     // Enqueue
@@ -99,14 +93,10 @@ public class JobQueue
         return allJobs;
     }
 
-    public int GetJobCount()
-    {
-        return jobQueue.Count;
-    }
-
     public void ClearAll()
     {
-        jobQueue.Clear();
+        buildingJobs.Clear();
+        scienceJobs.Clear();
     }
 
 }

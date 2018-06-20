@@ -24,6 +24,7 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
     {
         agent = GetComponent<NavMeshAgent>();
         isIdling = true;
+        
     }
 
     /*private void Update()
@@ -46,8 +47,8 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
                 return;
             }
             isIdling = false;
-            //Set destination
 
+            //Set destination
             agent.destination = theModel.myJob.GetTilePos();
 
             SetEndCallback();
@@ -65,12 +66,8 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
             {
                 //Remove as we will be using the stoppingdistance property
                 agent.isStopped = true;
-                //If close enough (via StoppingDistance
-            //if (agent.isStopped)
-            //{
                 //DoJob
                 theModel.myJob.DoWork(Time.deltaTime);
-            //}
             }
         }
     }

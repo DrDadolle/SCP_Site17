@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 /**
  *  Factory of NPC
@@ -59,6 +60,7 @@ public class NPCFactory {
         if (_model.myJobLite != null)
         {
             _model.myJob = new Job(_model.myJobLite);
+            go.GetComponent<NavMeshAgent>().destination = _model.myJob.GetTilePos();
             Behav.SetEndCallback();
         }
     }
