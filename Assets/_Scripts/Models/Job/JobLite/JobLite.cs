@@ -27,13 +27,13 @@ public class JobLite {
 
     // General type of the job, like "construction job" or such.
     // Used to determine the queueJob it belongs to.
-    public string jobMacroType;
+    public EnumTypes.JobMacroType jobMacroType;
 
     // Name of the job, refers to job type name in JobActions. It's the ID on the jobType
     public string jobName;
 
     // Parent constructor used by Job Class
-    public JobLite(string typeOfJob, float jobTime, string jobMacroType)
+    public JobLite(string typeOfJob, float jobTime, EnumTypes.JobMacroType jobMacroType)
     {
         this.jobName = typeOfJob;
         this.jobTime = jobTime;

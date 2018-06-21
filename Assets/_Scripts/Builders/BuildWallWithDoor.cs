@@ -94,7 +94,7 @@ public class BuildWallWithDoor : MonoBehaviour, IBuildingMethod
             // Display the building hint on top of this tile position
             map.SetTile(tilePos, tile);
             //FIXME : Maybe indicates that a job is going on
-        }, "WallWithDoor", "Building");
+        }, "WallWithDoor", EnumTypes.JobMacroType.Building);
 
         JobManager.jobQueue.Enqueue(j_tmp);
     }

@@ -14,3 +14,6 @@ MonoBehaviour:
   typeOfNPC: Construction_Engineer
   maxHealth: 0
   NPCprefab: {fileID: 1518643161468782, guid: 75093aa7621239b4bb56f263a3ba9e72, type: 2}
+  JobPriorities:
+  - JobMacroType: Building
+    priority: 10

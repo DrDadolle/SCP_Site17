@@ -37,7 +37,7 @@ public class JobActions {
             // Change the layer from GhostWalls to Walls
             UtilitiesMethod.ChangerLayerOfAllChildGO(WallManager.Instance.listOfAllWalls[npos].go, 10);
 
-        }, "Wall", "Building", tile.wallData.buildingTime);
+        }, "Wall", EnumTypes.JobMacroType.Building, tile.wallData.buildingTime);
     }
 
     // === FLOOR BUILDING
@@ -62,7 +62,7 @@ public class JobActions {
             FloorManager.Instance.listOfFloors[npos].isPreview = false;
             map.RefreshTile(npos);
 
-        }, "Floor", "Building", tile.buildingTime);
+        }, "Floor", EnumTypes.JobMacroType.Building, tile.buildingTime);
     }
 
     // === FURNITURE BUILDING
@@ -91,7 +91,7 @@ public class JobActions {
             _model.isPreview = false;
             map.RefreshTile(npos);
             UtilitiesMethod.ChangerLayerOfAllChildGO(FurnitureManager.Instance.GetGameObjectFromAllDictionnaries(npos), 12);
-        }, "Furniture", "Building", tile.furnitureData.buildingTime);
+        }, "Furniture", EnumTypes.JobMacroType.Building, tile.furnitureData.buildingTime);
     }
 
 }

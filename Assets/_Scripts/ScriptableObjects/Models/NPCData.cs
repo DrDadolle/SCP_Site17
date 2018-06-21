@@ -7,11 +7,20 @@ public class NPCData : ScriptableObject
 {
 
     //The type of the NPC
-    public string typeOfNPC;
+    public EnumTypes.TypeOfNPC typeOfNPC;
 
     //Max health of the NPC
     public float maxHealth;
 
     // The prefab in itself
     public GameObject NPCprefab;
+
+    //Prefered job with priority
+    [System.Serializable]
+    public struct JobPriority
+    {
+        public EnumTypes.JobMacroType JobMacroType;
+        public int priority;
+    }
+    public List<JobPriority> JobPriorities;
 }

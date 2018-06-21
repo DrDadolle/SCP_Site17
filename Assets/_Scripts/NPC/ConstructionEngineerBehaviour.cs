@@ -12,6 +12,7 @@ public class ConstructionEngineerBehaviour : NPCBasicBehaviour
         // Then we should use a queue list of "jobQueueVariable" objects ?
         GetAJobFromJobQueue(JobManager.jobQueue);
         DoAJob();
+        StartIdling();
     }
 
 }

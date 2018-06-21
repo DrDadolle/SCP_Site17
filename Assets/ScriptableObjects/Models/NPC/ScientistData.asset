@@ -14,3 +14,8 @@ MonoBehaviour:
   typeOfNPC: Scientist
   maxHealth: 0
   NPCprefab: {fileID: 1360931252604440, guid: f064eab550c28d54b8a967dcf2ea8e45, type: 2}
+  JobPriorities:
+  - JobMacroType: 1
+    priority: 10
+  - JobMacroType: 0
+    priority: 1

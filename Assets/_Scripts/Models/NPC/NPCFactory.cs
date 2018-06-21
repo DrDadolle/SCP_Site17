@@ -17,12 +17,12 @@ public class NPCFactory {
         // But once the first scp will be added, it will become usefull !
         switch (data.typeOfNPC)
         {
-            case "Scientist":
+            case EnumTypes.TypeOfNPC.Researcher:
                 NPCModel _s = new NPCModel(data, pos);
                 go.GetComponent<ScientistBehaviour>().theModel = _s;
                 NPCManager.Instance.listOfNPCS.Add(_s, go);        
                 break;
-            case "Construction_Engineer":
+            case EnumTypes.TypeOfNPC.Containement_Engineer:
                 NPCModel _ce = new NPCModel(data, pos);
                 go.GetComponent<ConstructionEngineerBehaviour>().theModel = _ce;
                 NPCManager.Instance.listOfNPCS.Add(_ce, go);
@@ -39,10 +39,10 @@ public class NPCFactory {
         GameObject go = null;
         switch (_model.typeOfNpc)
         {
-            case "Scientist":
+            case EnumTypes.TypeOfNPC.Researcher:
                 SetParamersFromLoad(go, _model, ResourcesLoading.NPCPrefabNames.Scientist);
                 break;
-            case "Construction_Engineer":
+            case EnumTypes.TypeOfNPC.Containement_Engineer:
                 SetParamersFromLoad(go, _model, ResourcesLoading.NPCPrefabNames.Construction_Engineer);
                 break;
         }

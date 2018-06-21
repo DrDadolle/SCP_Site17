@@ -6,7 +6,7 @@ using UnityEngine;
 public class OfficeModel : FurnitureModel
 {
     public string researcherUsingIt;
-    public SCPClassification.Classification ResearchClassification;
+    public EnumTypes.SCPClassification ResearchClassification;
 
     //Public constructor using InGame data
     public OfficeModel(Vector3Int pos, float rot, FurnitureData data, ResourcesLoading.TileBasesName tileName, bool preview, bool pending) :
@@ -15,6 +15,6 @@ public class OfficeModel : FurnitureModel
         this.hp = data.maxHealth;
         this.cost = data.costDollar;
         this.researcherUsingIt = "";
-        this.ResearchClassification = SCPClassification.Classification.Safe;
+        this.ResearchClassification = EnumTypes.SCPClassification.Safe;
     }
 }

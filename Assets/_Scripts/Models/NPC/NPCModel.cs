@@ -10,7 +10,7 @@ using System;
 [Serializable]
 public class NPCModel {
 
-    public string typeOfNpc;
+    public EnumTypes.TypeOfNPC typeOfNpc;
 
     // Life of the npc
     public float hp;
@@ -32,6 +32,8 @@ public class NPCModel {
     // JobLite only for saveLoad
     public JobLite myJobLite;
 
+    public List<NPCData.JobPriority> JobPriorities;
+
 
     //Job stuff
     // Keep reference of the job here or in NPCbehaviour ?
@@ -44,6 +46,7 @@ public class NPCModel {
         this.z = pos.z;
         this.hp = data.maxHealth;
         this.typeOfNpc = data.typeOfNPC;
+        this.JobPriorities = data.JobPriorities;
 
     }
 

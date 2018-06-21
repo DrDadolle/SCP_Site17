@@ -12,7 +12,7 @@ public class RoomData : ScriptableObject {
     // Scientific ?
     // Containement type ?
     // Office type ?
-    public RoomTypes.Type typeOfRoom;
+    public EnumTypes.TypeOfRoom typeOfRoom;
 
     public WallTile defaultWallTile;
 

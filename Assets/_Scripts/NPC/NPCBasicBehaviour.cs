@@ -45,7 +45,8 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
         if (isIdling)
         {
             //try to grab a job
-            theModel.myJob = queue.DequeueForNPC(gameObject.transform.position, "Building");
+            //TODO : change it to general jobs !
+            theModel.myJob = queue.DequeueForNPC(gameObject.transform.position, EnumTypes.JobMacroType.Building);
             if (theModel.myJob == null)
             {
                 return;
@@ -58,6 +59,18 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
 
             SetEndCallback();
         }
+    }
+
+    public void AssignJob(Job j)
+    {
+        theModel.myJob = j;
+        isIdling = false;
+
+        //Set destination
+        agent.destination = theModel.myJob.GetTilePos();
+        agent.speed = 1f;
+
+        SetEndCallback();
     }
 
     protected void DoAJob()
@@ -99,8 +112,6 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
     // Do it every seconds ?
     protected void StartIdling()
     {
-
-
         if (isIdling)
         {
             idleTimer += Time.deltaTime;
@@ -115,14 +126,11 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
                 //Set destination
                 agent.destination = randIdle_dest;
 
-
                 //reset timer
                 idleTimer = 0f;
                 //change the next idleTime
                 idleTime = 5f + Random.Range(-1, 8);
-
             }
-
         }
         //Check that we are not doing a HUGE roundabout.
     }

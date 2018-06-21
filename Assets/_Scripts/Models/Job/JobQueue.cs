@@ -13,10 +13,10 @@ using System;
 public class JobQueue
 {
     // List of building Jobs
-    List<Job> buildingJobs;
+    public List<Job> buildingJobs;
 
     // Science Jobs
-    List<Job> scienceJobs;
+    public List<Job> scienceJobs;
 
     public JobQueue()
     {
@@ -28,14 +28,13 @@ public class JobQueue
     // Enqueue
     public void Enqueue(Job j)
     {
-        //WIP to be done, with list<Job> !!
         switch (j.jobMacroType)
         {
-            case "Building":
+            case EnumTypes.JobMacroType.Building:
                 if (!buildingJobs.Contains(j))
                     buildingJobs.Add(j);
                 break;
-            case "Research":
+            case EnumTypes.JobMacroType.Research:
                 if (!scienceJobs.Contains(j))
                     scienceJobs.Add(j);
                 break;
@@ -44,18 +43,18 @@ public class JobQueue
     }
 
     //Dequeue
-    public Job DequeueForNPC(Vector3 NPCPosition, string jobMacroType)
+    public Job DequeueForNPC(Vector3 NPCPosition, EnumTypes.JobMacroType jobMacroType)
     {
         switch (jobMacroType)
         {
-            case "Building":
+            case EnumTypes.JobMacroType.Building:
                 if(buildingJobs.Count != 0)
                 {
                     return GetClosestJobFromNPC(buildingJobs, NPCPosition);
                 }
                 break;
-            case "Research":
-                if (buildingJobs.Count != 0)
+            case EnumTypes.JobMacroType.Research:
+                if (scienceJobs.Count != 0)
                 {
                     return GetClosestJobFromNPC(scienceJobs, NPCPosition);
                 }
@@ -65,6 +64,44 @@ public class JobQueue
         }
         return null;
     }
+
+    /**
+     *  Get the first job based on macrotype.
+     *  DOES NOT REMOVE IT FROM THE QUEUE
+     */
+    public Job GetForMacroType(EnumTypes.JobMacroType jobMacroType)
+    {
+        Job j;
+        switch (jobMacroType)
+        {
+            case EnumTypes.JobMacroType.Building:
+                j = buildingJobs[0];
+                return j;
+            case EnumTypes.JobMacroType.Research:
+                j = scienceJobs[0];
+                return j;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     *  Remove the job from the list
+     */
+    public bool RemoveFromListJob(Job j)
+    {
+        switch(j.jobMacroType)
+        {
+            case EnumTypes.JobMacroType.Building:
+                return buildingJobs.Remove(j);
+            case EnumTypes.JobMacroType.Research:
+                return scienceJobs.Remove(j);
+            default:
+                return false;
+        }
+    }
+
+
 
     private Job GetClosestJobFromNPC(List<Job> theList, Vector3 pos)
     {

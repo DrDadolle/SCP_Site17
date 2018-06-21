@@ -24,7 +24,7 @@ public class Job : JobLite
      * Create a job.
      * Default time to complete is 1 second.
      */
-    public Job(Vector3Int tileposition, UnityAction cbJobComplete, string TypeOfJob, string MacroType, float jobTime = 1f) : base(TypeOfJob, jobTime, MacroType)
+    public Job(Vector3Int tileposition, UnityAction cbJobComplete, string TypeOfJob, EnumTypes.JobMacroType MacroType, float jobTime = 1f) : base(TypeOfJob, jobTime, MacroType)
     {
         onJobComplete = new JobCompleteEvent();
         onJobCancel = new JobCancelEvent();
