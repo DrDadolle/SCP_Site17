@@ -214,7 +214,7 @@ public class ResourcesLoading : MonoBehaviour {
 
         //Check that the loading was successful
         // 2 hidden shader
-        if (ShaderDic.Count != tmp_shader.Length - 2)
+        if (ShaderDic.Count != tmp_shader.Length - 1)
             Debug.LogError("Loading of Shaders failed");
     }
 

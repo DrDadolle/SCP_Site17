@@ -19,6 +19,22 @@ public class UtilitiesMethod {
         return go.GetComponentsInChildren<Renderer>()[0].material.shader;
     }
 
+    /**
+     *  Change layer of all go child
+     */
+    public static void ChangerLayerOfAllChildGO(GameObject go, int layerNumber)
+    {
+        // change the parent
+        go.layer = layerNumber;
+
+        //change child
+        foreach (Transform child in go.transform)
+        {
+            child.gameObject.layer = layerNumber;
+        }
+
+    }
+
     /*
 	 * Snap the position at the center of the grid
 	 * The y axis will be always of 0

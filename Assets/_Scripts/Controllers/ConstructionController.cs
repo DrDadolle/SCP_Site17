@@ -82,6 +82,7 @@ public class ConstructionController : MonoBehaviour
         if (isFirstCallSinceChangeMode)
         {
             // Changing the material of the pointer
+            // FIXME : no need to change the shader, just change the color ! Or maybe we can't :(
             mousePointer.go.GetComponent<Renderer>().material.shader = (ResourcesLoading.ShaderDic[ResourcesLoading.ShaderNames.BlueHologram]);
 
             //Reset rotation of furniture

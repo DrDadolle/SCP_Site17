@@ -15,6 +15,9 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
 
     // Idling 
     public bool isIdling;
+    float idleTimer = 0f;
+    float idleTime;
+
 
     // To remove ? To keep ?
     // TODO : maybe to keep for now, then to remove to use specific model for specific behaviours !
@@ -24,7 +27,8 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
     {
         agent = GetComponent<NavMeshAgent>();
         isIdling = true;
-        
+        idleTime = 5f + Random.Range(-1, 8);
+
     }
 
     /*private void Update()
@@ -38,7 +42,7 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
     protected void GetAJobFromJobQueue(JobQueue queue)
     {
         // Get a job
-        if (theModel.myJob == null)
+        if (isIdling)
         {
             //try to grab a job
             theModel.myJob = queue.DequeueForNPC(gameObject.transform.position, "Building");
@@ -50,6 +54,7 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
 
             //Set destination
             agent.destination = theModel.myJob.GetTilePos();
+            agent.speed = 1f;
 
             SetEndCallback();
         }
@@ -57,7 +62,7 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
 
     protected void DoAJob()
     {
-        if (theModel.myJob != null)
+        if (!isIdling)
         {
             //If close, stop, do job
             float _x = Mathf.Abs(gameObject.transform.position.x - theModel.myJob.GetTilePos().x);
@@ -86,6 +91,40 @@ public abstract class NPCBasicBehaviour : MonoBehaviour {
         //Set callbacks
         theModel.myJob.onJobComplete.AddListener(OnJobEnded);
         theModel.myJob.onJobCancel.AddListener(OnJobEnded);
+    }
+
+    // Called when waiting for instructions
+    // Will move randomly in a near location
+    // TODO : stay in the same room ?
+    // Do it every seconds ?
+    protected void StartIdling()
+    {
+
+
+        if (isIdling)
+        {
+            idleTimer += Time.deltaTime;
+            if (idleTimer >= idleTime)
+            {
+                agent.speed = .5f;
+                float x_randIdle = Random.Range(-0.5f, 0.5f) + gameObject.transform.position.x;
+                float z_randIdle = Random.Range(-0.5f, 0.5f) + gameObject.transform.position.z;
+
+                Vector3 randIdle_dest = new Vector3(x_randIdle, 0, z_randIdle);
+
+                //Set destination
+                agent.destination = randIdle_dest;
+
+
+                //reset timer
+                idleTimer = 0f;
+                //change the next idleTime
+                idleTime = 5f + Random.Range(-1, 8);
+
+            }
+
+        }
+        //Check that we are not doing a HUGE roundabout.
     }
 
 }

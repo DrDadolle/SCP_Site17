@@ -93,7 +93,15 @@ public class FurnitureTile : TileBase
         _fm.tileItWasPutOn = tileBeneath;
         FurnitureManager.Instance.AddGameObjectToModelFromAllDictionnaries(position, furnitureData.nameOfFurniture, go);
 
-        //FurnitureFactory.BuildFurniture(furnitureData, position, rotation.thefloat, go, tileBeneath, false, false);
+        if (_fm.isPending)
+        {
+            UtilitiesMethod.ChangeShaderOfRecChildGameObject(go, ResourcesLoading.ShaderDic[ResourcesLoading.ShaderNames.BlueHologram]);
+        }
+        else
+        {
+            UtilitiesMethod.ChangeShaderOfRecChildGameObject(go, ResourcesLoading.ShaderDic[ResourcesLoading.ShaderNames.Basic]);
+        }
+
         return true;
     }
 

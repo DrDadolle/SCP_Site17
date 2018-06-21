@@ -12,7 +12,6 @@ public class WallTile : TileBase
 
     //Rotation value (in degree) of the prefab to align them correctly
     private float rotPrefab;
-    public Shader HologramShader;
 
     /**
      * Is called whenever a tile at "position" is placed
@@ -63,8 +62,7 @@ public class WallTile : TileBase
 
         if (wallModel.isPending)
         {
-
-            UtilitiesMethod.ChangeShaderOfRecChildGameObject(go, HologramShader);
+            UtilitiesMethod.ChangeShaderOfRecChildGameObject(go, ResourcesLoading.ShaderDic[ResourcesLoading.ShaderNames.BlueHologram]);
         }
         else
         {

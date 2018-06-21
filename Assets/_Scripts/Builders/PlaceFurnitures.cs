@@ -114,7 +114,10 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
         OldTile = new OldTileData(tilePos, _tb);
 
         //Check if Tile Placeable
-        CheckIsThisFurniturePlaceable(tile, tilePos);
+        bool isPlaceable = CheckIsThisFurniturePlaceable(tile, tilePos);
+
+        if (!isPlaceable)
+            return;
 
         //Create the model and add it to the Furnituremanager
         // GO and Tile are null. Furniture Tile will handle them later
@@ -151,17 +154,17 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
 
     // Check if we can put this furniture there
     //If we are not over a valid floorTile, bail out
-    private void CheckIsThisFurniturePlaceable(FurnitureTile tile, Vector3Int tilePos)
+    private bool CheckIsThisFurniturePlaceable(FurnitureTile tile, Vector3Int tilePos)
     {
         //If not a FloorTile, bail out
         if (!(map.GetTile(tilePos) is FloorTile))
-            return;
+            return false;
 
         if (!tile.furnitureData.tilesItCanBePlacedOn.Contains(map.GetTile(tilePos) as FloorTile))
         {
             // Bail out
             Debug.Log("Can't place " + tile.furnitureData.furniturePrefab.name + " on " + map.GetTile(tilePos).name + " tile !");
-            return;
+            return false;
         }
 
         //Save old sprite
@@ -170,7 +173,8 @@ public class PlaceFurnitures : MonoBehaviour, IBuildingMethod
         if (!dictionnaryOfOldTiles.AddToDict(v3, ((FloorTile)map.GetTile(tilePos)).name))
         {
             Debug.LogError("Trying to add twice the old tile data. Return.");
-            return;
+            return false;
         }
+        return true;
     }
 }

@@ -52,22 +52,6 @@ public class FurnitureManager : MonoBehaviour {
     }
 
     /**
-     *  for test purposes only
-     */
-    private void Update()
-    {
-        foreach (var v in listOfAllComputers.Values)
-        {
-            v.go.transform.Rotate(Vector3.up * Random.Range(5f, 10f) * Time.deltaTime);
-        }
-        foreach (var v in listOfAllOffices.Values)
-        {
-            v.go.transform.Rotate(Vector3.up * Random.Range(5f, 10f) * Time.deltaTime);
-            //Debug.Log(v.rotationOfTheFurniture);
-        }
-    }
-
-    /**
      *  Clear all furniture data
      */
      public void ClearAll()

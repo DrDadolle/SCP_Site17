@@ -21,7 +21,7 @@ public class JobActions {
             WallManager.Instance.listOfAllWalls[npos].model.isPreview = false;
             map.RefreshTile(npos);
             // Change the layer from GhostWalls to Walls
-            WallManager.Instance.listOfAllWalls[npos].go.layer = 10;
+            UtilitiesMethod.ChangerLayerOfAllChildGO(WallManager.Instance.listOfAllWalls[npos].go, 10);
 
         };
     }
@@ -35,7 +35,7 @@ public class JobActions {
             WallManager.Instance.listOfAllWalls[npos].model.isPreview = false;
             map.RefreshTile(npos);
             // Change the layer from GhostWalls to Walls
-            WallManager.Instance.listOfAllWalls[npos].go.layer = 10;
+            UtilitiesMethod.ChangerLayerOfAllChildGO(WallManager.Instance.listOfAllWalls[npos].go, 10);
 
         }, "Wall", "Building", tile.wallData.buildingTime);
     }
@@ -76,7 +76,7 @@ public class JobActions {
             _model.isPreview = false;
             map.RefreshTile(npos);
             // Change the layer from GhostFurnitures to Furniture
-            FurnitureManager.Instance.GetGameObjectFromAllDictionnaries(npos).layer = 12;
+            UtilitiesMethod.ChangerLayerOfAllChildGO(FurnitureManager.Instance.GetGameObjectFromAllDictionnaries(npos), 12);
         };
     }
 
@@ -90,8 +90,7 @@ public class JobActions {
             _model.isPending = false;
             _model.isPreview = false;
             map.RefreshTile(npos);
-            // Change the layer from GhostFurnitures to Furniture
-            FurnitureManager.Instance.GetGameObjectFromAllDictionnaries(npos).layer = 12;
+            UtilitiesMethod.ChangerLayerOfAllChildGO(FurnitureManager.Instance.GetGameObjectFromAllDictionnaries(npos), 12);
         }, "Furniture", "Building", tile.furnitureData.buildingTime);
     }
 
