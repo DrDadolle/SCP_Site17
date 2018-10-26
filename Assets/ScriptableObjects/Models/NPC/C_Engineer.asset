@@ -11,9 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55a697e38440c264885bde8c5a8cfee0, type: 3}
   m_Name: C_Engineer
   m_EditorClassIdentifier: 
-  typeOfNPC: Construction_Engineer
+  typeOfNPC: 1
   maxHealth: 0
   NPCprefab: {fileID: 1518643161468782, guid: 75093aa7621239b4bb56f263a3ba9e72, type: 2}
   JobPriorities:
-  - JobMacroType: Building
+  - JobMacroType: 0
     priority: 10
